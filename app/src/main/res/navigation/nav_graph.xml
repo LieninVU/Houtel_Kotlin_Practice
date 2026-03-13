@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.example.hotel_app.presentation.ui.fragments.DashboardFragment"
+        android:label="Dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/bookingFragment"
+        android:name="com.example.hotel_app.presentation.ui.fragments.BookingFragment"
+        android:label="Booking" />
+
+    <fragment
+        android:id="@+id/keyFragment"
+        android:name="com.example.hotel_app.presentation.ui.fragments.KeyFragment"
+        android:label="NFC Key" />
+
+    <fragment
+        android:id="@+id/hotelInfoFragment"
+        android:name="com.example.hotel_app.presentation.ui.fragments.HotelInfoFragment"
+        android:label="Hotel Info" />
+
+    <fragment
+        android:id="@+id/servicesFragment"
+        android:name="com.example.hotel_app.presentation.ui.fragments.ServicesFragment"
+        android:label="Services" />
+
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.example.hotel_app.presentation.ui.fragments.PaymentFragment"
+        android:label="Payment" />
+
+    <fragment
+        android:id="@+id/reviewsFragment"
+        android:name="com.example.hotel_app.presentation.ui.fragments.ReviewsFragment"
+        android:label="Reviews" />
+
+</navigation>
