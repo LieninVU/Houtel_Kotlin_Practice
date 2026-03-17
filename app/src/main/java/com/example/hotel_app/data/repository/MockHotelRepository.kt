@@ -2,15 +2,20 @@ package com.example.hotel_app.data.repository
 
 import com.example.hotel_app.domain.model.*
 import com.example.hotel_app.domain.repository.HotelRepository
+import com.example.hotel_app.domain.repository.KeyAction
 import io.github.serpro69.kfaker.Faker
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
+import java.text.SimpleDateFormat
 import java.util.*
 
 class MockHotelRepository : HotelRepository {
     private val faker = Faker()
     private val random = Random()
+    
+    private val _nfcKeys = MutableStateFlow<List<NfcKey>>(emptyList())
 
     override fun getRooms(): Flow<List<Room>> = flow {
         delay(500)
@@ -68,6 +73,34 @@ class MockHotelRepository : HotelRepository {
 
     override suspend fun bookRoom(roomId: String, checkIn: String, checkOut: String): Boolean {
         delay(500)
+        return true
+    }
+
+    override fun getNfcKeys(): Flow<List<NfcKey>> = _nfcKeys
+
+    override suspend fun activateNfcKey(bookingId: String): Boolean {
+        delay(1000)
+        val newKey = NfcKey(
+            id = UUID.randomUUID().toString(),
+            roomNumber = (100 + random.nextInt(400)).toString(),
+            roomType = listOf("Deluxe", "Suite", "Standard").random(),
+            isActive = true,
+            validUntil = "2023-12-31"
+        )
+        val currentList = _nfcKeys.value.toMutableList()
+        currentList.add(newKey)
+        _nfcKeys.value = currentList
+        return true
+    }
+
+    override suspend fun useKeyAction(keyId: String, action: KeyAction): Boolean {
+        delay(800)
+        val currentList = _nfcKeys.value.map { key ->
+            if (key.id == keyId) {
+                key.copy(lastUsed = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date()))
+            } else key
+        }
+        _nfcKeys.value = currentList
         return true
     }
 }
