@@ -11,6 +11,8 @@ import com.example.hotel_app.databinding.FragmentHotelInfoBinding
 import com.example.hotel_app.presentation.ui.adapter.EventAdapter
 import com.example.hotel_app.presentation.viewmodel.HotelInfoViewModel
 import com.example.hotel_app.presentation.viewmodel.HotelInfoViewModelFactory
+import com.example.hotel_app.presentation.viewmodel.UiState
+import com.google.android.material.snackbar.Snackbar
 
 class HotelInfoFragment : Fragment() {
 
@@ -37,39 +39,60 @@ class HotelInfoFragment : Fragment() {
         setupAdapters()
         observeViewModel()
         setupTabs()
+        setupRetry()
     }
 
     private fun setupAdapters() {
-        eventsAdapter = EventAdapter { event ->
-            viewModel.onEventViewed(event)
-        }
-        recommendationsAdapter = EventAdapter { event ->
-            viewModel.onEventViewed(event)
-        }
+        eventsAdapter = EventAdapter { event -> viewModel.onEventViewed(event) }
+        recommendationsAdapter = EventAdapter { event -> viewModel.onEventViewed(event) }
 
         binding.rvEvents.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = eventsAdapter
         }
-
-        // Горизонтальный список рекомендаций (Этап 2)
         binding.rvRecommendations.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(
+                requireContext(), LinearLayoutManager.HORIZONTAL, false
+            )
             adapter = recommendationsAdapter
         }
     }
 
     private fun observeViewModel() {
-        viewModel.events.observe(viewLifecycleOwner) { events ->
-            eventsAdapter.submitList(events)
+        viewModel.eventsState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.layoutErrorInfo.visibility = View.GONE
+                    binding.rvEvents.visibility = View.GONE
+                }
+                is UiState.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.layoutErrorInfo.visibility = View.GONE
+                    binding.rvEvents.visibility = View.VISIBLE
+                    eventsAdapter.submitList(state.data)
+                }
+                is UiState.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.layoutErrorInfo.visibility = View.VISIBLE
+                    binding.rvEvents.visibility = View.GONE
+                    Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
+                }
+            }
         }
+
         viewModel.recommendations.observe(viewLifecycleOwner) { recs ->
             recommendationsAdapter.submitList(recs)
         }
     }
 
+    private fun setupRetry() {
+        binding.btnRetryInfo.setOnClickListener {
+            viewModel.loadEvents()
+        }
+    }
+
     private fun setupTabs() {
-        // Переключение между вкладками: Мероприятия / Карта / Контакты
         binding.tabLayout.addOnTabSelectedListener(object :
             com.google.android.material.tabs.TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: com.google.android.material.tabs.TabLayout.Tab?) {
@@ -86,18 +109,21 @@ class HotelInfoFragment : Fragment() {
 
     private fun showEventsTab() {
         binding.rvEvents.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
         binding.ivHotelMap.visibility = View.GONE
         binding.layoutContacts.visibility = View.GONE
     }
 
     private fun showMapTab() {
         binding.rvEvents.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
         binding.ivHotelMap.visibility = View.VISIBLE
         binding.layoutContacts.visibility = View.GONE
     }
 
     private fun showContactsTab() {
         binding.rvEvents.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
         binding.ivHotelMap.visibility = View.GONE
         binding.layoutContacts.visibility = View.VISIBLE
     }

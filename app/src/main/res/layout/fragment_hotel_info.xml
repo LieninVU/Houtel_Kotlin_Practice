@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- Рекомендации (Этап 2) — горизонтальный список -->
+    <!-- Рекомендации — горизонтальный список -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
         android:paddingEnd="8dp"
         android:clipToPadding="false" />
 
-    <!-- Вкладки: Мероприятия / Карта / Контакты -->
+    <!-- Вкладки -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
@@ -49,6 +49,40 @@
             android:text="Контакты" />
 
     </com.google.android.material.tabs.TabLayout>
+
+    <!-- Загрузка -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="32dp"
+        android:visibility="gone" />
+
+    <!-- Ошибка загрузки -->
+    <LinearLayout
+        android:id="@+id/layoutErrorInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Не удалось загрузить мероприятия"
+            android:textSize="14sp"
+            android:paddingBottom="12dp" />
+
+        <Button
+            android:id="@+id/btnRetryInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Повторить" />
+
+    </LinearLayout>
 
     <!-- Список мероприятий -->
     <androidx.recyclerview.widget.RecyclerView

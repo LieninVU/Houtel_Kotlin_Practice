@@ -8,30 +8,55 @@ import com.example.hotel_app.data.parser.XlsEventParser
 import com.example.hotel_app.data.preferences.UserPreferences
 import com.example.hotel_app.domain.model.Event
 
+sealed class UiState<out T> {
+    object Loading : UiState<Nothing>()
+    data class Success<T>(val data: T) : UiState<T>()
+    data class Error(val message: String) : UiState<Nothing>()
+}
+
 class HotelInfoViewModel(context: Context) : ViewModel() {
 
     private val parser = XlsEventParser(context)
     private val userPrefs = UserPreferences.getInstance(context)
 
-    private val _events = MutableLiveData<List<Event>>()
-    val events: LiveData<List<Event>> = _events
+    private val _eventsState = MutableLiveData<UiState<List<Event>>>()
+    val eventsState: LiveData<UiState<List<Event>>> = _eventsState
 
     private val _recommendations = MutableLiveData<List<Event>>()
     val recommendations: LiveData<List<Event>> = _recommendations
+
+    // Удобный доступ к списку событий для Dashboard
+    val events: LiveData<List<Event>> get() = MutableLiveData<List<Event>>().also { ld ->
+        eventsState.observeForever { state ->
+            if (state is UiState.Success) ld.value = state.data
+        }
+    }
 
     init {
         loadEvents()
     }
 
     fun loadEvents() {
-        val allEvents = parser.parseFromAssets()
-        _events.value = allEvents
-        _recommendations.value = getRecommendations(allEvents)
+        _eventsState.value = UiState.Loading
+        try {
+            val allEvents = parser.parseFromAssets()
+            if (allEvents.isEmpty()) {
+                _eventsState.value = UiState.Error("Нет данных о мероприятиях")
+            } else {
+                _eventsState.value = UiState.Success(allEvents)
+                _recommendations.value = getRecommendations(allEvents)
+            }
+        } catch (e: Exception) {
+            _eventsState.value = UiState.Error("Ошибка загрузки: ${e.localizedMessage}")
+            // Fallback на моки при ошибке
+            val mocks = parser.getMockEvents()
+            _recommendations.value = getRecommendations(mocks)
+        }
     }
 
     /**
      * Алгоритм рекомендаций:
-     * 1. Если есть история просмотров — показываем события той же категории
+     * 1. Если есть история — показываем события той же категории
      * 2. Иначе — случайные 3 события
      */
     private fun getRecommendations(events: List<Event>): List<Event> {
@@ -47,5 +72,9 @@ class HotelInfoViewModel(context: Context) : ViewModel() {
     fun onEventViewed(event: Event) {
         userPrefs.lastViewedCategory = event.category
         userPrefs.markEventViewed(event.title)
+        // Обновляем рекомендации после просмотра
+        val current = (eventsState.value as? UiState.Success)?.data
+            ?: parser.getMockEvents()
+        _recommendations.value = getRecommendations(current)
     }
 }
