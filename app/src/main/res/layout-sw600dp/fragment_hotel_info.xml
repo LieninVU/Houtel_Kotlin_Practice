@@ -101,16 +101,52 @@
             android:padding="8dp"
             android:clipToPadding="false" />
 
-        <!-- Карта отеля -->
-        <ImageView
+        <!-- Карта отеля — заглушка -->
+        <FrameLayout
             android:id="@+id/ivHotelMap"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:contentDescription="Карта отеля"
-            android:src="@drawable/ic_launcher_background"
-            android:visibility="gone" />
+            android:background="#FFE8E8E8"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/hotel_map_placeholder"
+                android:contentDescription="Карта отеля" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📍"
+                    android:textSize="48sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Карта отеля"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:paddingTop="8dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ул. Гостиничная, 1"
+                    android:textSize="14sp"
+                    android:paddingTop="4dp" />
+
+            </LinearLayout>
+        </FrameLayout>
 
         <!-- Контакты -->
         <ScrollView

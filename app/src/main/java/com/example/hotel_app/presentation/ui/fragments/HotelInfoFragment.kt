@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.hotel_app.R
 import com.example.hotel_app.databinding.FragmentHotelInfoBinding
 import com.example.hotel_app.presentation.ui.adapter.EventAdapter
 import com.example.hotel_app.presentation.viewmodel.HotelInfoViewModel
@@ -109,6 +110,9 @@ class HotelInfoFragment : Fragment() {
 
     private fun showEventsTab() {
         binding.rvEvents.visibility = View.VISIBLE
+        binding.rvEvents.startAnimation(
+            android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.slide_up)
+        )
         binding.ivHotelMap.visibility = View.GONE
         binding.layoutContacts.visibility = View.GONE
         binding.layoutErrorInfo.visibility = View.GONE
@@ -119,6 +123,9 @@ class HotelInfoFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
         binding.layoutErrorInfo.visibility = View.GONE
         binding.ivHotelMap.visibility = View.VISIBLE
+        binding.ivHotelMap.startAnimation(
+            android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        )
         binding.layoutContacts.visibility = View.GONE
     }
 
@@ -128,6 +135,9 @@ class HotelInfoFragment : Fragment() {
         binding.layoutErrorInfo.visibility = View.GONE
         binding.ivHotelMap.visibility = View.GONE
         binding.layoutContacts.visibility = View.VISIBLE
+        binding.layoutContacts.startAnimation(
+            android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.slide_up)
+        )
     }
 
     override fun onDestroyView() {
