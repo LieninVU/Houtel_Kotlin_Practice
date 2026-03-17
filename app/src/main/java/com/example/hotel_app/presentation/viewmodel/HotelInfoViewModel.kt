@@ -25,12 +25,8 @@ class HotelInfoViewModel(context: Context) : ViewModel() {
     private val _recommendations = MutableLiveData<List<Event>>()
     val recommendations: LiveData<List<Event>> = _recommendations
 
-    // Удобный доступ к списку событий для Dashboard
-    val events: LiveData<List<Event>> get() = MutableLiveData<List<Event>>().also { ld ->
-        eventsState.observeForever { state ->
-            if (state is UiState.Success) ld.value = state.data
-        }
-    }
+    // Кэш загруженных событий — используется при обновлении рекомендаций
+    private var cachedEvents: List<Event> = emptyList()
 
     init {
         loadEvents()
@@ -43,6 +39,7 @@ class HotelInfoViewModel(context: Context) : ViewModel() {
             if (allEvents.isEmpty()) {
                 _eventsState.value = UiState.Error("Нет данных о мероприятиях")
             } else {
+                cachedEvents = allEvents
                 _eventsState.value = UiState.Success(allEvents)
                 _recommendations.value = getRecommendations(allEvents)
             }
@@ -50,6 +47,7 @@ class HotelInfoViewModel(context: Context) : ViewModel() {
             _eventsState.value = UiState.Error("Ошибка загрузки: ${e.localizedMessage}")
             // Fallback на моки при ошибке
             val mocks = parser.getMockEvents()
+            cachedEvents = mocks
             _recommendations.value = getRecommendations(mocks)
         }
     }
@@ -72,9 +70,8 @@ class HotelInfoViewModel(context: Context) : ViewModel() {
     fun onEventViewed(event: Event) {
         userPrefs.lastViewedCategory = event.category
         userPrefs.markEventViewed(event.title)
-        // Обновляем рекомендации после просмотра
-        val current = (eventsState.value as? UiState.Success)?.data
-            ?: parser.getMockEvents()
+        // Используем кэш вместо повторного парсинга
+        val current = if (cachedEvents.isNotEmpty()) cachedEvents else parser.getMockEvents()
         _recommendations.value = getRecommendations(current)
     }
 }

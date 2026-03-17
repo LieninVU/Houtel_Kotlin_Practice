@@ -109,14 +109,15 @@ class HotelInfoFragment : Fragment() {
 
     private fun showEventsTab() {
         binding.rvEvents.visibility = View.VISIBLE
-        binding.progressBar.visibility = View.GONE
         binding.ivHotelMap.visibility = View.GONE
         binding.layoutContacts.visibility = View.GONE
+        binding.layoutErrorInfo.visibility = View.GONE
     }
 
     private fun showMapTab() {
         binding.rvEvents.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
+        binding.layoutErrorInfo.visibility = View.GONE
         binding.ivHotelMap.visibility = View.VISIBLE
         binding.layoutContacts.visibility = View.GONE
     }
@@ -124,6 +125,7 @@ class HotelInfoFragment : Fragment() {
     private fun showContactsTab() {
         binding.rvEvents.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
+        binding.layoutErrorInfo.visibility = View.GONE
         binding.ivHotelMap.visibility = View.GONE
         binding.layoutContacts.visibility = View.VISIBLE
     }

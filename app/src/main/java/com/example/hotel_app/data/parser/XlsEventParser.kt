@@ -4,7 +4,6 @@ import android.content.Context
 import com.example.hotel_app.domain.model.Event
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import java.io.InputStream
 
 /**
  * Парсер XLS/XLSX файлов с мероприятиями отеля.
@@ -18,9 +17,10 @@ class XlsEventParser(private val context: Context) {
 
     fun parseFromAssets(fileName: String = "events.xlsx"): List<Event> {
         return try {
-            val inputStream: InputStream = context.assets.open(fileName)
-            if (fileName.endsWith(".xlsx")) parseXlsx(inputStream)
-            else parseXls(inputStream)
+            context.assets.open(fileName).use { inputStream ->
+                if (fileName.endsWith(".xlsx")) parseXlsx(inputStream)
+                else parseXls(inputStream)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             getMockEvents() // fallback на моки если файл не найден
