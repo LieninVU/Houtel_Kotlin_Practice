@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.hotel_app.domain.model.Event
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import java.io.InputStream
 
 /**
  * Парсер XLS/XLSX файлов с мероприятиями отеля.
