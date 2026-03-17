@@ -66,6 +66,10 @@ dependencies {
     // Faker
     implementation(libs.kotlin.faker)
 
+    // Apache POI — парсинг XLS/XLSX
+    implementation(libs.poi)
+    implementation(libs.poi.ooxml)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
