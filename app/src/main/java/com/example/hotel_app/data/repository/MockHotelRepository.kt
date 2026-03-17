@@ -1,5 +1,6 @@
 package com.example.hotel_app.data.repository
 
+import com.example.hotel_app.data.mock.ServiceCatalogMocks
 import com.example.hotel_app.domain.model.*
 import com.example.hotel_app.domain.repository.HotelRepository
 import io.github.serpro69.kfaker.Faker
@@ -29,16 +30,7 @@ class MockHotelRepository : HotelRepository {
 
     override fun getServices(): Flow<List<HotelService>> = flow {
         delay(500)
-        val services = List(8) {
-            HotelService(
-                id = UUID.randomUUID().toString(),
-                title = listOf("SPA Treatment", "Airport Transfer", "Breakfast Buffet", "Gym Access").random(),
-                category = ServiceCategory.values().random(),
-                price = 20.0 + random.nextInt(180),
-                imageUrl = "https://picsum.photos/seed/${random.nextInt(1000)}/200/200"
-            )
-        }
-        emit(services)
+        emit(ServiceCatalogMocks.services)
     }
 
     override fun getReviews(): Flow<List<Review>> = flow {

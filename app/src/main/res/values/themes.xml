@@ -3,15 +3,44 @@
     <!-- Base application theme. -->
     <style name="Theme.Hotel_App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorPrimaryVariant">@color/brand_primary_dark</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorSecondary">@color/brand_secondary</item>
+        <item name="colorSecondaryVariant">@color/brand_secondary</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:windowBackground">@color/surface_canvas</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="TextAppearance.HotelApp.SectionLabel" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.HotelApp.BodyMuted" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="Widget.HotelApp.ServiceCard" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/surface_card</item>
+        <item name="cardCornerRadius">20dp</item>
+        <item name="cardElevation">3dp</item>
+        <item name="strokeColor">@color/surface_muted</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="Widget.HotelApp.Badge" parent="Widget.MaterialComponents.TextView">
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:textColor">@color/brand_primary_dark</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/bg_service_badge</item>
     </style>
 </resources>

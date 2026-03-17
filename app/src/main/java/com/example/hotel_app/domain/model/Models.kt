@@ -19,13 +19,28 @@ data class Room(
 data class HotelService(
     val id: String,
     val title: String,
+    val subtitle: String,
     val category: ServiceCategory,
     val price: Double,
-    val imageUrl: String
+    val imageUrl: String,
+    val durationMinutes: Int,
+    val isPopular: Boolean = false
 )
 
 enum class ServiceCategory {
-    SPA, TRANSFER, FOOD, OTHER
+    SPA,
+    TRANSFER,
+    FOOD,
+    LEISURE,
+    BUSINESS;
+
+    fun displayName(): String = when (this) {
+        SPA -> "SPA & Wellness"
+        TRANSFER -> "Transfer"
+        FOOD -> "Food & Drinks"
+        LEISURE -> "Leisure"
+        BUSINESS -> "Business"
+    }
 }
 
 data class Review(
