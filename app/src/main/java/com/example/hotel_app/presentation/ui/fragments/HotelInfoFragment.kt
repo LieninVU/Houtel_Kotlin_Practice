@@ -30,7 +30,7 @@ class HotelInfoFragment : Fragment(R.layout.fragment_hotel_info) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHotelInfoBinding.bind(view)
 
-        binding.toolbar.setNavigationOnClickListener {
+        binding.toolbar?.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
 

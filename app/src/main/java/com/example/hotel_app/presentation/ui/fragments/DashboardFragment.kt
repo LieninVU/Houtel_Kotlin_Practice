@@ -41,10 +41,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     }
 
     private fun setupListeners() {
-<<<<<<< HEAD
-=======
-        // Booking (бронь)
->>>>>>> 7ad9b97 (Booking + NFC: auto key after booking)
         binding.btnQuickBooking.setOnClickListener {
             findNavController().navigate(R.id.bookingFragment)
         }
@@ -54,10 +50,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             findNavController().navigate(R.id.servicesFragment)
         }
 
-<<<<<<< HEAD
-=======
-        // Переход к ключу (задача другой роли, но оставим для связки)
->>>>>>> 7ad9b97 (Booking + NFC: auto key after booking)
         binding.btnQuickKey.setOnClickListener {
             findNavController().navigate(R.id.keyFragment)
         }
@@ -108,8 +100,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         binding.layoutRecommendations.visibility = View.GONE
         binding.layoutError.visibility = View.VISIBLE
     }
-
-        // end setupListeners
 
     private fun observeState() {
         viewLifecycleOwner.lifecycleScope.launch {
