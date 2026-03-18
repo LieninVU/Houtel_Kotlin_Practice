@@ -72,7 +72,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/btnQuickServices"
+                    android:id="@+id/btnQuickBooking"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -84,19 +84,19 @@
                         android:layout_height="40dp"
                         android:background="@drawable/circle_background_orange"
                         android:padding="8dp"
-                        android:src="@android:drawable/ic_menu_agenda"
+                        android:src="@android:drawable/ic_menu_my_calendar"
                         app:tint="@android:color/white" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Services"
+                        android:text="Booking"
                         android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/btnQuickSupport"
+                    android:id="@+id/btnQuickServices"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -108,14 +108,14 @@
                         android:layout_height="40dp"
                         android:background="@drawable/circle_background_green"
                         android:padding="8dp"
-                        android:src="@android:drawable/stat_sys_phone_call"
+                        android:src="@android:drawable/ic_menu_agenda"
                         app:tint="@android:color/white" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Support"
+                        android:text="Services"
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -212,7 +212,7 @@
                     android:id="@+id/tvBookingRoom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Deluxe Suite #304"
+                    android:text="No active booking"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -221,7 +221,7 @@
                     android:id="@+id/tvBookingDates"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Oct 15 - Oct 20"
+                    android:text="Tap Booking to reserve a room"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvBookingRoom" />

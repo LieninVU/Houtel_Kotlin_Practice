@@ -1,12 +1,12 @@
 package com.example.hotel_app.presentation.ui.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.hotel_app.R
 import com.example.hotel_app.databinding.FragmentHotelInfoBinding
 import com.example.hotel_app.presentation.ui.adapter.EventAdapter
 import com.example.hotel_app.presentation.viewmodel.HotelInfoViewModel
@@ -14,7 +14,7 @@ import com.example.hotel_app.presentation.viewmodel.HotelInfoViewModelFactory
 import com.example.hotel_app.presentation.viewmodel.UiState
 import com.google.android.material.snackbar.Snackbar
 
-class HotelInfoFragment : Fragment() {
+class HotelInfoFragment : Fragment(R.layout.fragment_hotel_info) {
 
     private var _binding: FragmentHotelInfoBinding? = null
     private val binding get() = _binding!!
@@ -26,16 +26,14 @@ class HotelInfoFragment : Fragment() {
     private lateinit var eventsAdapter: EventAdapter
     private lateinit var recommendationsAdapter: EventAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentHotelInfoBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentHotelInfoBinding.bind(view)
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+
         setupAdapters()
         observeViewModel()
         setupTabs()

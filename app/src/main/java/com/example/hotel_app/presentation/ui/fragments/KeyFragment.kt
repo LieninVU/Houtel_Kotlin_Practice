@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hotel_app.R
 import com.example.hotel_app.databinding.FragmentKeyBinding
@@ -30,8 +32,16 @@ class KeyFragment : Fragment(R.layout.fragment_key) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentKeyBinding.bind(view)
 
+        binding.toolbar.setNavigationOnClickListener {
+            // В связке с bottom-nav самый стабильный вариант: popUpTo dashboard + singleTop
+            val options = NavOptions.Builder()
+                .setPopUpTo(R.id.dashboardFragment, false)
+                .setLaunchSingleTop(true)
+                .build()
+            findNavController().navigate(R.id.dashboardFragment, null, options)
+        }
+
         setupRecyclerView()
-        setupListeners()
         observeState()
     }
 
@@ -39,12 +49,6 @@ class KeyFragment : Fragment(R.layout.fragment_key) {
         binding.rvKeys.apply {
             adapter = keyAdapter
             layoutManager = LinearLayoutManager(requireContext())
-        }
-    }
-
-    private fun setupListeners() {
-        binding.btnRequestKey.setOnClickListener {
-            viewModel.requestNewKey("mock_booking_id_${System.currentTimeMillis()}")
         }
     }
 

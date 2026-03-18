@@ -1,6 +1,28 @@
 package com.example.hotel_app.presentation.ui.fragments
 
+import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.hotel_app.R
+import com.example.hotel_app.databinding.FragmentPaymentBinding
 
-class PaymentFragment : Fragment(R.layout.fragment_payment)
+class PaymentFragment : Fragment(R.layout.fragment_payment) {
+
+    private var _binding: FragmentPaymentBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentPaymentBinding.bind(view)
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}

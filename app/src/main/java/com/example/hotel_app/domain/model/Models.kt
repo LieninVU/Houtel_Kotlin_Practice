@@ -40,9 +40,12 @@ data class Booking(
     val id: String,
     val roomId: String,
     val roomNumber: String,
+    val roomType: String,
+    val guestName: String,
     val checkIn: String,
     val checkOut: String,
-    val status: BookingStatus
+    val status: BookingStatus,
+    val nfcKeyId: String? = null
 )
 
 enum class BookingStatus {

@@ -65,6 +65,9 @@ dependencies {
     
     // Faker
     implementation(libs.kotlin.faker)
+    
+    // Image Loading - Coil
+    implementation(libs.coil)
 
     // Apache POI — парсинг XLS/XLSX
     implementation(libs.poi)
