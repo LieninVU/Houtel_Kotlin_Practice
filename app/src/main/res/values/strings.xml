@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Hotel_App</string>
+    <string name="nfc_digital_key">NFC Digital Key</string>
+    <string name="room_number_format">ROOM %1$s</string>
+    <string name="room_empty">ROOM ---</string>
+    <string name="valid_until_format">Valid until: %1$s</string>
+    <string name="valid_until_empty">Valid until: --/--/--</string>
+    <string name="key_active_status">Key is active. Bring phone to the door lock.</string>
+    <string name="no_key_status">No active key found. Please check-in first.</string>
+    <string name="simulate_nfc_scan">Simulate NFC Scan (Open Door)</string>
+    <string name="request_digital_key">Request Digital Key</string>
 </resources>

@@ -9,7 +9,11 @@
         android:id="@+id/dashboardFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.DashboardFragment"
         android:label="Dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/action_dashboardFragment_to_keyFragment"
+            app:destination="@id/keyFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/bookingFragment"

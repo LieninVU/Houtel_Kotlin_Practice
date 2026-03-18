@@ -1,11 +1,12 @@
 package com.example.hotel_app.presentation.ui.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hotel_app.R
@@ -13,32 +14,53 @@ import com.example.hotel_app.databinding.FragmentDashboardBinding
 import com.example.hotel_app.presentation.ui.adapter.EventAdapter
 import com.example.hotel_app.presentation.viewmodel.HotelInfoViewModel
 import com.example.hotel_app.presentation.viewmodel.HotelInfoViewModelFactory
+import com.example.hotel_app.presentation.viewmodel.MainViewModel
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class DashboardFragment : Fragment() {
+class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
+    private val viewModel: MainViewModel by viewModel()
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
 
-    // ViewModel от Android-3 — рекомендации
     private val hotelInfoViewModel: HotelInfoViewModel by viewModels {
         HotelInfoViewModelFactory(requireContext())
     }
 
     private lateinit var recommendationsAdapter: EventAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentDashboardBinding.bind(view)
+
+        setupListeners()
         setupRecommendations()
         observeRecommendations()
-        setupNavigation()
+        observeState()
+    }
+
+    private fun setupListeners() {
+        binding.btnQuickBooking.setOnClickListener {
+            findNavController().navigate(R.id.bookingFragment)
+        }
+
+        binding.btnQuickServices.setOnClickListener {
+            findNavController().navigate(R.id.servicesFragment)
+        }
+
+        binding.btnQuickKey.setOnClickListener {
+            findNavController().navigate(R.id.keyFragment)
+        }
+
+        binding.cardStatus.setOnClickListener {
+            val hasBooking = viewModel.activeBooking.value != null
+            findNavController().navigate(if (hasBooking) R.id.keyFragment else R.id.bookingFragment)
+        }
+
+        binding.btnGoToInfo.setOnClickListener {
+            findNavController().navigate(R.id.hotelInfoFragment)
+        }
     }
 
     private fun setupRecommendations() {
@@ -47,9 +69,7 @@ class DashboardFragment : Fragment() {
             findNavController().navigate(R.id.hotelInfoFragment)
         }
         binding.rvDashboardRecommendations.apply {
-            layoutManager = LinearLayoutManager(
-                requireContext(), LinearLayoutManager.HORIZONTAL, false
-            )
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = recommendationsAdapter
         }
     }
@@ -80,9 +100,35 @@ class DashboardFragment : Fragment() {
         binding.layoutError.visibility = View.VISIBLE
     }
 
-    private fun setupNavigation() {
-        binding.btnGoToInfo.setOnClickListener {
-            findNavController().navigate(R.id.hotelInfoFragment)
+    private fun observeState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.user.collect { user ->
+                        binding.tvUserName.text = user?.name ?: "Guest"
+                    }
+                }
+
+                launch {
+                    viewModel.activeBooking.collect { booking ->
+                        if (booking == null) {
+                            binding.tvBookingRoom.text = "No active booking"
+                            binding.tvBookingDates.text = "Tap Booking to reserve a room"
+                            binding.tvBookingStatus.text = "—"
+                        } else {
+                            binding.tvBookingRoom.text = "${booking.roomType} #${booking.roomNumber}"
+                            binding.tvBookingDates.text = "${booking.checkIn} - ${booking.checkOut}"
+                            binding.tvBookingStatus.text = booking.status.name.replace("_", " ")
+                        }
+                    }
+                }
+
+                launch {
+                    viewModel.bookings.collect { list ->
+                        binding.tvBookingCount.text = "Bookings: ${list.size}"
+                    }
+                }
+            }
         }
     }
 
