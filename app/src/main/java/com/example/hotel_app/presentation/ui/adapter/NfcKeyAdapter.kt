@@ -7,11 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hotel_app.databinding.LayoutItemNfcKeyBinding
 import com.example.hotel_app.domain.model.NfcKey
-import com.example.hotel_app.domain.repository.KeyAction
 
-class NfcKeyAdapter(
-    private val onActionClick: (String, KeyAction) -> Unit
-) : ListAdapter<NfcKey, NfcKeyAdapter.KeyViewHolder>(DiffCallback) {
+class NfcKeyAdapter : ListAdapter<NfcKey, NfcKeyAdapter.KeyViewHolder>(DiffCallback) {
 
     class KeyViewHolder(val binding: LayoutItemNfcKeyBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -27,12 +24,8 @@ class NfcKeyAdapter(
         with(holder.binding) {
             tvRoomNumber.text = "ROOM ${key.roomNumber}"
             tvRoomType.text = key.roomType
+            tvValidUntil.text = "Valid until: ${key.validUntil}"
             tvLastUsed.text = "Last used: ${key.lastUsed ?: "Never"}"
-
-            btnOpen.setOnClickListener { onActionClick(key.id, KeyAction.OPEN_DOOR) }
-            btnClose.setOnClickListener { onActionClick(key.id, KeyAction.CLOSE_DOOR) }
-            btnLights.setOnClickListener { onActionClick(key.id, KeyAction.LIGHTS_ON) }
-            btnPower.setOnClickListener { onActionClick(key.id, KeyAction.POWER_ON) }
         }
     }
 

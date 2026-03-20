@@ -1,5 +1,12 @@
 package com.example.hotel_app.presentation.ui.fragments
 
+import android.app.PendingIntent
+import android.content.Intent
+import android.content.IntentFilter
+import android.nfc.NfcAdapter
+import android.nfc.tech.IsoDep
+import android.nfc.tech.NfcA
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -13,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hotel_app.R
 import com.example.hotel_app.databinding.FragmentKeyBinding
+import com.example.hotel_app.domain.repository.KeyAction
 import com.example.hotel_app.presentation.ui.adapter.NfcKeyAdapter
 import com.example.hotel_app.presentation.viewmodel.NfcViewModel
 import kotlinx.coroutines.launch
@@ -23,9 +31,17 @@ class KeyFragment : Fragment(R.layout.fragment_key) {
     private val viewModel: NfcViewModel by viewModel()
     private var _binding: FragmentKeyBinding? = null
     private val binding get() = _binding!!
-    
-    private val keyAdapter = NfcKeyAdapter { keyId, action ->
-        viewModel.performAction(keyId, action)
+
+    private var nfcAdapter: NfcAdapter? = null
+    private lateinit var pendingIntent: PendingIntent
+    private lateinit var intentFiltersArray: Array<IntentFilter>
+    private lateinit var techListsArray: Array<Array<String>>
+
+    private val keyAdapter = NfcKeyAdapter()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupNfcForegroundDispatch()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,7 +49,6 @@ class KeyFragment : Fragment(R.layout.fragment_key) {
         _binding = FragmentKeyBinding.bind(view)
 
         binding.toolbar.setNavigationOnClickListener {
-            // В связке с bottom-nav самый стабильный вариант: popUpTo dashboard + singleTop
             val options = NavOptions.Builder()
                 .setPopUpTo(R.id.dashboardFragment, false)
                 .setLaunchSingleTop(true)
@@ -41,8 +56,39 @@ class KeyFragment : Fragment(R.layout.fragment_key) {
             findNavController().navigate(R.id.dashboardFragment, null, options)
         }
 
+        binding.btnEmulateNfc.setOnClickListener {
+            emulateNfcTouch()
+        }
+
         setupRecyclerView()
         observeState()
+    }
+
+    private fun setupNfcForegroundDispatch() {
+        nfcAdapter = NfcAdapter.getDefaultAdapter(requireContext())
+
+        val intent = Intent(requireContext(), requireActivity().javaClass).apply {
+            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+        
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.FLAG_MUTABLE
+        } else {
+            0
+        }
+        
+        pendingIntent = PendingIntent.getActivity(requireContext(), 0, intent, flags)
+
+        val ndef = IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED).apply {
+            try {
+                addDataType("*/*")
+            } catch (e: IntentFilter.MalformedMimeTypeException) {
+                throw RuntimeException("fail", e)
+            }
+        }
+        
+        intentFiltersArray = arrayOf(ndef, IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED))
+        techListsArray = arrayOf(arrayOf(NfcA::class.java.name), arrayOf(IsoDep::class.java.name))
     }
 
     private fun setupRecyclerView() {
@@ -58,6 +104,7 @@ class KeyFragment : Fragment(R.layout.fragment_key) {
                 launch {
                     viewModel.nfcKeys.collect { keys ->
                         keyAdapter.submitList(keys)
+                        binding.btnEmulateNfc.isEnabled = keys.isNotEmpty()
                     }
                 }
 
@@ -74,6 +121,25 @@ class KeyFragment : Fragment(R.layout.fragment_key) {
                 }
             }
         }
+    }
+
+    private fun emulateNfcTouch() {
+        val activeKey = viewModel.nfcKeys.value.firstOrNull { it.isActive }
+        if (activeKey != null) {
+            viewModel.performAction(activeKey.id, KeyAction.OPEN_DOOR)
+        } else {
+            Toast.makeText(requireContext(), "No active keys found", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        nfcAdapter?.enableForegroundDispatch(requireActivity(), pendingIntent, intentFiltersArray, techListsArray)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        nfcAdapter?.disableForegroundDispatch(requireActivity())
     }
 
     override fun onDestroyView() {

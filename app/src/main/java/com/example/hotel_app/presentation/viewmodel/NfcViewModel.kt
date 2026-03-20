@@ -5,15 +5,20 @@ import androidx.lifecycle.viewModelScope
 import com.example.hotel_app.domain.model.NfcKey
 import com.example.hotel_app.domain.repository.HotelRepository
 import com.example.hotel_app.domain.repository.KeyAction
+import com.example.hotel_app.presentation.ui.NfcNotificationManager
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
-class NfcViewModel(private val repository: HotelRepository) : ViewModel() {
+class NfcViewModel(
+    private val repository: HotelRepository,
+    private val notificationManager: NfcNotificationManager
+) : ViewModel() {
 
     private val _nfcKeys = MutableStateFlow<List<NfcKey>>(emptyList())
     val nfcKeys: StateFlow<List<NfcKey>> = _nfcKeys.asStateFlow()
@@ -43,6 +48,13 @@ class NfcViewModel(private val repository: HotelRepository) : ViewModel() {
             if (success) {
                 val actionName = action.name.replace("_", " ").lowercase()
                 _nfcEvent.emit("Success: $actionName for key $keyId")
+                
+                if (action == KeyAction.OPEN_DOOR) {
+                    val key = _nfcKeys.value.find { it.id == keyId }
+                    key?.let {
+                        notificationManager.showDoorOpenedNotification(it.roomNumber)
+                    }
+                }
             }
             _isLoading.value = false
         }

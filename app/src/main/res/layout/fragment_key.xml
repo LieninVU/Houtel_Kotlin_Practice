@@ -14,17 +14,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@android:drawable/ic_media_previous"
-        app:title="NFC Keys" />
+        app:title="Digital Key" />
 
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="NFC Digital Keys"
-        android:textSize="24sp"
-        android:textStyle="bold"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
+        android:text="Your Room Access"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
@@ -32,12 +32,22 @@
         android:id="@+id/rvKeys"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnEmulateNfc"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         tools:listitem="@layout/layout_item_nfc_key" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnEmulateNfc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:padding="12dp"
+        android:text="Emulate NFC Touch (Test)"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"
