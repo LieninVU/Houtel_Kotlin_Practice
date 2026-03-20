@@ -18,6 +18,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.hotel_app.R
 import com.example.hotel_app.databinding.FragmentKeyBinding
 import com.example.hotel_app.domain.repository.KeyAction
@@ -37,7 +39,9 @@ class KeyFragment : Fragment(R.layout.fragment_key) {
     private lateinit var intentFiltersArray: Array<IntentFilter>
     private lateinit var techListsArray: Array<Array<String>>
 
-    private val keyAdapter = NfcKeyAdapter()
+    private val keyAdapter = NfcKeyAdapter { key ->
+        viewModel.performAction(key.id, KeyAction.OPEN_DOOR)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +61,7 @@ class KeyFragment : Fragment(R.layout.fragment_key) {
         }
 
         binding.btnEmulateNfc.setOnClickListener {
-            emulateNfcTouch()
+            emulateNfcTouchForVisibleKey()
         }
 
         setupRecyclerView()
@@ -66,27 +70,15 @@ class KeyFragment : Fragment(R.layout.fragment_key) {
 
     private fun setupNfcForegroundDispatch() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(requireContext())
-
         val intent = Intent(requireContext(), requireActivity().javaClass).apply {
             addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
-        
-        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.FLAG_MUTABLE
-        } else {
-            0
-        }
-        
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0
         pendingIntent = PendingIntent.getActivity(requireContext(), 0, intent, flags)
 
         val ndef = IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED).apply {
-            try {
-                addDataType("*/*")
-            } catch (e: IntentFilter.MalformedMimeTypeException) {
-                throw RuntimeException("fail", e)
-            }
+            try { addDataType("*/*") } catch (e: Exception) { }
         }
-        
         intentFiltersArray = arrayOf(ndef, IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED))
         techListsArray = arrayOf(arrayOf(NfcA::class.java.name), arrayOf(IsoDep::class.java.name))
     }
@@ -94,7 +86,13 @@ class KeyFragment : Fragment(R.layout.fragment_key) {
     private fun setupRecyclerView() {
         binding.rvKeys.apply {
             adapter = keyAdapter
-            layoutManager = LinearLayoutManager(requireContext())
+            // Горизонтальный список для удобного переключения между номерами
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            
+            // SnapHelper заставляет карточки "прилипать" по центру
+            val snapHelper = PagerSnapHelper()
+            onFlingListener = null // Сброс, если уже был установлен
+            snapHelper.attachToRecyclerView(this)
         }
     }
 
@@ -104,16 +102,14 @@ class KeyFragment : Fragment(R.layout.fragment_key) {
                 launch {
                     viewModel.nfcKeys.collect { keys ->
                         keyAdapter.submitList(keys)
-                        binding.btnEmulateNfc.isEnabled = keys.isNotEmpty()
+                        binding.btnEmulateNfc.isVisible = keys.isNotEmpty()
                     }
                 }
-
                 launch {
                     viewModel.nfcEvent.collect { message ->
                         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                     }
                 }
-
                 launch {
                     viewModel.isLoading.collect { isLoading ->
                         binding.progressBar.isVisible = isLoading
@@ -123,12 +119,16 @@ class KeyFragment : Fragment(R.layout.fragment_key) {
         }
     }
 
-    private fun emulateNfcTouch() {
-        val activeKey = viewModel.nfcKeys.value.firstOrNull { it.isActive }
-        if (activeKey != null) {
-            viewModel.performAction(activeKey.id, KeyAction.OPEN_DOOR)
+    private fun emulateNfcTouchForVisibleKey() {
+        val layoutManager = binding.rvKeys.layoutManager as LinearLayoutManager
+        val position = layoutManager.findFirstCompletelyVisibleItemPosition()
+        val targetPosition = if (position != RecyclerView.NO_POSITION) position else layoutManager.findFirstVisibleItemPosition()
+
+        if (targetPosition != RecyclerView.NO_POSITION) {
+            val key = keyAdapter.currentList[targetPosition]
+            viewModel.performAction(key.id, KeyAction.OPEN_DOOR)
         } else {
-            Toast.makeText(requireContext(), "No active keys found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "No key selected", Toast.LENGTH_SHORT).show()
         }
     }
 

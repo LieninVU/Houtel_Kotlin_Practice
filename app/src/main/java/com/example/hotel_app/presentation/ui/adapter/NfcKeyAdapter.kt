@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.hotel_app.databinding.LayoutItemNfcKeyBinding
 import com.example.hotel_app.domain.model.NfcKey
 
-class NfcKeyAdapter : ListAdapter<NfcKey, NfcKeyAdapter.KeyViewHolder>(DiffCallback) {
+class NfcKeyAdapter(
+    private val onKeyClick: (NfcKey) -> Unit
+) : ListAdapter<NfcKey, NfcKeyAdapter.KeyViewHolder>(DiffCallback) {
 
     class KeyViewHolder(val binding: LayoutItemNfcKeyBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -26,6 +28,8 @@ class NfcKeyAdapter : ListAdapter<NfcKey, NfcKeyAdapter.KeyViewHolder>(DiffCallb
             tvRoomType.text = key.roomType
             tvValidUntil.text = "Valid until: ${key.validUntil}"
             tvLastUsed.text = "Last used: ${key.lastUsed ?: "Never"}"
+            
+            root.setOnClickListener { onKeyClick(key) }
         }
     }
 
