@@ -28,6 +28,13 @@ enum class ServiceCategory {
     SPA, TRANSFER, FOOD, OTHER
 }
 
+fun ServiceCategory.getIcon(): String = when (this) {
+    ServiceCategory.SPA -> "🧖"
+    ServiceCategory.TRANSFER -> "🚗"
+    ServiceCategory.FOOD -> "🍽️"
+    ServiceCategory.OTHER -> "⭐"
+}
+
 data class Review(
     val id: String,
     val userName: String,

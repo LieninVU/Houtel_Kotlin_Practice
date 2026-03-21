@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Map Fragment -->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/mapFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/selectedRestaurantInfo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Selected Restaurant Info -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/selectedRestaurantInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvSelectedRestaurantName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvSelectedRestaurantCuisine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvSelectedRestaurantName" />
+
+            <TextView
+                android:id="@+id/tvSelectedRestaurantRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@id/tvSelectedRestaurantCuisine"
+                app:layout_constraintTop_toBottomOf="@id/tvSelectedRestaurantName" />
+
+            <TextView
+                android:id="@+id/tvSelectedRestaurantDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvSelectedRestaurantCuisine" />
+
+            <TextView
+                android:id="@+id/tvSelectedRestaurantAddress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvSelectedRestaurantDistance" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/tvSelectedRestaurantAddress">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRoute"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:text="Маршрут"
+                    style="@style/Widget.Material3.Button.TonalButton" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="Позвонить"
+                    style="@style/Widget.Material3.Button.TonalButton" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

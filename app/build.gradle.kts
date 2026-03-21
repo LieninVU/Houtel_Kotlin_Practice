@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.navigation.safeargs)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -72,6 +73,15 @@ dependencies {
     // Apache POI — парсинг XLS/XLSX
     implementation(libs.poi)
     implementation(libs.poi.ooxml)
+
+    // Room Database
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
+    // Google Maps
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

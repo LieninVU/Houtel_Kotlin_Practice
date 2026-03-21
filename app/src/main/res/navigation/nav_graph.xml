@@ -55,4 +55,9 @@
         android:name="com.example.hotel_app.presentation.ui.fragments.ReviewsFragment"
         android:label="Reviews" />
 
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.hotel_app.presentation.ui.fragments.MapsFragment"
+        android:label="Maps" />
+
 </navigation>

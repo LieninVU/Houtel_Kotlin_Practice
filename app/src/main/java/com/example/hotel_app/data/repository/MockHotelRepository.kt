@@ -1,5 +1,7 @@
 package com.example.hotel_app.data.repository
 
+import com.example.hotel_app.data.local.ReviewDao
+import com.example.hotel_app.data.local.ReviewEntity
 import com.example.hotel_app.domain.model.*
 import com.example.hotel_app.domain.repository.BookingResult
 import com.example.hotel_app.domain.repository.HotelRepository
@@ -12,7 +14,9 @@ import kotlinx.coroutines.flow.map
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MockHotelRepository : HotelRepository {
+class MockHotelRepository(
+    private val reviewDao: ReviewDao
+) : HotelRepository {
     private val faker = Faker()
     private val random = Random()
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -73,23 +77,17 @@ class MockHotelRepository : HotelRepository {
         )
     )
 
-    override fun getReviews(): Flow<List<Review>> = MutableStateFlow(
-        List(5) {
-            Review(
-                id = UUID.randomUUID().toString(),
-                userName = faker.name.name(),
-                rating = 3 + random.nextInt(3),
-                comment = listOf(
-                    "Had a wonderful stay. The staff was very helpful and the room was clean.",
-                    "Great location and excellent service. Will definitely come back!",
-                    "The room was spacious and comfortable. Breakfast was amazing.",
-                    "Perfect hotel for business trips. Fast Wi-Fi and quiet rooms.",
-                    "Beautiful view from the room. The pool area is fantastic."
-                ).random(),
-                date = "2026-03-${10 + it}"
-            )
-        }
-    )
+    override fun getReviews(): Flow<List<Review>> = reviewDao.getAllReviews().map { entities ->
+        entities.map { it.toReview() }
+    }
+
+    suspend fun saveReview(review: Review) {
+        reviewDao.insertReview(review.toEntity())
+    }
+
+    suspend fun deleteReview(reviewId: String) {
+        reviewDao.deleteReview(reviewId)
+    }
 
     override fun getCurrentUser(): Flow<User> = _bookings.map { bookings ->
         baseUser.copy(bookingHistory = bookings)
@@ -175,3 +173,20 @@ class MockHotelRepository : HotelRepository {
         return true
     }
 }
+
+// Extension functions for Review conversion
+fun Review.toEntity(): ReviewEntity = ReviewEntity(
+    id = id,
+    userName = userName,
+    rating = rating,
+    comment = comment,
+    date = date
+)
+
+fun ReviewEntity.toReview(): Review = Review(
+    id = id,
+    userName = userName,
+    rating = rating,
+    comment = comment,
+    date = date
+)
