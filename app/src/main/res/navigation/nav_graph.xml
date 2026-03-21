@@ -38,7 +38,8 @@
     <fragment
         android:id="@+id/keyFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.KeyFragment"
-        android:label="NFC Key" />
+        android:label="NFC Key"
+        tools:layout="@layout/fragment_key" />
 
     <fragment
         android:id="@+id/hotelInfoFragment"
@@ -48,7 +49,8 @@
     <fragment
         android:id="@+id/servicesFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.ServicesFragment"
-        android:label="Services" />
+        android:label="Services"
+        tools:layout="@layout/fragment_services" />
 
     <fragment
         android:id="@+id/paymentFragment"
@@ -56,7 +58,7 @@
         android:label="Payment">
         <argument
             android:name="amount"
-            app:argType="java.lang.Double" />
+            app:argType="float" />
         <argument
             android:name="bookingId"
             app:argType="string" />

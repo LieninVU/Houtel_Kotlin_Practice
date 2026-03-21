@@ -127,7 +127,7 @@ class BookingViewModel(private val repository: HotelRepository) : ViewModel() {
                         BookingUiEvent.NavigateToPayment(
                             booking = result.booking,
                             nfcKey = result.nfcKey,
-                            amount = java.lang.Double.valueOf(totalPrice)
+                            amount = totalPrice
                         )
                     )
                 }
@@ -150,7 +150,7 @@ class BookingViewModel(private val repository: HotelRepository) : ViewModel() {
         data class NavigateToPayment(
             val booking: Booking,
             val nfcKey: NfcKey,
-            val amount: java.lang.Double
+            val amount: Double
         ) : BookingUiEvent()
 
         data class BookingError(val message: String) : BookingUiEvent()
