@@ -21,11 +21,19 @@ data class HotelService(
     val title: String,
     val category: ServiceCategory,
     val price: Double,
-    val imageUrl: String
+    val imageUrl: String,
+    val description: String
 )
 
 enum class ServiceCategory {
     SPA, TRANSFER, FOOD, OTHER
+}
+
+fun ServiceCategory.getIcon(): String = when (this) {
+    SPA -> "🧖"
+    TRANSFER -> "🚗"
+    FOOD -> "🍽️"
+    OTHER -> "⭐"
 }
 
 data class Review(

@@ -27,10 +27,20 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         binding.btnQuickServices.setOnClickListener {
-            findNavController().navigate(R.id.servicesFragment)
+            findNavController().navigate(R.id.action_dashboardFragment_to_servicesFragment)
         }
 
-        // Other listeners...
+        binding.btnQuickSupport.setOnClickListener {
+            findNavController().navigate(R.id.action_dashboardFragment_to_hotelInfoFragment)
+        }
+
+        binding.cardStatus.setOnClickListener {
+            findNavController().navigate(R.id.action_dashboardFragment_to_bookingFragment)
+        }
+
+        binding.tvUserName.setOnClickListener {
+            // Show user profile or settings
+        }
     }
 
     override fun onDestroyView() {

@@ -8,41 +8,71 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.DashboardFragment"
-        android:label="Dashboard"
+        android:label="Главная"
         tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/action_dashboardFragment_to_keyFragment"
             app:destination="@id/keyFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_bookingFragment"
+            app:destination="@id/bookingFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_servicesFragment"
+            app:destination="@id/servicesFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_hotelInfoFragment"
+            app:destination="@id/hotelInfoFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_reviewsFragment"
+            app:destination="@id/reviewsFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/bookingFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.BookingFragment"
-        android:label="Booking" />
+        android:label="Бронирование"
+        tools:layout="@layout/fragment_booking" />
 
     <fragment
         android:id="@+id/keyFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.KeyFragment"
-        android:label="NFC Key" />
+        android:label="NFC Ключ"
+        tools:layout="@layout/fragment_key" />
 
     <fragment
         android:id="@+id/hotelInfoFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.HotelInfoFragment"
-        android:label="Hotel Info" />
+        android:label="Информация об отеле"
+        tools:layout="@layout/fragment_hotel_info" />
 
     <fragment
         android:id="@+id/servicesFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.ServicesFragment"
-        android:label="Services" />
+        android:label="Услуги"
+        tools:layout="@layout/fragment_services" />
 
     <fragment
         android:id="@+id/paymentFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.PaymentFragment"
-        android:label="Payment" />
+        android:label="Оплата"
+        tools:layout="@layout/fragment_payment" />
 
     <fragment
         android:id="@+id/reviewsFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.ReviewsFragment"
-        android:label="Reviews" />
+        android:label="Отзывы"
+        tools:layout="@layout/fragment_reviews" />
+
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.hotel_app.presentation.ui.fragments.MapsFragment"
+        android:label="Карта"
+        tools:layout="@layout/fragment_maps" />
 
 </navigation>
