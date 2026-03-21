@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hotel_app.domain.model.HotelService
 import com.example.hotel_app.domain.model.ServiceCategory
+import com.example.hotel_app.domain.model.getIcon
 import com.example.hotel_app.domain.repository.HotelRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -30,10 +30,10 @@ enum class ServiceCategory {
 }
 
 fun ServiceCategory.getIcon(): String = when (this) {
-    SPA -> "🧖"
-    TRANSFER -> "🚗"
-    FOOD -> "🍽️"
-    OTHER -> "⭐"
+    ServiceCategory.SPA -> "🧖"
+    ServiceCategory.TRANSFER -> "🚗"
+    ServiceCategory.FOOD -> "🍽️"
+    ServiceCategory.OTHER -> "⭐"
 }
 
 data class Review(
