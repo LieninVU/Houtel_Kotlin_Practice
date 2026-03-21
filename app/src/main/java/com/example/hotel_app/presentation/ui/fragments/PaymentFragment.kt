@@ -28,8 +28,8 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentPaymentBinding.bind(view)
 
-        // Устанавливаем сумму из аргументов
-        viewModel.setAmount(args.amount)
+        // Устанавливаем сумму из аргументов (конвертируем java.lang.Double в kotlin.Double)
+        viewModel.setAmount(args.amount.toDouble())
         
         setupToolbar()
         setupListeners()

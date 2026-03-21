@@ -197,7 +197,7 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
                             is BookingViewModel.BookingUiEvent.NavigateToPayment -> {
                                 // Переход на оплату с передачей суммы
                                 val action = BookingFragmentDirections.actionBookingFragmentToPaymentFragment(
-                                    amount = event.amount,
+                                    amount = event.amount.toDouble(),
                                     bookingId = event.booking.id,
                                     roomNumber = event.booking.roomNumber
                                 )
