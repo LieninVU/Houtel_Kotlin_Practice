@@ -1,5 +1,8 @@
 package com.example.hotel_app.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 data class User(
     val id: String,
     val name: String,
@@ -16,6 +19,7 @@ data class Room(
     val isAvailable: Boolean
 )
 
+@Parcelize
 data class HotelService(
     val id: String,
     val title: String,
@@ -25,7 +29,7 @@ data class HotelService(
     val imageUrl: String,
     val durationMinutes: Int,
     val isPopular: Boolean = false
-)
+) : Parcelable
 
 enum class ServiceCategory {
     SPA,

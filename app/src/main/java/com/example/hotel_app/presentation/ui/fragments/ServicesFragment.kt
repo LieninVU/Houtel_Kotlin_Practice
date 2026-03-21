@@ -4,13 +4,15 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.hotel_app.databinding.FragmentServicesBinding
+import com.example.hotel_app.domain.model.HotelService
 import com.example.hotel_app.presentation.ui.adapter.ServiceCategoryPagerAdapter
 import com.example.hotel_app.presentation.viewmodel.MainViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.hotel_app.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ServicesFragment : Fragment(R.layout.fragment_services) {
 
@@ -41,13 +43,13 @@ class ServicesFragment : Fragment(R.layout.fragment_services) {
                     tab.text = categories[position].displayName()
                 }.apply { attach() }
 
-                pagerAdapter.submitPages(categories, viewModel.services.value)
+                pagerAdapter.submitPages(categories, viewModel.services.value, ::openPayment)
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.services.collect { services ->
-                pagerAdapter.submitPages(viewModel.serviceCategories.value, services)
+                pagerAdapter.submitPages(viewModel.serviceCategories.value, services, ::openPayment)
                 binding.tvServicesEmpty.visibility = if (services.isEmpty()) View.VISIBLE else View.GONE
             }
         }
@@ -58,6 +60,11 @@ class ServicesFragment : Fragment(R.layout.fragment_services) {
                 binding.vpServices.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
             }
         }
+    }
+
+    private fun openPayment(service: HotelService) {
+        val action = ServicesFragmentDirections.actionServicesFragmentToPaymentFragment(service)
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {

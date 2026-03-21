@@ -29,12 +29,20 @@
     <fragment
         android:id="@+id/servicesFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.ServicesFragment"
-        android:label="Services" />
+        android:label="Services">
+        <action
+            android:id="@+id/action_servicesFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/paymentFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.PaymentFragment"
-        android:label="Payment" />
+        android:label="Payment">
+        <argument
+            android:name="selectedService"
+            app:argType="com.example.hotel_app.domain.model.HotelService" />
+    </fragment>
 
     <fragment
         android:id="@+id/reviewsFragment"
