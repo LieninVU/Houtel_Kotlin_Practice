@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hotel_app.R
 import com.example.hotel_app.databinding.FragmentDashboardBinding
 import com.example.hotel_app.presentation.ui.adapter.EventAdapter
+import com.example.hotel_app.presentation.ui.adapter.PaidServicesAdapter
 import com.example.hotel_app.presentation.viewmodel.HotelInfoViewModel
 import com.example.hotel_app.presentation.viewmodel.HotelInfoViewModelFactory
 import com.example.hotel_app.presentation.viewmodel.MainViewModel
@@ -29,6 +30,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     }
 
     private lateinit var recommendationsAdapter: EventAdapter
+    private lateinit var paidServicesAdapter: PaidServicesAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,7 +38,9 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         _binding = FragmentDashboardBinding.bind(view)
         setupListeners()
         setupRecommendations()
+        setupPaidServices()
         observeRecommendations()
+        observePaidServices()
         observeState()
     }
 
@@ -72,6 +76,27 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         binding.rvDashboardRecommendations.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = recommendationsAdapter
+        }
+    }
+
+    private fun setupPaidServices() {
+        paidServicesAdapter = PaidServicesAdapter()
+        binding.rvPaidServices.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = paidServicesAdapter
+        }
+    }
+
+    private fun observePaidServices() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.paidServices.collect { services ->
+                    paidServicesAdapter.submitList(services)
+                    binding.rvPaidServices.isVisible = services.isNotEmpty()
+                    binding.tvPaidServicesLabel.isVisible = services.isNotEmpty()
+                    binding.tvNoPaidServices.isVisible = services.isEmpty()
+                }
+            }
         }
     }
 

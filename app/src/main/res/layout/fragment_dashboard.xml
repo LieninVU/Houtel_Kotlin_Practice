@@ -193,7 +193,7 @@
             android:text="Current Booking"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutRecommendations" />
+            app:layout_constraintTop_toBottomOf="@id/cardStatus" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardStatus"
@@ -253,6 +253,41 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- Paid Services -->
+        <TextView
+            android:id="@+id/tvPaidServicesLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Оплаченные услуги"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardStatus" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPaidServices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/tvPaidServicesLabel" />
+
+        <TextView
+            android:id="@+id/tvNoPaidServices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Нет оплаченных услуг"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardStatus" />
+
         <!-- Recommended Rooms -->
         <TextView
             android:id="@+id/tvOffersLabel"
@@ -262,7 +297,7 @@
             android:text="Special Offers"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardStatus" />
+            app:layout_constraintTop_toBottomOf="@id/tvNoPaidServices" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvOffers"

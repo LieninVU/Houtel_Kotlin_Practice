@@ -2,7 +2,6 @@ package com.example.hotel_app.presentation.ui.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -14,7 +13,9 @@ import com.example.hotel_app.R
 import com.example.hotel_app.databinding.FragmentServicesBinding
 import com.example.hotel_app.domain.model.ServiceCategory
 import com.example.hotel_app.presentation.ui.adapter.ServicesAdapter
+import com.example.hotel_app.presentation.viewmodel.PaymentUiState
 import com.example.hotel_app.presentation.viewmodel.ServicesViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -41,16 +42,23 @@ class ServicesFragment : Fragment(R.layout.fragment_services) {
 
     private fun setupRecyclerView() {
         servicesAdapter = ServicesAdapter { service ->
-            Toast.makeText(
-                requireContext(),
-                "${service.title} - ${service.price}₽",
-                Toast.LENGTH_SHORT
-            ).show()
+            showPaymentDialog(service)
         }
         binding.rvServices.apply {
             adapter = servicesAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
+    }
+
+    private fun showPaymentDialog(service: HotelService) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Оплата услуги")
+            .setMessage("${service.title}\n\nЦена: $${service.price.toInt()}\n\nОплатить эту услугу?")
+            .setPositiveButton("Оплатить") { _, _ ->
+                viewModel.payForService(service)
+            }
+            .setNegativeButton("Отмена", null)
+            .show()
     }
 
     private fun setupCategoryFilter() {
@@ -109,6 +117,19 @@ class ServicesFragment : Fragment(R.layout.fragment_services) {
                 launch {
                     viewModel.isLoading.collect { isLoading ->
                         binding.progressBar.isVisible = isLoading
+                    }
+                }
+
+                launch {
+                    viewModel.paymentResult.collect { state ->
+                        when (state) {
+                            is PaymentUiState.Success -> {
+                                Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                            }
+                            is PaymentUiState.Error -> {
+                                Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     }
                 }
             }

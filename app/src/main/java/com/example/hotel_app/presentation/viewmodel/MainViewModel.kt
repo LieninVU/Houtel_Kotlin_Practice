@@ -3,6 +3,7 @@ package com.example.hotel_app.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hotel_app.domain.model.Booking
+import com.example.hotel_app.domain.model.PaidService
 import com.example.hotel_app.domain.model.Room
 import com.example.hotel_app.domain.model.User
 import com.example.hotel_app.domain.repository.HotelRepository
@@ -25,6 +26,9 @@ class MainViewModel(private val repository: HotelRepository) : ViewModel() {
     private val _user = MutableStateFlow<User?>(null)
     val user: StateFlow<User?> = _user.asStateFlow()
 
+    private val _paidServices = MutableStateFlow<List<PaidService>>(emptyList())
+    val paidServices: StateFlow<List<PaidService>> = _paidServices.asStateFlow()
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
@@ -33,6 +37,7 @@ class MainViewModel(private val repository: HotelRepository) : ViewModel() {
         observeActiveBooking()
         observeBookings()
         observeUser()
+        observePaidServices()
     }
 
     fun loadRooms() {
@@ -65,6 +70,14 @@ class MainViewModel(private val repository: HotelRepository) : ViewModel() {
         viewModelScope.launch {
             repository.getCurrentUser().collect { currentUser ->
                 _user.value = currentUser
+            }
+        }
+    }
+
+    private fun observePaidServices() {
+        viewModelScope.launch {
+            repository.getPaidServices().collect { services ->
+                _paidServices.value = services
             }
         }
     }

@@ -6,6 +6,8 @@ import com.example.hotel_app.domain.model.*
 import com.example.hotel_app.domain.repository.BookingResult
 import com.example.hotel_app.domain.repository.HotelRepository
 import com.example.hotel_app.domain.repository.KeyAction
+import com.example.hotel_app.domain.repository.PaymentResult
+import com.example.hotel_app.domain.model.PaymentStatus
 import io.github.serpro69.kfaker.Faker
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -26,6 +28,7 @@ class MockHotelRepository(
     private val _nfcKeys = MutableStateFlow<List<NfcKey>>(emptyList())
     private val _activeBooking = MutableStateFlow<Booking?>(null)
     private val _bookings = MutableStateFlow<List<Booking>>(emptyList())
+    private val _paidServices = MutableStateFlow<List<PaidService>>(emptyList())
     private val baseUser = User(
         id = "user_123",
         name = faker.name.name(),
@@ -171,6 +174,28 @@ class MockHotelRepository(
             } else key
         }
         return true
+    }
+
+    override fun getPaidServices(): Flow<List<PaidService>> = _paidServices
+
+    override suspend fun payForService(service: HotelService): PaymentResult {
+        delay(1000) // Имитация обработки платежа
+        
+        val paidService = PaidService(
+            id = "paid_${UUID.randomUUID()}",
+            serviceId = service.id,
+            title = service.title,
+            price = service.price,
+            category = service.category,
+            paidAt = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault()).format(Date()),
+            status = PaymentStatus.PAID
+        )
+        
+        val currentList = _paidServices.value.toMutableList()
+        currentList.add(paidService)
+        _paidServices.value = currentList
+        
+        return PaymentResult.Success(paidService)
     }
 }
 

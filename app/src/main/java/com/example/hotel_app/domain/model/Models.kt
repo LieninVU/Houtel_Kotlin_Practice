@@ -68,3 +68,17 @@ data class NfcKey(
     val validUntil: String,
     val lastUsed: String? = null
 )
+
+data class PaidService(
+    val id: String,
+    val serviceId: String,
+    val title: String,
+    val price: Double,
+    val category: ServiceCategory,
+    val paidAt: String,
+    val status: PaymentStatus
+)
+
+enum class PaymentStatus {
+    PENDING, PAID, CANCELLED
+}

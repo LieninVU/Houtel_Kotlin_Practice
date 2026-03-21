@@ -22,11 +22,20 @@ interface HotelRepository {
     fun getNfcKeys(): Flow<List<NfcKey>>
     suspend fun activateNfcKey(bookingId: String): Boolean
     suspend fun useKeyAction(keyId: String, action: KeyAction): Boolean
+    
+    // Paid services
+    fun getPaidServices(): Flow<List<PaidService>>
+    suspend fun payForService(service: HotelService): PaymentResult
 }
 
 sealed class BookingResult {
     data class Success(val booking: Booking, val nfcKey: NfcKey) : BookingResult()
     data class Error(val message: String) : BookingResult()
+}
+
+sealed class PaymentResult {
+    data class Success(val paidService: PaidService) : PaymentResult()
+    data class Error(val message: String) : PaymentResult()
 }
 
 enum class KeyAction {
