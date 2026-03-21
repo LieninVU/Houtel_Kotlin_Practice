@@ -2,6 +2,7 @@ package com.example.hotel_app.presentation.ui.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.hotel_app.R
 import com.example.hotel_app.databinding.FragmentServicesBinding
+import com.example.hotel_app.domain.model.HotelService
 import com.example.hotel_app.domain.model.ServiceCategory
 import com.example.hotel_app.presentation.ui.adapter.ServicesAdapter
 import com.example.hotel_app.presentation.viewmodel.PaymentUiState
