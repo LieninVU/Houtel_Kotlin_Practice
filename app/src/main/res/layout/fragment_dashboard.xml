@@ -121,7 +121,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Recommendations (Android-3 integration) -->
+        <!-- Hotel Info Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGoToInfo"
             android:layout_width="match_parent"
@@ -130,6 +130,7 @@
             android:text="Hotel information"
             app:layout_constraintTop_toBottomOf="@id/cardQuickActions" />
 
+        <!-- Recommendations -->
         <LinearLayout
             android:id="@+id/layoutRecommendations"
             android:layout_width="0dp"
@@ -157,6 +158,7 @@
                 android:paddingEnd="8dp" />
         </LinearLayout>
 
+        <!-- Error Layout -->
         <LinearLayout
             android:id="@+id/layoutError"
             android:layout_width="0dp"
@@ -184,7 +186,7 @@
                 android:text="Retry" />
         </LinearLayout>
 
-        <!-- Current Status / Booking -->
+        <!-- Current Booking Status -->
         <TextView
             android:id="@+id/tvStatusLabel"
             android:layout_width="wrap_content"
@@ -193,7 +195,7 @@
             android:text="Current Booking"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardStatus" />
+            app:layout_constraintTop_toBottomOf="@id/layoutRecommendations" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardStatus"
@@ -253,7 +255,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Paid Services -->
+        <!-- Paid Services Section -->
         <TextView
             android:id="@+id/tvPaidServicesLabel"
             android:layout_width="wrap_content"
@@ -288,7 +290,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardStatus" />
 
-        <!-- Recommended Rooms -->
+        <!-- Special Offers -->
         <TextView
             android:id="@+id/tvOffersLabel"
             android:layout_width="wrap_content"
@@ -297,7 +299,7 @@
             android:text="Special Offers"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvNoPaidServices" />
+            app:layout_constraintTop_toBottomOf="@id/rvPaidServices" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvOffers"
