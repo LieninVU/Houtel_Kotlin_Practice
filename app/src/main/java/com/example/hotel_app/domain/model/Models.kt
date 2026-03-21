@@ -21,11 +21,19 @@ data class HotelService(
     val title: String,
     val category: ServiceCategory,
     val price: Double,
-    val imageUrl: String
+    val imageUrl: String,
+    val description: String
 )
 
 enum class ServiceCategory {
     SPA, TRANSFER, FOOD, OTHER
+}
+
+fun ServiceCategory.getIcon(): String = when (this) {
+    SPA -> "🧖"
+    TRANSFER -> "🚗"
+    FOOD -> "🍽️"
+    OTHER -> "⭐"
 }
 
 data class Review(
@@ -39,6 +47,7 @@ data class Review(
 data class Booking(
     val id: String,
     val roomId: String,
+    val roomNumber: String,
     val checkIn: String,
     val checkOut: String,
     val status: BookingStatus
@@ -47,3 +56,12 @@ data class Booking(
 enum class BookingStatus {
     PENDING, CONFIRMED, CANCELLED, COMPLETED
 }
+
+data class NfcKey(
+    val id: String,
+    val roomNumber: String,
+    val roomType: String,
+    val isActive: Boolean,
+    val validUntil: String,
+    val lastUsed: String? = null
+)

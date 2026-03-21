@@ -1,3 +1,62 @@
 <resources>
-    <string name="app_name">Hotel_App</string>
+    <string name="app_name">Отель</string>
+    
+    <!-- NFC Key -->
+    <string name="nfc_digital_key">Электронный ключ NFC</string>
+    <string name="room_number_format">НОМЕР %1$s</string>
+    <string name="room_empty">НОМЕР ---</string>
+    <string name="valid_until_format">Действует до: %1$s</string>
+    <string name="valid_until_empty">Действует до: --/--/--</string>
+    <string name="key_active_status">Ключ активен. Поднесите телефон к замку двери.</string>
+    <string name="no_key_status">Активный ключ не найден. Пожалуйста, зарегистрируйтесь.</string>
+    <string name="simulate_nfc_scan">Симуляция NFC (Открыть дверь)</string>
+    <string name="request_digital_key">Запросить электронный ключ</string>
+    
+    <!-- Dashboard -->
+    <string name="welcome">Добро пожаловать,</string>
+    <string name="guest">Гость</string>
+    <string name="my_key">Мой ключ</string>
+    <string name="services">Услуги</string>
+    <string name="support">Поддержка</string>
+    <string name="current_booking">Текущее бронирование</string>
+    <string name="special_offers">Спецпредложения</string>
+    
+    <!-- Booking -->
+    <string name="booking_title">Бронирование номера</string>
+    <string name="check_in_date">Дата заезда</string>
+    <string name="check_out_date">Дата выезда</string>
+    <string name="select_room">Выберите номер</string>
+    <string name="book_room">Забронировать</string>
+    
+    <!-- Services -->
+    <string name="services_catalog">Каталог услуг</string>
+    <string name="search_services">Поиск услуг</string>
+    <string name="all">Все</string>
+    <string name="spa">SPA</string>
+    <string name="transfer">Трансфер</string>
+    <string name="food">Еда</string>
+    <string name="other">Другое</string>
+    
+    <!-- Hotel Info -->
+    <string name="hotel_info">Информация об отеле</string>
+    <string name="contacts">Контакты</string>
+    <string name="schedule">Расписание</string>
+    <string name="facilities">Удобства</string>
+    
+    <!-- Payment -->
+    <string name="payment">Оплата услуг</string>
+    <string name="pay">Оплатить</string>
+    <string name="cancel">Отмена</string>
+    
+    <!-- Reviews -->
+    <string name="reviews">Отзывы</string>
+    <string name="leave_review">Оставить отзыв</string>
+    <string name="your_name">Ваше имя</string>
+    <string name="your_review">Ваш отзыв</string>
+    <string name="submit_review">Отправить отзыв</string>
+    
+    <!-- Maps -->
+    <string name="maps">Карта</string>
+    <string name="route">Маршрут</string>
+    <string name="call">Позвонить</string>
 </resources>

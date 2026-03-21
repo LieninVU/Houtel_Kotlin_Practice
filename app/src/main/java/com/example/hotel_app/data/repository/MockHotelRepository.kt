@@ -1,16 +1,24 @@
 package com.example.hotel_app.data.repository
 
+import com.example.hotel_app.data.local.ReviewDao
+import com.example.hotel_app.data.local.ReviewEntity
 import com.example.hotel_app.domain.model.*
 import com.example.hotel_app.domain.repository.HotelRepository
+import com.example.hotel_app.domain.repository.KeyAction
 import io.github.serpro69.kfaker.Faker
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import java.text.SimpleDateFormat
 import java.util.*
 
-class MockHotelRepository : HotelRepository {
+class MockHotelRepository(private val reviewDao: ReviewDao) : HotelRepository {
     private val faker = Faker()
     private val random = Random()
+
+    private val _nfcKeys = MutableStateFlow<List<NfcKey>>(emptyList())
 
     override fun getRooms(): Flow<List<Room>> = flow {
         delay(500)
@@ -32,27 +40,18 @@ class MockHotelRepository : HotelRepository {
         val services = List(8) {
             HotelService(
                 id = UUID.randomUUID().toString(),
-                title = listOf("SPA Treatment", "Airport Transfer", "Breakfast Buffet", "Gym Access").random(),
+                title = listOf("SPA Treatment", "Airport Transfer", "Breakfast Buffet", "Gym Access", "Laundry", "Excursion").random(),
                 category = ServiceCategory.values().random(),
                 price = 20.0 + random.nextInt(180),
-                imageUrl = "https://picsum.photos/seed/${random.nextInt(1000)}/200/200"
+                imageUrl = "https://picsum.photos/seed/${random.nextInt(1000)}/200/200",
+                description = "Premium ${listOf("SPA", "Transfer", "Food", "Service").random()} service"
             )
         }
         emit(services)
     }
 
-    override fun getReviews(): Flow<List<Review>> = flow {
-        delay(500)
-        val reviews = List(5) {
-            Review(
-                id = UUID.randomUUID().toString(),
-                userName = faker.name.name(),
-                rating = 1 + random.nextInt(5),
-                comment = "Had a wonderful stay. The staff was very helpful and the room was clean.",
-                date = "2023-10-15"
-            )
-        }
-        emit(reviews)
+    override fun getReviews(): Flow<List<Review>> = reviewDao.getAllReviews().map { entities ->
+        entities.map { it.toReview() }
     }
 
     override fun getCurrentUser(): Flow<User> = flow {
@@ -70,4 +69,57 @@ class MockHotelRepository : HotelRepository {
         delay(500)
         return true
     }
+
+    override fun getNfcKeys(): Flow<List<NfcKey>> = _nfcKeys
+
+    override suspend fun activateNfcKey(bookingId: String): Boolean {
+        delay(1000)
+        val newKey = NfcKey(
+            id = UUID.randomUUID().toString(),
+            roomNumber = (100 + random.nextInt(400)).toString(),
+            roomType = listOf("Deluxe", "Suite", "Standard").random(),
+            isActive = true,
+            validUntil = "2026-12-31"
+        )
+        val currentList = _nfcKeys.value.toMutableList()
+        currentList.add(newKey)
+        _nfcKeys.value = currentList
+        return true
+    }
+
+    override suspend fun useKeyAction(keyId: String, action: KeyAction): Boolean {
+        delay(800)
+        val currentList = _nfcKeys.value.map { key ->
+            if (key.id == keyId) {
+                key.copy(lastUsed = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date()))
+            } else key
+        }
+        _nfcKeys.value = currentList
+        return true
+    }
+
+    suspend fun saveReview(review: Review) {
+        reviewDao.insertReview(review.toEntity())
+    }
+
+    suspend fun deleteReview(reviewId: String) {
+        reviewDao.deleteReview(reviewId)
+    }
 }
+
+// Extension functions for conversion
+fun Review.toEntity(): ReviewEntity = ReviewEntity(
+    id = id,
+    userName = userName,
+    rating = rating,
+    comment = comment,
+    date = date
+)
+
+fun ReviewEntity.toReview(): Review = Review(
+    id = id,
+    userName = userName,
+    rating = rating,
+    comment = comment,
+    date = date
+)
