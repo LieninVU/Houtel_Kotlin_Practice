@@ -33,56 +33,61 @@
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Category Filter -->
+    <!-- Category Filter - Using Buttons instead of Chips -->
     <HorizontalScrollView
         android:id="@+id/scrollCategories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:scrollbars="none"
         app:layout_constraintTop_toBottomOf="@id/layoutSearch">
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroup"
+        <LinearLayout
+            android:id="@+id/layoutCategories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
-            app:singleSelection="true">
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
 
-            <com.google.android.material.chip.Chip
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/chipAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:text="Все"
-                style="@style/Widget.Material3.Chip.Filter" />
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
-            <com.google.android.material.chip.Chip
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/chipSpa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:text="SPA"
-                style="@style/Widget.Material3.Chip.Filter" />
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
-            <com.google.android.material.chip.Chip
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/chipTransfer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:text="Трансфер"
-                style="@style/Widget.Material3.Chip.Filter" />
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
-            <com.google.android.material.chip.Chip
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/chipFood"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:text="Еда"
-                style="@style/Widget.Material3.Chip.Filter" />
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
-            <com.google.android.material.chip.Chip
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/chipOther"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Другое"
-                style="@style/Widget.Material3.Chip.Filter" />
-        </com.google.android.material.chip.ChipGroup>
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+        </LinearLayout>
     </HorizontalScrollView>
 
     <!-- Services Grid -->

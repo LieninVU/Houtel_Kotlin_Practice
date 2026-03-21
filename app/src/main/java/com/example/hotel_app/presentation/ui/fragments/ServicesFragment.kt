@@ -55,20 +55,38 @@ class ServicesFragment : Fragment(R.layout.fragment_services) {
 
     private fun setupCategoryFilter() {
         binding.chipAll.setOnClickListener {
+            clearCategoryButtons()
+            binding.chipAll.isEnabled = false
             viewModel.selectCategory(null)
         }
         binding.chipSpa.setOnClickListener {
+            clearCategoryButtons()
+            binding.chipSpa.isEnabled = false
             viewModel.selectCategory(ServiceCategory.SPA)
         }
         binding.chipTransfer.setOnClickListener {
+            clearCategoryButtons()
+            binding.chipTransfer.isEnabled = false
             viewModel.selectCategory(ServiceCategory.TRANSFER)
         }
         binding.chipFood.setOnClickListener {
+            clearCategoryButtons()
+            binding.chipFood.isEnabled = false
             viewModel.selectCategory(ServiceCategory.FOOD)
         }
         binding.chipOther.setOnClickListener {
+            clearCategoryButtons()
+            binding.chipOther.isEnabled = false
             viewModel.selectCategory(ServiceCategory.OTHER)
         }
+    }
+
+    private fun clearCategoryButtons() {
+        binding.chipAll.isEnabled = true
+        binding.chipSpa.isEnabled = true
+        binding.chipTransfer.isEnabled = true
+        binding.chipFood.isEnabled = true
+        binding.chipOther.isEnabled = true
     }
 
     private fun setupSearch() {
