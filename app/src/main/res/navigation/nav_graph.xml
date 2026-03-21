@@ -24,6 +24,11 @@
             app:destination="@id/keyFragment"
             app:popUpTo="@id/dashboardFragment" />
         <action
+            android:id="@+id/action_bookingFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment"
+            app:popUpTo="@id/bookingFragment"
+            app:popUpToInclusive="true" />
+        <action
             android:id="@+id/action_bookingFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment"
             app:popUpTo="@id/dashboardFragment"
@@ -48,7 +53,20 @@
     <fragment
         android:id="@+id/paymentFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.PaymentFragment"
-        android:label="Payment" />
+        android:label="Payment">
+        <argument
+            android:name="amount"
+            android:defaultValue="0.0"
+            app:argType="double" />
+        <argument
+            android:name="bookingId"
+            android:defaultValue='""'
+            app:argType="string" />
+        <argument
+            android:name="roomNumber"
+            android:defaultValue='""'
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/reviewsFragment"

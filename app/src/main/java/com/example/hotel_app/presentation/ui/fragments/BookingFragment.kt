@@ -194,6 +194,15 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
                                     message = event.message
                                 )
                             }
+                            is BookingViewModel.BookingUiEvent.NavigateToPayment -> {
+                                // Переход на оплату с передачей суммы
+                                val action = BookingFragmentDirections.actionBookingFragmentToPaymentFragment(
+                                    amount = event.amount,
+                                    bookingId = event.booking.id,
+                                    roomNumber = event.booking.roomNumber
+                                )
+                                findNavController().navigate(action)
+                            }
                             is BookingViewModel.BookingUiEvent.BookingError -> {
                                 Toast.makeText(requireContext(), event.message, Toast.LENGTH_LONG).show()
                             }

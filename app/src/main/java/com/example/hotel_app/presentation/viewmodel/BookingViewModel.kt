@@ -97,48 +97,45 @@ class BookingViewModel(private val repository: HotelRepository) : ViewModel() {
         val checkOut = _checkOutDate.value
 
         if (room == null) {
-            viewModelScope.launch { 
-                _bookingEvent.emit(BookingUiEvent.ValidationError("Please select a room")) 
+            viewModelScope.launch {
+                _bookingEvent.emit(BookingUiEvent.ValidationError("Please select a room"))
             }
             return
         }
 
         if (checkIn.isNullOrBlank() || checkOut.isNullOrBlank()) {
-            viewModelScope.launch { 
-                _bookingEvent.emit(BookingUiEvent.ValidationError("Please select check-in and check-out dates")) 
+            viewModelScope.launch {
+                _bookingEvent.emit(BookingUiEvent.ValidationError("Please select check-in and check-out dates"))
             }
             return
         }
 
         if (guestName.isBlank()) {
-            viewModelScope.launch { 
-                _bookingEvent.emit(BookingUiEvent.ValidationError("Please enter guest name")) 
+            viewModelScope.launch {
+                _bookingEvent.emit(BookingUiEvent.ValidationError("Please enter guest name"))
             }
             return
         }
 
         viewModelScope.launch {
             _isLoading.value = true
-            
+
             when (val result = repository.bookRoom(room.id, guestName, checkIn, checkOut)) {
                 is BookingResult.Success -> {
+                    val totalPrice = calculateTotalPrice()
                     _bookingEvent.emit(
-                        BookingUiEvent.BookingSuccess(
+                        BookingUiEvent.NavigateToPayment(
                             booking = result.booking,
                             nfcKey = result.nfcKey,
-                            message = "Booking confirmed! Your NFC key for room ${result.booking.roomNumber} is ready."
+                            amount = totalPrice
                         )
                     )
-                    _selectedRoom.value = null
-                    _checkInDate.value = null
-                    _checkOutDate.value = null
-                    loadRooms()
                 }
                 is BookingResult.Error -> {
                     _bookingEvent.emit(BookingUiEvent.BookingError(result.message))
                 }
             }
-            
+
             _isLoading.value = false
         }
     }
@@ -149,7 +146,13 @@ class BookingViewModel(private val repository: HotelRepository) : ViewModel() {
             val nfcKey: NfcKey,
             val message: String
         ) : BookingUiEvent()
-        
+
+        data class NavigateToPayment(
+            val booking: Booking,
+            val nfcKey: NfcKey,
+            val amount: Double
+        ) : BookingUiEvent()
+
         data class BookingError(val message: String) : BookingUiEvent()
         data class ValidationError(val message: String) : BookingUiEvent()
     }
