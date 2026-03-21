@@ -56,7 +56,7 @@
         android:label="Payment">
         <argument
             android:name="amount"
-            app:argType="double" />
+            app:argType="java.lang.Double" />
         <argument
             android:name="bookingId"
             app:argType="string" />
