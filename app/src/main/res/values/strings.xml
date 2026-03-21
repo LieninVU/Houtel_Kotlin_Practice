@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Hotel_App</string>
     <string name="services_catalog_title">Service catalog</string>
-    <string name="services_catalog_subtitle">Foundation for categories, mocks and reusable service cards.</string>
-    <string name="services_preview_category_label">Mock categories prepared</string>
+    <string name="services_catalog_subtitle">Choose a category and browse hotel services prepared with mock data.</string>
     <string name="services_popular_label">Popular</string>
     <string name="services_duration_template">%1$d min</string>
     <string name="services_price_template">%1$.0f RUB</string>
     <string name="services_image_content_description">Service preview image</string>
+    <string name="services_empty_state">Services are loading or not available yet.</string>
 </resources>

@@ -30,7 +30,7 @@ class MockHotelRepository : HotelRepository {
 
     override fun getServices(): Flow<List<HotelService>> = flow {
         delay(500)
-        emit(ServiceCatalogMocks.services)
+        emit(ServiceCatalogMocks.generateServices(faker))
     }
 
     override fun getReviews(): Flow<List<Review>> = flow {
