@@ -68,12 +68,12 @@ class MockHotelRepository(
 
     override fun getServices(): Flow<List<HotelService>> = MutableStateFlow(
         listOf(
-            HotelService("srv_1", "SPA Treatment", ServiceCategory.SPA, 80.0, "https://picsum.photos/seed/spa/200/200"),
-            HotelService("srv_2", "Airport Transfer", ServiceCategory.TRANSFER, 45.0, "https://picsum.photos/seed/transfer/200/200"),
-            HotelService("srv_3", "Breakfast Buffet", ServiceCategory.FOOD, 25.0, "https://picsum.photos/seed/breakfast/200/200"),
-            HotelService("srv_4", "Gym Access", ServiceCategory.OTHER, 15.0, "https://picsum.photos/seed/gym/200/200"),
-            HotelService("srv_5", "Room Service", ServiceCategory.FOOD, 35.0, "https://picsum.photos/seed/room/200/200"),
-            HotelService("srv_6", "Laundry", ServiceCategory.OTHER, 20.0, "https://picsum.photos/seed/laundry/200/200")
+            HotelService("srv_1", "SPA Treatment", ServiceCategory.SPA, 80.0, "https://picsum.photos/seed/spa/200/200", "Relaxing spa experience"),
+            HotelService("srv_2", "Airport Transfer", ServiceCategory.TRANSFER, 45.0, "https://picsum.photos/seed/transfer/200/200", "Comfortable ride to airport"),
+            HotelService("srv_3", "Breakfast Buffet", ServiceCategory.FOOD, 25.0, "https://picsum.photos/seed/breakfast/200/200", "Delicious breakfast spread"),
+            HotelService("srv_4", "Gym Access", ServiceCategory.OTHER, 15.0, "https://picsum.photos/seed/gym/200/200", "Modern fitness equipment"),
+            HotelService("srv_5", "Room Service", ServiceCategory.FOOD, 35.0, "https://picsum.photos/seed/room/200/200", "24/7 in-room dining"),
+            HotelService("srv_6", "Laundry", ServiceCategory.OTHER, 20.0, "https://picsum.photos/seed/laundry/200/200", "Same-day laundry service")
         )
     )
 

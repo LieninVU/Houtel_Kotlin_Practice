@@ -21,7 +21,8 @@ data class HotelService(
     val title: String,
     val category: ServiceCategory,
     val price: Double,
-    val imageUrl: String
+    val imageUrl: String,
+    val description: String = ""
 )
 
 enum class ServiceCategory {

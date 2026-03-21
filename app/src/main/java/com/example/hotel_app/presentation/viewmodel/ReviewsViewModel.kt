@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.hotel_app.data.local.ReviewDao
 import com.example.hotel_app.data.repository.MockHotelRepository
 import com.example.hotel_app.data.repository.toEntity
+import com.example.hotel_app.data.repository.toReview
 import com.example.hotel_app.domain.model.Review
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
