@@ -56,15 +56,12 @@
         android:label="Payment">
         <argument
             android:name="amount"
-            android:defaultValue="0.0"
             app:argType="double" />
         <argument
             android:name="bookingId"
-            android:defaultValue='""'
             app:argType="string" />
         <argument
             android:name="roomNumber"
-            android:defaultValue='""'
             app:argType="string" />
     </fragment>
 
