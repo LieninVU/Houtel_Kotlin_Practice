@@ -62,12 +62,12 @@ class ServicesFragment : Fragment(R.layout.fragment_services) {
 
     private fun showPaymentDialog(service: HotelService) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Оплата услуги")
-            .setMessage("${service.title}\n\nЦена: $${service.price.toInt()}\n\nОплатить эту услугу?")
-            .setPositiveButton("Оплатить") { _, _ ->
+            .setTitle(getString(R.string.payment_dialog_title))
+            .setMessage(getString(R.string.payment_dialog_message_format, service.title, service.price.toInt()))
+            .setPositiveButton(getString(R.string.payment_dialog_pay_button)) { _, _ ->
                 viewModel.payForService(service)
             }
-            .setNegativeButton("Отмена", null)
+            .setNegativeButton(getString(R.string.payment_dialog_cancel_button), null)
             .show()
     }
 

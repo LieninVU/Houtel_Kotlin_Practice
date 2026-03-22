@@ -4,6 +4,9 @@
 
     <!-- Common -->
     <string name="back_button_content_description">Назад</string>
+    <string name="text_dash">—</string>
+    <string name="button_retry">Повторить</string>
+    <string name="paid_status">Оплачено</string>
 
     <!-- NFC Key -->
     <string name="nfc_digital_key">Электронный ключ</string>
@@ -69,6 +72,13 @@
     <string name="payment_button_continue">Перейти к ключу</string>
     <string name="payment_success_message">Оплата прошла успешно!</string>
     <string name="payment_cancelled_message">Оплата отменена</string>
+    <string name="payment_dialog_title">Оплата услуги</string>
+    <string name="payment_dialog_message_format">%1$s\n\nЦена: %2$d$\n\nОплатить эту услугу?</string>
+    <string name="payment_dialog_pay_button">Оплатить</string>
+    <string name="payment_dialog_cancel_button">Отмена</string>
+    <string name="payment_timer_text_format">Оплата через: %1$dс</string>
+    <string name="payment_amount_text_format">Сумма: %1$d$</string>
+    <string name="payment_toolbar_title_format">Оплата номера %1$s</string>
 
     <!-- Room Adapter -->
     <string name="room_price_per_night_format">%1$d$ / ночь</string>
@@ -77,12 +87,13 @@
     <string name="room_type_status_format">%1$s • %2$s</string>
     <string name="room_status_available_en">Available</string>
     <string name="room_status_booked_en">Booked</string>
+    <string name="room_image_content_description">Изображение номера</string>
 
     <!-- Services Fragment -->
     <string name="services_toolbar_title">Услуги</string>
     <string name="services_search_hint">Поиск услуг</string>
     <string name="services_category_all">Все</string>
-    <string name="services_category_spa">SPA</string>
+    <string name="services_category_spa">СПА</string>
     <string name="services_category_transfer">Трансфер</string>
     <string name="services_category_food">Еда</string>
     <string name="services_category_other">Другое</string>
@@ -126,9 +137,12 @@
     <string name="hotel_info_retry_button">Повторить</string>
     <string name="hotel_info_contacts_title">Контакты отеля</string>
     <string name="hotel_info_reception">🕐 Ресепшн: 24/7</string>
-    <string name="hotel_info_phone">+7 (800) 555-35-35</string>
-    <string name="hotel_info_email">info@hotel.ru</string>
-    <string name="hotel_info_address">ул. Гостиничная, 1</string>
+    <string name="hotel_info_phone_label">📞 Телефон:</string>
+    <string name="hotel_info_phone_value">+7 (800) 555-35-35</string>
+    <string name="hotel_info_email_label">📧 Email:</string>
+    <string name="hotel_info_email_value">info@hotel.ru</string>
+    <string name="hotel_info_address_label">📍 Адрес:</string>
+    <string name="hotel_info_map_content_description">Карта отеля</string>
     <string name="error_cannot_call">Не удалось выполнить звонок</string>
     <string name="error_cannot_email">Не удалось открыть почтовый клиент</string>
 
@@ -143,6 +157,7 @@
 
     <!-- Key Fragment -->
     <string name="key_no_key_selected">Нет выбранного ключа</string>
+    <string name="key_room_access_title">Доступ к номеру</string>
 
     <!-- Paid Services Adapter -->
     <string name="paid_service_price_format">%1$d$</string>
@@ -184,6 +199,8 @@
     <string name="restaurant_chaykhona_name">Чайхона №1</string>
     <string name="restaurant_chaykhona_cuisine">Узбекская</string>
     <string name="restaurant_chaykhona_address">ул. Большая Дмитровка, 35</string>
+    <string name="restaurant_route_built">Маршрут построен до ресторана</string>
+    <string name="restaurant_call_initiated">Звонок инициирован</string>
 
     <!-- Events (XlsEventParser) -->
     <string name="event_music_evening_name">Вечер живой музыки</string>
@@ -234,6 +251,7 @@
     <string name="mock_room_description_presidential">Максимальная роскошь. Две спальни, частная терраса, услуги дворецкого.</string>
     <string name="mock_error_room_not_found">Номер не найден</string>
     <string name="mock_error_room_not_available">Номер недоступен</string>
+    <string name="mock_error_unexpected_validation">Неожиданное состояние валидации</string>
     <string name="mock_room_price_per_night_format">%1$d$ / ночь</string>
 
     <!-- Mock Services -->

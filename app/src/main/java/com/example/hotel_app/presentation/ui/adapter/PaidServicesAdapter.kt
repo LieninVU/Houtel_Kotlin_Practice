@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hotel_app.R
 import com.example.hotel_app.databinding.LayoutItemPaidServiceBinding
 import com.example.hotel_app.domain.model.PaidService
 import com.example.hotel_app.domain.model.getIcon
@@ -24,12 +25,13 @@ class PaidServicesAdapter :
 
     override fun onBindViewHolder(holder: PaidServiceViewHolder, position: Int) {
         val service = getItem(position)
+        val context = holder.itemView.context
         with(holder.binding) {
             tvServiceIcon.text = service.category.getIcon()
             tvServiceTitle.text = service.title
             tvServicePrice.text = "$${service.price.toInt()}"
             tvPaidAt.text = service.paidAt
-            tvPaidStatus.text = "Оплачено"
+            tvPaidStatus.text = context.getString(R.string.paid_service_paid_status)
         }
     }
 

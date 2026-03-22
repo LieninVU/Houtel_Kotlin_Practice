@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hotel_app.R
+import com.example.hotel_app.ResourceProvider
 import com.example.hotel_app.data.parser.XlsEventParser
 import com.example.hotel_app.data.preferences.UserPreferences
 import com.example.hotel_app.domain.model.Event
@@ -55,7 +57,7 @@ class HotelInfoViewModel(context: Context) : ViewModel() {
             }
 
             _eventsState.value = when {
-                allEvents.isEmpty() -> UiState.Error("Нет данных о мероприятиях")
+                allEvents.isEmpty() -> UiState.Error(ResourceProvider.getString(R.string.hotel_info_events_error))
                 else -> UiState.Success(allEvents)
             }
 

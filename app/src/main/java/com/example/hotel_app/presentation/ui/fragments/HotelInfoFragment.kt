@@ -31,9 +31,8 @@ class HotelInfoFragment : Fragment(R.layout.fragment_hotel_info) {
     private lateinit var recommendationsAdapter: EventAdapter
 
     // ✅ Данные для контактов из ресурсов
-    private val hotelPhone: String by lazy { getString(R.string.hotel_info_phone) }
-    private val hotelEmail: String by lazy { getString(R.string.hotel_info_email) }
-    private val hotelAddress: String by lazy { getString(R.string.hotel_info_address) }
+    private val hotelPhone: String by lazy { getString(R.string.hotel_info_phone_label) + " " + getString(R.string.hotel_info_phone_value) }
+    private val hotelEmail: String by lazy { getString(R.string.hotel_info_email_label) + " " + getString(R.string.hotel_info_email_value) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -108,6 +107,10 @@ class HotelInfoFragment : Fragment(R.layout.fragment_hotel_info) {
         // Находим TextView контактов в layoutContacts
         val phoneTextView = binding.layoutContacts.findViewById<TextView>(R.id.tvPhone)
         val emailTextView = binding.layoutContacts.findViewById<TextView>(R.id.tvEmail)
+
+        // ✅ Устанавливаем текст из ресурсов
+        phoneTextView.text = hotelPhone
+        emailTextView.text = hotelEmail
 
         // ✅ Телефон - ACTION_DIAL
         phoneTextView.setOnClickListener {

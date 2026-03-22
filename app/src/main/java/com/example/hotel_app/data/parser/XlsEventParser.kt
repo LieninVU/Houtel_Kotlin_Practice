@@ -1,6 +1,8 @@
 package com.example.hotel_app.data.parser
 
 import android.content.Context
+import com.example.hotel_app.R
+import com.example.hotel_app.ResourceProvider
 import com.example.hotel_app.domain.model.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -73,10 +75,45 @@ class XlsEventParser(private val context: Context) {
 
     /** Моки для работы без XLS-файла */
     fun getMockEvents(): List<Event> = listOf(
-        Event("Вечер живой музыки", "Джазовый концерт в лобби", "15.06.2024", "19:00", "Лобби", "Концерт"),
-        Event("Экскурсия по городу", "Обзорная экскурсия с гидом", "16.06.2024", "10:00", "Главный вход", "Экскурсия"),
-        Event("Йога на рассвете", "Утренняя йога на террасе", "17.06.2024", "07:00", "Терраса", "Спорт"),
-        Event("Дегустация вин", "Вечер с сомелье", "18.06.2024", "20:00", "Ресторан", "Гастрономия"),
-        Event("Мастер-класс по кулинарии", "Готовим с шеф-поваром", "19.06.2024", "15:00", "Кухня", "Мастер-класс")
+        Event(
+            ResourceProvider.getString(R.string.event_music_evening_name),
+            ResourceProvider.getString(R.string.event_music_evening_description),
+            ResourceProvider.getString(R.string.event_music_evening_date),
+            ResourceProvider.getString(R.string.event_music_evening_time),
+            ResourceProvider.getString(R.string.event_music_evening_location),
+            ResourceProvider.getString(R.string.event_music_evening_category)
+        ),
+        Event(
+            ResourceProvider.getString(R.string.event_city_tour_name),
+            ResourceProvider.getString(R.string.event_city_tour_description),
+            ResourceProvider.getString(R.string.event_city_tour_date),
+            ResourceProvider.getString(R.string.event_city_tour_time),
+            ResourceProvider.getString(R.string.event_city_tour_location),
+            ResourceProvider.getString(R.string.event_city_tour_category)
+        ),
+        Event(
+            ResourceProvider.getString(R.string.event_yoga_dawn_name),
+            ResourceProvider.getString(R.string.event_yoga_dawn_description),
+            ResourceProvider.getString(R.string.event_yoga_dawn_date),
+            ResourceProvider.getString(R.string.event_yoga_dawn_time),
+            ResourceProvider.getString(R.string.event_yoga_dawn_location),
+            ResourceProvider.getString(R.string.event_yoga_dawn_category)
+        ),
+        Event(
+            ResourceProvider.getString(R.string.event_wine_tasting_name),
+            ResourceProvider.getString(R.string.event_wine_tasting_description),
+            ResourceProvider.getString(R.string.event_wine_tasting_date),
+            ResourceProvider.getString(R.string.event_wine_tasting_time),
+            ResourceProvider.getString(R.string.event_wine_tasting_location),
+            ResourceProvider.getString(R.string.event_wine_tasting_category)
+        ),
+        Event(
+            ResourceProvider.getString(R.string.event_cooking_masterclass_name),
+            ResourceProvider.getString(R.string.event_cooking_masterclass_description),
+            ResourceProvider.getString(R.string.event_cooking_masterclass_date),
+            ResourceProvider.getString(R.string.event_cooking_masterclass_time),
+            ResourceProvider.getString(R.string.event_cooking_masterclass_location),
+            ResourceProvider.getString(R.string.event_cooking_masterclass_category)
+        )
     )
 }

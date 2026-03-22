@@ -70,7 +70,7 @@
             android:background="@drawable/bg_status_active"
             android:paddingHorizontal="6dp"
             android:paddingVertical="2dp"
-            android:text="Оплачено"
+            android:text="@string/paid_status"
             android:textColor="@android:color/white"
             android:textSize="10sp"
             app:layout_constraintStart_toStartOf="parent"

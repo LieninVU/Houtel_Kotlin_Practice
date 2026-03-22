@@ -41,7 +41,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
             setNavigationOnClickListener {
                 findNavController().navigateUp()
             }
-            title = "Оплата номера ${args.roomNumber}"
+            title = getString(R.string.payment_toolbar_title_format, args.roomNumber)
         }
     }
 
@@ -68,7 +68,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
 
                 launch {
                     viewModel.timeRemaining.collect { time ->
-                        binding.tvTimer.text = "Оплата через: ${time}с"
+                        binding.tvTimer.text = getString(R.string.payment_timer_text_format, time)
                         if (time > 0) {
                             binding.timerProgress.progress = time * 20 // 5 seconds = 100%
                         }
@@ -78,7 +78,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
                 launch {
                     viewModel.amount.collect { amount ->
                         if (amount > 0) {
-                            binding.tvAmount.text = "Сумма: $${amount.toInt()}"
+                            binding.tvAmount.text = getString(R.string.payment_amount_text_format, amount.toInt())
                         }
                     }
                 }

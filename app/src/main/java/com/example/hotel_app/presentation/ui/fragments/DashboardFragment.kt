@@ -146,7 +146,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                         } ?: run {
                             binding.tvBookingRoom.text = getString(R.string.dashboard_no_active_booking)
                             binding.tvBookingDates.text = getString(R.string.dashboard_tap_to_reserve)
-                            binding.tvBookingStatus.text = "—"
+                            binding.tvBookingStatus.text = getString(R.string.text_dash)
                         }
                     }
                 }

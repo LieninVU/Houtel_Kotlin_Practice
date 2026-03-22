@@ -2,6 +2,8 @@ package com.example.hotel_app.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hotel_app.R
+import com.example.hotel_app.ResourceProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +32,7 @@ class PaymentViewModel : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             _paymentResult.value = null
-            
+
             // Countdown timer
             for (i in 5 downTo 0) {
                 _timeRemaining.value = i
@@ -39,14 +41,14 @@ class PaymentViewModel : ViewModel() {
 
             // Simulate payment processing
             delay(2000)
-            
+
             _isLoading.value = false
-            _paymentResult.value = PaymentResult.Success("Оплата прошла успешно!")
+            _paymentResult.value = PaymentResult.Success(ResourceProvider.getString(R.string.payment_success_message))
         }
     }
 
     fun cancelPayment() {
-        _paymentResult.value = PaymentResult.Cancelled("Оплата отменена")
+        _paymentResult.value = PaymentResult.Cancelled(ResourceProvider.getString(R.string.payment_cancelled_message))
     }
 
     fun clearResult() {

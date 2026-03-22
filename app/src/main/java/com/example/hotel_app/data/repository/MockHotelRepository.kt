@@ -121,7 +121,7 @@ class MockHotelRepository(
         val room = when (val validation = validateBooking(roomId)) {
             is BookingValidationResult.Error -> return BookingResult.Error(validation.message)
             is ValidatedRoom -> validation.room
-            BookingValidationResult.Valid -> return BookingResult.Error("Unexpected validation state")
+            BookingValidationResult.Valid -> return BookingResult.Error(ResourceProvider.getString(R.string.mock_error_unexpected_validation))
         }
 
         val roomNumber = roomId.removePrefix("room_")
@@ -259,52 +259,52 @@ class MockHotelRepository(
         listOf(
             RestaurantMarker(
                 id = "1",
-                name = "Кафе Пушкинъ",
-                cuisine = "Русская",
+                name = ResourceProvider.getString(R.string.restaurant_pushkin_name),
+                cuisine = ResourceProvider.getString(R.string.restaurant_pushkin_cuisine),
                 rating = 4.8,
                 distance = 0.5,
                 coordinates = Location(55.760244, 37.605423),
-                address = "Тверской бульвар, 26А",
+                address = ResourceProvider.getString(R.string.restaurant_pushkin_address),
                 phone = "+7 (495) 123-45-67"
             ),
             RestaurantMarker(
                 id = "2",
-                name = "White Rabbit",
-                cuisine = "Европейская",
+                name = ResourceProvider.getString(R.string.restaurant_white_rabbit_name),
+                cuisine = ResourceProvider.getString(R.string.restaurant_white_rabbit_cuisine),
                 rating = 4.9,
                 distance = 1.2,
                 coordinates = Location(55.747244, 37.590423),
-                address = "Смоленская площадь, 3",
+                address = ResourceProvider.getString(R.string.restaurant_white_rabbit_address),
                 phone = "+7 (495) 234-56-78"
             ),
             RestaurantMarker(
                 id = "3",
-                name = "Турандот",
-                cuisine = "Паназиатская",
+                name = ResourceProvider.getString(R.string.restaurant_turandot_name),
+                cuisine = ResourceProvider.getString(R.string.restaurant_turandot_cuisine),
                 rating = 4.7,
                 distance = 0.8,
                 coordinates = Location(55.755244, 37.610423),
-                address = "Тверской бульвар, 26",
+                address = ResourceProvider.getString(R.string.restaurant_turandot_address),
                 phone = "+7 (495) 345-67-89"
             ),
             RestaurantMarker(
                 id = "4",
-                name = "Сыроварня",
-                cuisine = "Итальянская",
+                name = ResourceProvider.getString(R.string.restaurant_syrovarnya_name),
+                cuisine = ResourceProvider.getString(R.string.restaurant_syrovarnya_cuisine),
                 rating = 4.5,
                 distance = 0.3,
                 coordinates = Location(55.749244, 37.615423),
-                address = "ул. Петровка, 15",
+                address = ResourceProvider.getString(R.string.restaurant_syrovarnya_address),
                 phone = "+7 (495) 456-78-90"
             ),
             RestaurantMarker(
                 id = "5",
-                name = "Чайхона №1",
-                cuisine = "Узбекская",
+                name = ResourceProvider.getString(R.string.restaurant_chaykhona_name),
+                cuisine = ResourceProvider.getString(R.string.restaurant_chaykhona_cuisine),
                 rating = 4.4,
                 distance = 1.5,
                 coordinates = Location(55.743244, 37.625423),
-                address = "ул. Большая Дмитровка, 35",
+                address = ResourceProvider.getString(R.string.restaurant_chaykhona_address),
                 phone = "+7 (495) 567-89-01"
             )
         )
@@ -312,12 +312,12 @@ class MockHotelRepository(
 
     override suspend fun getRouteToRestaurant(markerId: String): String? {
         delay(500) // Имитация загрузки маршрута
-        return "Маршрут построен до ресторана"
+        return ResourceProvider.getString(R.string.restaurant_route_built)
     }
 
     override suspend fun callRestaurant(markerId: String): String? {
         delay(300) // Имитация звонка
-        return "Звонок инициирован"
+        return ResourceProvider.getString(R.string.restaurant_call_initiated)
     }
 }
 

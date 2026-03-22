@@ -88,7 +88,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:text="Маршрут"
+                    android:text="@string/maps_button_route"
                     style="@style/Widget.Material3.Button.TonalButton" />
 
                 <com.google.android.material.button.MaterialButton
@@ -97,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    android:text="Позвонить"
+                    android:text="@string/maps_button_call"
                     style="@style/Widget.Material3.Button.TonalButton" />
             </LinearLayout>
 

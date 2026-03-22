@@ -2,6 +2,8 @@ package com.example.hotel_app.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hotel_app.R
+import com.example.hotel_app.ResourceProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,15 +42,15 @@ class RestaurantViewModel : ViewModel() {
     }
 
     private fun getMenuItems(): List<MenuItem> = listOf(
-        MenuItem("1", "Цезарь с курицей", "Салат с курицей, пармезаном и сухариками", 450.0, "🥗"),
-        MenuItem("2", "Борщ московский", "Традиционный русский суп со сметаной", 350.0, "🍲"),
-        MenuItem("3", "Стейк рибай", "Сочный стейк из мраморной говядины", 1200.0, "🥩"),
-        MenuItem("4", "Лосось на гриле", "Свежий лосось с овощами", 890.0, "🐟"),
-        MenuItem("5", "Паста Карбонара", "Классическая итальянская паста", 520.0, "🍝"),
-        MenuItem("6", "Тирамису", "Итальянский десерт с маскарпоне", 380.0, "🍰"),
-        MenuItem("7", "Чизкейк Нью-Йорк", "Классический чизкейк", 420.0, "🧀"),
-        MenuItem("8", "Кофе эспрессо", "Арабика 100%", 150.0, "☕"),
-        MenuItem("9", "Свежевыжатый сок", "Апельсиновый или яблочный", 250.0, "🧃")
+        MenuItem("1", ResourceProvider.getString(R.string.menu_caesar_chicken), ResourceProvider.getString(R.string.menu_description_caesar), 450.0, "🥗"),
+        MenuItem("2", ResourceProvider.getString(R.string.menu_borscht_moscow), ResourceProvider.getString(R.string.menu_description_borscht), 350.0, "🍲"),
+        MenuItem("3", ResourceProvider.getString(R.string.menu_steak_ribeye), ResourceProvider.getString(R.string.menu_description_steak), 1200.0, "🥩"),
+        MenuItem("4", ResourceProvider.getString(R.string.menu_salmon_grill), ResourceProvider.getString(R.string.menu_description_salmon), 890.0, "🐟"),
+        MenuItem("5", ResourceProvider.getString(R.string.menu_pasta_carbonara), ResourceProvider.getString(R.string.menu_description_pasta), 520.0, "🍝"),
+        MenuItem("6", ResourceProvider.getString(R.string.menu_tiramisu), ResourceProvider.getString(R.string.menu_description_tiramisu), 380.0, "🍰"),
+        MenuItem("7", ResourceProvider.getString(R.string.menu_cheesecake_ny), ResourceProvider.getString(R.string.menu_description_cheesecake), 420.0, "🧀"),
+        MenuItem("8", ResourceProvider.getString(R.string.menu_coffee_espresso), ResourceProvider.getString(R.string.menu_description_coffee), 150.0, "☕"),
+        MenuItem("9", ResourceProvider.getString(R.string.menu_fresh_juice), ResourceProvider.getString(R.string.menu_description_juice), 250.0, "🧃")
     )
 }
 
