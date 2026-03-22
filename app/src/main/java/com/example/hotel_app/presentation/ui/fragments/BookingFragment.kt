@@ -156,9 +156,11 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
                         // Обновляем прогресс загрузки комнат
                         binding.progressRooms.isVisible = state.isRoomsLoading
 
-                        // Обновляем прогресс бронирования и кнопку
+                        // ✅ Обновляем прогресс бронирования и кнопку
+                        // Кнопка видима только когда форма заполнена
                         binding.progressBooking.isVisible = state.isBookingLoading
-                        binding.btnBook.isEnabled = state.isFormValid && !state.isBookingLoading
+                        binding.btnBook.isVisible = state.isFormValid && !state.isBookingLoading
+                        binding.btnBook.isEnabled = !state.isBookingLoading
 
                         // Обновляем карточку summary
                         updateSummary(state)

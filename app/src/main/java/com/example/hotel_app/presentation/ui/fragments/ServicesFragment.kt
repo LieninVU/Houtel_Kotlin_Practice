@@ -33,13 +33,21 @@ class ServicesFragment : Fragment(R.layout.fragment_services) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentServicesBinding.bind(view)
 
+        setupToolbar() // ✅ Добавлена настройка toolbar
         setupRecyclerView()
         setupCategoryFilter()
         setupSearch()
         observeState()
-        
+
         // Загружаем услуги
         viewModel.loadServices()
+    }
+
+    private fun setupToolbar() {
+        binding.toolbar.setNavigationOnClickListener {
+            // ✅ Навигация назад
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     private fun setupRecyclerView() {

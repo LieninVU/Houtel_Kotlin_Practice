@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorSurface"
-        app:navigationIcon="@android:drawable/ic_media_previous"
+        app:navigationIcon="@drawable/ic_back_arrow"
+        app:navigationContentDescription="Назад"
         app:title="Hotel Info" />
 
     <!-- Рекомендации — горизонтальный список -->

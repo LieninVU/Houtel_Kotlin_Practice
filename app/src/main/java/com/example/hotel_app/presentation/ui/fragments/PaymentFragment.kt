@@ -91,7 +91,13 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
                                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                                     binding.tvPaymentStatus.text = it.message
                                     binding.tvPaymentStatus.isVisible = true
-                                    
+
+                                    // ✅ Скрываем кнопку оплаты и отмены после успешной оплаты
+                                    binding.btnPay.isVisible = false
+                                    binding.btnCancel.isVisible = false
+                                    binding.tvTimer.isVisible = false
+                                    binding.timerProgress.isVisible = false
+
                                     // Переход на ключи после успешной оплаты
                                     binding.btnContinue.isVisible = true
                                     binding.btnContinue.setOnClickListener {

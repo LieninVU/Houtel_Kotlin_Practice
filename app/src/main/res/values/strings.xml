@@ -3,79 +3,95 @@
     <string name="app_name">Hotel_App</string>
 
     <!-- NFC Key -->
-    <string name="nfc_digital_key">NFC Digital Key</string>
-    <string name="room_number_format">ROOM %1$s</string>
-    <string name="room_empty">ROOM ---</string>
-    <string name="valid_until_format">Valid until: %1$s</string>
-    <string name="valid_until_empty">Valid until: --/--/--</string>
-    <string name="key_active_status">Key is active. Bring phone to the door lock.</string>
-    <string name="no_key_status">No active key found. Please check-in first.</string>
-    <string name="simulate_nfc_scan">Simulate NFC Scan (Open Door)</string>
-    <string name="request_digital_key">Request Digital Key</string>
-    <string name="last_used_format">Last used: %1$s</string>
-    <string name="last_used_never">Last used: Never</string>
+    <string name="nfc_digital_key">Электронный ключ</string>
+    <string name="room_number_format">Номер %1$s</string>
+    <string name="room_empty">Номер ---</string>
+    <string name="valid_until_format">Действует до: %1$s</string>
+    <string name="valid_until_empty">Действует до: --/--/--</string>
+    <string name="key_active_status">Ключ активен. Поднесите телефон к замку.</string>
+    <string name="no_key_status">Нет активного ключа. Сначала зарегистрируйтесь.</string>
+    <string name="simulate_nfc_scan">Симулировать NFC (Открыть дверь)</string>
+    <string name="request_digital_key">Получить электронный ключ</string>
+    <string name="last_used_format">Использован: %1$s</string>
+    <string name="last_used_never">Использован: Никогда</string>
+    <string name="ready_to_unlock">Готов к открытию</string>
 
     <!-- Booking Fragment -->
-    <string name="booking_toolbar_title">Book a Room</string>
-    <string name="booking_step_select_room">1. Select a Room</string>
-    <string name="booking_step_select_dates">2. Select Dates</string>
-    <string name="booking_step_guest_info">3. Guest Information</string>
-    <string name="booking_hint_check_in">Check-in</string>
-    <string name="booking_hint_check_out">Check-out</string>
-    <string name="booking_hint_full_name">Full Name</string>
-    <string name="booking_summary_title">Booking Summary</string>
-    <string name="booking_summary_room_format">Room: %1$s #%2$s</string>
-    <string name="booking_summary_dates_format">Dates: %1$s - %2$s</string>
-    <string name="booking_summary_dates_select">Dates: Select dates</string>
-    <string name="booking_summary_price_per_night">Price: $%1$d / night</string>
-    <string name="booking_summary_total_format">Total: $%1$d</string>
-    <string name="booking_button_book">Book Now</string>
-    <string name="booking_dialog_confirmed_title">Booking Confirmed!</string>
-    <string name="booking_dialog_confirmed_message">%1$s\n\nYour digital NFC key has been automatically created and is ready to use.</string>
-    <string name="booking_dialog_view_key">View My Key</string>
-    <string name="booking_dialog_back_to_dashboard">Back to Dashboard</string>
-    <string name="booking_error_no_room">Please select a room</string>
-    <string name="booking_error_no_dates">Please select check-in and check-out dates</string>
-    <string name="booking_error_no_guest_name">Please enter guest name</string>
+    <string name="booking_toolbar_title">Бронирование номера</string>
+    <string name="booking_step_select_room">1. Выберите номер</string>
+    <string name="booking_step_select_dates">2. Выберите даты</string>
+    <string name="booking_step_guest_info">3. Информация о госте</string>
+    <string name="booking_hint_check_in">Дата заезда</string>
+    <string name="booking_hint_check_out">Дата выезда</string>
+    <string name="booking_hint_full_name">ФИО</string>
+    <string name="booking_summary_title">Информация о бронировании</string>
+    <string name="booking_summary_room_format">Номер: %1$s #%2$s</string>
+    <string name="booking_summary_dates_format">Даты: %1$s - %2$s</string>
+    <string name="booking_summary_dates_select">Даты: Выберите даты</string>
+    <string name="booking_summary_price_per_night">%1$d$ / ночь</string>
+    <string name="booking_summary_total_format">Итого: %1$d$</string>
+    <string name="booking_button_book">Забронировать</string>
+    <string name="booking_dialog_confirmed_title">Бронирование подтверждено!</string>
+    <string name="booking_dialog_confirmed_message">%1$s\n\nВаш электронный NFC ключ автоматически создан и готов к использованию.</string>
+    <string name="booking_dialog_view_key">Посмотреть ключ</string>
+    <string name="booking_dialog_back_to_dashboard">На главную</string>
+    <string name="booking_error_no_room">Выберите номер</string>
+    <string name="booking_error_no_dates">Выберите даты заезда и выезда</string>
+    <string name="booking_error_no_guest_name">Введите имя гостя</string>
 
     <!-- Dashboard Fragment -->
-    <string name="dashboard_welcome">Welcome Home,</string>
-    <string name="dashboard_quick_action_key">My Key</string>
-    <string name="dashboard_quick_action_booking">Booking</string>
-    <string name="dashboard_quick_action_services">Services</string>
-    <string name="dashboard_hotel_info_button">Hotel information</string>
-    <string name="dashboard_recommended_title">Recommended for you</string>
-    <string name="dashboard_error_load_recommendations">Failed to load recommendations</string>
-    <string name="dashboard_button_retry">Retry</string>
-    <string name="dashboard_current_booking_title">Current Booking</string>
-    <string name="dashboard_no_active_booking">No active booking</string>
-    <string name="dashboard_tap_to_reserve">Tap Booking to reserve a room</string>
-    <string name="dashboard_bookings_count_format">Bookings: %1$d</string>
+    <string name="dashboard_welcome">Добро пожаловать,</string>
+    <string name="dashboard_quick_action_key">Мой ключ</string>
+    <string name="dashboard_quick_action_booking">Бронирование</string>
+    <string name="dashboard_quick_action_services">Услуги</string>
+    <string name="dashboard_hotel_info_button">Информация об отеле</string>
+    <string name="dashboard_recommended_title">Рекомендуем для вас</string>
+    <string name="dashboard_error_load_recommendations">Не удалось загрузить рекомендации</string>
+    <string name="dashboard_button_retry">Повторить</string>
+    <string name="dashboard_current_booking_title">Текущее бронирование</string>
+    <string name="dashboard_no_active_booking">Нет активного бронирования</string>
+    <string name="dashboard_tap_to_reserve">Нажмите Бронирование для выбора номера</string>
+    <string name="dashboard_bookings_count_format">Бронирований: %1$d</string>
     <string name="dashboard_paid_services_title">Оплаченные услуги</string>
     <string name="dashboard_no_paid_services">Нет оплаченных услуг</string>
-    <string name="dashboard_special_offers">Special Offers</string>
+    <string name="dashboard_special_offers">Специальные предложения</string>
 
     <!-- Payment Fragment -->
-    <string name="payment_toolbar_title">Payment</string>
+    <string name="payment_toolbar_title">Оплата</string>
     <string name="payment_room_title_format">Оплата номера %1$s</string>
     <string name="payment_timer_format">Оплата через: %1$dс</string>
-    <string name="payment_amount_format">Сумма: $%1$d</string>
+    <string name="payment_amount_format">Сумма: %1$d$</string>
     <string name="payment_button_pay">Оплатить</string>
     <string name="payment_button_cancel">Отмена</string>
     <string name="payment_button_continue">Перейти к ключу</string>
     <string name="payment_success_message">Оплата прошла успешно!</string>
     <string name="payment_cancelled_message">Оплата отменена</string>
 
+    <!-- Room Adapter -->
+    <string name="room_price_per_night_format">%1$d$ / ночь</string>
+    <string name="room_status_available">Свободен</string>
+    <string name="room_status_booked">Занят</string>
+    <string name="room_type_status_format">%1$s • %2$s</string>
+
     <!-- Services Fragment -->
+    <string name="services_toolbar_title">Услуги</string>
+    <string name="services_search_hint">Поиск услуг</string>
+    <string name="services_category_all">Все</string>
+    <string name="services_category_spa">SPA</string>
+    <string name="services_category_transfer">Трансфер</string>
+    <string name="services_category_food">Еда</string>
+    <string name="services_category_other">Другое</string>
+    <string name="services_not_found">Услуги не найдены</string>
     <string name="services_dialog_payment_title">Оплата услуги</string>
-    <string name="services_dialog_payment_message_format">%1$s\n\nЦена: $%2$d\n\nОплатить эту услугу?</string>
+    <string name="services_dialog_payment_message_format">%1$s\n\nЦена: %2$d$\n\nОплатить эту услугу?</string>
     <string name="services_dialog_pay_button">Оплатить</string>
     <string name="services_dialog_cancel_button">Отмена</string>
     <string name="services_paid_status">Оплачено</string>
-    <string name="services_price_format">$%1$d</string>
+    <string name="services_price_format">%1$d$</string>
     <string name="services_service_paid_format">Услуга \'%1$s\' оплачена!</string>
 
     <!-- Reviews Fragment -->
+    <string name="reviews_toolbar_title">Отзывы</string>
     <string name="reviews_error_empty_name">Введите ваше имя</string>
     <string name="reviews_error_empty_rating">Выберите рейтинг от 1 до 5</string>
     <string name="reviews_error_empty_text">Введите текст отзыва</string>
@@ -83,6 +99,7 @@
     <string name="reviews_date_format">dd MMM yyyy</string>
 
     <!-- Maps Fragment -->
+    <string name="maps_toolbar_title">Рестораны рядом</string>
     <string name="maps_hotel_marker_title">Grand Hotel</string>
     <string name="maps_hotel_marker_snippet">Ваш отель</string>
     <string name="maps_restaurant_snippet_format">%1$s • %2$s★ • %3$s км</string>
@@ -90,26 +107,30 @@
     <string name="maps_call_toast_format">Звонок в %1$s</string>
     <string name="maps_restaurant_rating_format">Рейтинг: %1$s★</string>
     <string name="maps_restaurant_distance_format">Расстояние: %1$s км</string>
+    <string name="maps_button_route">Маршрут</string>
+    <string name="maps_button_call">Позвонить</string>
 
     <!-- Hotel Info Fragment -->
+    <string name="hotel_info_toolbar_title">Информация об отеле</string>
+    <string name="hotel_info_recommend_title">Рекомендуем</string>
+    <string name="hotel_info_tab_events">Мероприятия</string>
+    <string name="hotel_info_tab_map">Карта</string>
+    <string name="hotel_info_tab_contacts">Контакты</string>
     <string name="hotel_info_events_error">Нет данных о мероприятиях</string>
     <string name="hotel_info_load_error_format">Ошибка загрузки: %1$s</string>
+    <string name="hotel_info_retry_button">Повторить</string>
+    <string name="hotel_info_contacts_title">Контакты отеля</string>
+    <string name="hotel_info_reception">🕐 Ресепшн: 24/7</string>
     <string name="error_cannot_call">Не удалось выполнить звонок</string>
     <string name="error_cannot_email">Не удалось открыть почтовый клиент</string>
 
-    <!-- Room Adapter -->
-    <string name="room_price_per_night_format">$ %1$d / night</string>
-    <string name="room_status_available">Available</string>
-    <string name="room_status_booked">Booked</string>
-    <string name="room_type_status_format">%1$s • %2$s</string>
-
     <!-- Nfc Key Adapter -->
-    <string name="nfc_key_room_format">ROOM %1$s</string>
-    <string name="nfc_key_valid_until_format">Valid until: %1$s</string>
-    <string name="nfc_key_last_used_format">Last used: %1$s</string>
+    <string name="nfc_key_room_format">НОМЕР %1$s</string>
+    <string name="nfc_key_valid_until_format">Действует до: %1$s</string>
+    <string name="nfc_key_last_used_format">Использован: %1$s</string>
 
     <!-- Paid Services Adapter -->
-    <string name="paid_service_price_format">$%1$d</string>
+    <string name="paid_service_price_format">%1$d$</string>
     <string name="paid_service_paid_status">Оплачено</string>
 
     <!-- Restaurant Menu (MapsViewModel) -->

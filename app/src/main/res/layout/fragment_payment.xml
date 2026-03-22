@@ -12,7 +12,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@android:drawable/ic_media_previous"
+        app:navigationIcon="@drawable/ic_back_arrow"
+        app:navigationContentDescription="Назад"
         app:title="@string/payment_toolbar_title" />
 
     <!-- Timer -->
@@ -80,8 +81,9 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCancel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/button_height_normal"
         android:text="@string/payment_button_cancel"
+        android:textSize="@dimen/text_size_medium"
         style="@style/Widget.Material3.Button.OutlinedButton"
         app:layout_constraintBottom_toTopOf="@id/btnContinue" />
 

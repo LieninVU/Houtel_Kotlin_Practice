@@ -13,8 +13,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@android:drawable/ic_media_previous"
-        app:title="Digital Key" />
+        app:navigationIcon="@drawable/ic_back_arrow"
+        app:navigationContentDescription="Назад"
+        app:title="@string/nfc_digital_key" />
 
     <TextView
         android:id="@+id/tvTitle"
@@ -22,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
-        android:text="Your Room Access"
+        android:text="Доступ к номеру"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:padding="12dp"
-        android:text="Emulate NFC Touch (Test)"
+        android:text="@string/simulate_nfc_scan"
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 
