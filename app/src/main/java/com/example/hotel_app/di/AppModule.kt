@@ -8,11 +8,16 @@ import org.koin.dsl.module
 
 val appModule = module {
     // Repository: Switch between Mock and Real here
+<<<<<<< HEAD
     // single<HotelRepository> { MockHotelRepository() }
+=======
+    single<HotelRepository> { MockHotelRepository() }
+>>>>>>> 571799fc9205593a2257cbab7c2d50265b15af69
     
     // RemoteDataSource (Stub for future)
     // single { RemoteDataSource(get()) }
 
+<<<<<<< HEAD
     // Мне уже всё-равно
     // Room Database
     single {
@@ -29,6 +34,8 @@ val appModule = module {
     // Review Repository
     single { ReviewRepository(get()) }
 
+=======
+>>>>>>> 571799fc9205593a2257cbab7c2d50265b15af69
     // ViewModels
     viewModel { MainViewModel(get()) }
 }

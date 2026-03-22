@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.hotel.app.ui.fragments
 
 import android.os.Bundle
@@ -106,3 +107,11 @@ class ServicesFragment : Fragment() {
         _binding = null
     }
 }
+=======
+package com.example.hotel_app.presentation.ui.fragments
+
+import androidx.fragment.app.Fragment
+import com.example.hotel_app.R
+
+class ServicesFragment : Fragment(R.layout.fragment_services)
+>>>>>>> 571799fc9205593a2257cbab7c2d50265b15af69
