@@ -134,19 +134,33 @@
                 android:textStyle="bold"
                 android:paddingBottom="12dp" />
 
+            <!-- ✅ Телефон - кликабельный -->
             <TextView
+                android:id="@+id/tvPhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="📞 Телефон: +7 (800) 555-35-35"
                 android:textSize="15sp"
-                android:paddingBottom="8dp" />
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:background="?attr/selectableItemBackground" />
 
+            <!-- ✅ Email - кликабельный -->
             <TextView
+                android:id="@+id/tvEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="📧 Email: info@hotel.ru"
                 android:textSize="15sp"
-                android:paddingBottom="8dp" />
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:background="?attr/selectableItemBackground" />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -1,7 +1,11 @@
 package com.example.hotel_app.presentation.ui.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -26,6 +30,11 @@ class HotelInfoFragment : Fragment(R.layout.fragment_hotel_info) {
     private lateinit var eventsAdapter: EventAdapter
     private lateinit var recommendationsAdapter: EventAdapter
 
+    // ✅ Данные для контактов
+    private val hotelPhone = "+7 (800) 555-35-35"
+    private val hotelEmail = "info@hotel.ru"
+    private val hotelAddress = "ул. Гостиничная, 1"
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHotelInfoBinding.bind(view)
@@ -38,6 +47,7 @@ class HotelInfoFragment : Fragment(R.layout.fragment_hotel_info) {
         observeViewModel()
         setupTabs()
         setupRetry()
+        setupContactClickListeners() // ✅ Добавляем клики для контактов
     }
 
     private fun setupAdapters() {
@@ -87,6 +97,48 @@ class HotelInfoFragment : Fragment(R.layout.fragment_hotel_info) {
     private fun setupRetry() {
         binding.btnRetryInfo.setOnClickListener {
             viewModel.loadEvents()
+        }
+    }
+
+    /**
+     * Настройка кликов для контактов (телефон и email).
+     * ✅ Intent для звонка и отправки email.
+     */
+    private fun setupContactClickListeners() {
+        // Находим TextView контактов в layoutContacts
+        val phoneTextView = binding.layoutContacts.findViewById<TextView>(R.id.tvPhone)
+        val emailTextView = binding.layoutContacts.findViewById<TextView>(R.id.tvEmail)
+
+        // ✅ Телефон - ACTION_DIAL
+        phoneTextView.setOnClickListener {
+            try {
+                val intent = Intent(Intent.ACTION_DIAL).apply {
+                    data = Uri.parse("tel:$hotelPhone")
+                }
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.error_cannot_call),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        // ✅ Email - ACTION_SENDTO
+        emailTextView.setOnClickListener {
+            try {
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = Uri.parse("mailto:$hotelEmail")
+                }
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.error_cannot_email),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 

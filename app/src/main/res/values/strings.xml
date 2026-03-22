@@ -94,6 +94,8 @@
     <!-- Hotel Info Fragment -->
     <string name="hotel_info_events_error">Нет данных о мероприятиях</string>
     <string name="hotel_info_load_error_format">Ошибка загрузки: %1$s</string>
+    <string name="error_cannot_call">Не удалось выполнить звонок</string>
+    <string name="error_cannot_email">Не удалось открыть почтовый клиент</string>
 
     <!-- Room Adapter -->
     <string name="room_price_per_night_format">$ %1$d / night</string>
