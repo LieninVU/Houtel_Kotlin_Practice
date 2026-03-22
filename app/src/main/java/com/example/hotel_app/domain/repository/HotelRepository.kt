@@ -11,21 +11,27 @@ interface HotelRepository {
     fun getCurrentUser(): Flow<User>
     fun getActiveBooking(): Flow<Booking?>
     fun getBookings(): Flow<List<Booking>>
-    
+
     suspend fun bookRoom(
         roomId: String,
         guestName: String,
         checkIn: String,
         checkOut: String
     ): BookingResult
-    
+
     fun getNfcKeys(): Flow<List<NfcKey>>
     suspend fun activateNfcKey(bookingId: String): Boolean
     suspend fun useKeyAction(keyId: String, action: KeyAction): Boolean
-    
+
     // Paid services
     fun getPaidServices(): Flow<List<PaidService>>
     suspend fun payForService(service: HotelService): PaymentResult
+
+    // Map & Restaurants
+    fun getHotelLocation(): Location
+    fun getRestaurantMarkers(): Flow<List<RestaurantMarker>>
+    suspend fun getRouteToRestaurant(markerId: String): String?
+    suspend fun callRestaurant(markerId: String): String?
 }
 
 sealed class BookingResult {

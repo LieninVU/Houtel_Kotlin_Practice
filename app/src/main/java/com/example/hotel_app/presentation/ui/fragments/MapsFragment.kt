@@ -10,8 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.hotel_app.R
 import com.example.hotel_app.databinding.FragmentMapsBinding
+import com.example.hotel_app.domain.model.RestaurantMarker
 import com.example.hotel_app.presentation.viewmodel.MapsViewModel
-import com.example.hotel_app.presentation.viewmodel.RestaurantMarker
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -43,7 +43,7 @@ class MapsFragment : Fragment(R.layout.fragment_maps), OnMapReadyCallback {
 
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
-        
+
         // Add hotel marker
         val hotelLocation = LatLng(viewModel.hotelLocation.latitude, viewModel.hotelLocation.longitude)
         map.addMarker(
@@ -55,22 +55,23 @@ class MapsFragment : Fragment(R.layout.fragment_maps), OnMapReadyCallback {
 
         // Add restaurant markers
         viewModel.markers.value.forEach { marker ->
-            val position = LatLng(marker.latitude, marker.longitude)
+            val position = LatLng(marker.coordinates.latitude, marker.coordinates.longitude)
             map.addMarker(
                 MarkerOptions()
                     .position(position)
                     .title(marker.name)
-                    .snippet("${marker.cuisine} • ${marker.rating}★ • ${marker.distance} км")
+                    .snippet(marker.getSnippet())
             )
         }
 
         // Move camera to hotel location
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(hotelLocation, 14f))
-        
+
         // Set map click listener
         map.setOnMarkerClickListener { marker ->
-            val clickedMarker = viewModel.markers.value.find { 
-                it.latitude == marker.position.latitude && it.longitude == marker.position.longitude 
+            val clickedMarker = viewModel.markers.value.find {
+                it.coordinates.latitude == marker.position.latitude && 
+                it.coordinates.longitude == marker.position.longitude
             }
             clickedMarker?.let {
                 viewModel.selectMarker(it)
@@ -81,23 +82,11 @@ class MapsFragment : Fragment(R.layout.fragment_maps), OnMapReadyCallback {
 
     private fun setupListeners() {
         binding.btnRoute.setOnClickListener {
-            viewModel.selectedMarker.value?.let { marker ->
-                Toast.makeText(
-                    requireContext(),
-                    "Маршрут до ${marker.name}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            viewModel.buildRouteToRestaurant()
         }
 
         binding.btnCall.setOnClickListener {
-            viewModel.selectedMarker.value?.let { marker ->
-                Toast.makeText(
-                    requireContext(),
-                    "Звонок в ${marker.name}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            viewModel.callRestaurant()
         }
     }
 

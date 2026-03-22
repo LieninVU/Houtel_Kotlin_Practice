@@ -33,5 +33,5 @@ val appModule = module {
     viewModel { PaymentViewModel() }
     viewModel { ReviewsViewModel(get(), get()) }
     viewModel { RestaurantViewModel() }
-    viewModel { MapsViewModel() }
+    viewModel { MapsViewModel(get()) }
 }

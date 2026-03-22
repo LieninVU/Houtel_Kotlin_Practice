@@ -238,7 +238,7 @@ class MockHotelRepository(
 
     override suspend fun payForService(service: HotelService): PaymentResult {
         delay(1000) // Имитация обработки платежа
-        
+
         val paidService = PaidService(
             id = "paid_${UUID.randomUUID()}",
             serviceId = service.id,
@@ -248,12 +248,83 @@ class MockHotelRepository(
             paidAt = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault()).format(Date()),
             status = PaymentStatus.PAID
         )
-        
+
         val currentList = _paidServices.value.toMutableList()
         currentList.add(paidService)
         _paidServices.value = currentList
-        
+
         return PaymentResult.Success(paidService)
+    }
+
+    // ✅ Map & Restaurants - данные в data слое
+    override fun getHotelLocation(): Location {
+        // Центр Москвы (моковая локация отеля)
+        return Location(55.751244, 37.618423)
+    }
+
+    override fun getRestaurantMarkers(): Flow<List<RestaurantMarker>> = MutableStateFlow(
+        listOf(
+            RestaurantMarker(
+                id = "1",
+                name = "Кафе Пушкинъ",
+                cuisine = "Русская",
+                rating = 4.8,
+                distance = 0.5,
+                coordinates = Location(55.760244, 37.605423),
+                address = "Тверской бульвар, 26А",
+                phone = "+7 (495) 123-45-67"
+            ),
+            RestaurantMarker(
+                id = "2",
+                name = "White Rabbit",
+                cuisine = "Европейская",
+                rating = 4.9,
+                distance = 1.2,
+                coordinates = Location(55.747244, 37.590423),
+                address = "Смоленская площадь, 3",
+                phone = "+7 (495) 234-56-78"
+            ),
+            RestaurantMarker(
+                id = "3",
+                name = "Турандот",
+                cuisine = "Паназиатская",
+                rating = 4.7,
+                distance = 0.8,
+                coordinates = Location(55.755244, 37.610423),
+                address = "Тверской бульвар, 26",
+                phone = "+7 (495) 345-67-89"
+            ),
+            RestaurantMarker(
+                id = "4",
+                name = "Сыроварня",
+                cuisine = "Итальянская",
+                rating = 4.5,
+                distance = 0.3,
+                coordinates = Location(55.749244, 37.615423),
+                address = "ул. Петровка, 15",
+                phone = "+7 (495) 456-78-90"
+            ),
+            RestaurantMarker(
+                id = "5",
+                name = "Чайхона №1",
+                cuisine = "Узбекская",
+                rating = 4.4,
+                distance = 1.5,
+                coordinates = Location(55.743244, 37.625423),
+                address = "ул. Большая Дмитровка, 35",
+                phone = "+7 (495) 567-89-01"
+            )
+        )
+    )
+
+    override suspend fun getRouteToRestaurant(markerId: String): String? {
+        delay(500) // Имитация загрузки маршрута
+        return "Маршрут построен до ресторана"
+    }
+
+    override suspend fun callRestaurant(markerId: String): String? {
+        delay(300) // Имитация звонка
+        return "Звонок инициирован"
     }
 }
 

@@ -1,95 +1,85 @@
 package com.example.hotel_app.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.hotel_app.domain.model.Location
+import com.example.hotel_app.domain.model.RestaurantMarker
+import com.example.hotel_app.domain.repository.HotelRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
-class MapsViewModel : ViewModel() {
+/**
+ * ViewModel для экрана карты.
+ * 
+ * ## Clean Architecture:
+ * - Данные находятся в data слое (MockHotelRepository)
+ * - Модели находятся в domain слое (RestaurantMarker, Location)
+ * - ViewModel только управляет UI состоянием
+ */
+class MapsViewModel(private val repository: HotelRepository) : ViewModel() {
 
-    private val _markers = MutableStateFlow<List<RestaurantMarker>>(getRestaurantMarkers())
+    // ✅ Данные из repository (data слой)
+    private val _markers = MutableStateFlow<List<RestaurantMarker>>(emptyList())
     val markers: StateFlow<List<RestaurantMarker>> = _markers.asStateFlow()
 
     private val _selectedMarker = MutableStateFlow<RestaurantMarker?>(null)
     val selectedMarker: StateFlow<RestaurantMarker?> = _selectedMarker.asStateFlow()
 
-    // Hotel location (mock - center of Moscow)
-    val hotelLocation = Location(55.751244, 37.618423)
+    // ✅ Локация отеля из repository (data слой)
+    val hotelLocation: Location = repository.getHotelLocation()
 
+    init {
+        loadRestaurantMarkers()
+    }
+
+    /**
+     * Загрузка маркеров ресторанов из repository.
+     */
+    private fun loadRestaurantMarkers() {
+        viewModelScope.launch {
+            repository.getRestaurantMarkers().collect { markers ->
+                _markers.value = markers
+            }
+        }
+    }
+
+    /**
+     * Выбор маркера ресторана.
+     */
     fun selectMarker(marker: RestaurantMarker) {
         _selectedMarker.value = marker
     }
 
+    /**
+     * Очистка выбора.
+     */
     fun clearSelection() {
         _selectedMarker.value = null
     }
 
-    private fun getRestaurantMarkers(): List<RestaurantMarker> = listOf(
-        RestaurantMarker(
-            id = "1",
-            name = "Кафе Пушкинъ",
-            cuisine = "Русская",
-            rating = 4.8,
-            distance = 0.5,
-            latitude = 55.760244,
-            longitude = 37.605423,
-            address = "Тверской бульвар, 26А"
-        ),
-        RestaurantMarker(
-            id = "2",
-            name = "White Rabbit",
-            cuisine = "Европейская",
-            rating = 4.9,
-            distance = 1.2,
-            latitude = 55.747244,
-            longitude = 37.590423,
-            address = "Смоленская площадь, 3"
-        ),
-        RestaurantMarker(
-            id = "3",
-            name = "Турандот",
-            cuisine = "Паназиатская",
-            rating = 4.7,
-            distance = 0.8,
-            latitude = 55.755244,
-            longitude = 37.610423,
-            address = "Тверской бульвар, 26"
-        ),
-        RestaurantMarker(
-            id = "4",
-            name = "Сыроварня",
-            cuisine = "Итальянская",
-            rating = 4.5,
-            distance = 0.3,
-            latitude = 55.749244,
-            longitude = 37.615423,
-            address = "ул. Петровка, 15"
-        ),
-        RestaurantMarker(
-            id = "5",
-            name = "Чайхона №1",
-            cuisine = "Узбекская",
-            rating = 4.4,
-            distance = 1.5,
-            latitude = 55.743244,
-            longitude = 37.625423,
-            address = "ул. Большая Дмитровка, 35"
-        )
-    )
+    /**
+     * Построение маршрута до ресторана.
+     */
+    fun buildRouteToRestaurant() {
+        viewModelScope.launch {
+            selectedMarker.value?.let { marker ->
+                repository.getRouteToRestaurant(marker.id)
+                // Маршрут построен (можно показать уведомление)
+            }
+        }
+    }
+
+    /**
+     * Звонок в ресторан.
+     */
+    fun callRestaurant() {
+        viewModelScope.launch {
+            selectedMarker.value?.let { marker ->
+                repository.callRestaurant(marker.id)
+                // Звонок инициирован (можно показать уведомление)
+            }
+        }
+    }
 }
-
-data class RestaurantMarker(
-    val id: String,
-    val name: String,
-    val cuisine: String,
-    val rating: Double,
-    val distance: Double, // km from hotel
-    val latitude: Double,
-    val longitude: Double,
-    val address: String
-)
-
-data class Location(
-    val latitude: Double,
-    val longitude: Double
-)
