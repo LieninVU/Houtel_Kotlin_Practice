@@ -14,7 +14,7 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="@dimen/toolbar_height"
             app:title="@string/booking_toolbar_title"
             app:navigationIcon="@drawable/ic_launcher_foreground" />
 
@@ -31,16 +31,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="100dp">
+            android:paddingBottom="@dimen/button_height_large">
 
             <!-- Step 1: Select Room -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginEnd="@dimen/margin_medium"
                 android:text="@string/booking_step_select_room"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -49,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
-                android:paddingVertical="8dp"
+                android:paddingVertical="@dimen/padding_small"
                 tools:itemCount="3"
                 tools:listitem="@layout/layout_item_room" />
 
@@ -64,23 +65,24 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_medium"
                 android:text="@string/booking_step_select_dates"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="@dimen/margin_small"
                     android:layout_weight="1"
                     android:hint="@string/booking_hint_check_in"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -88,18 +90,20 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etCheckIn"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/button_height_normal"
                         android:clickable="true"
                         android:cursorVisible="false"
                         android:focusable="false"
-                        android:inputType="none" />
+                        android:inputType="none"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="@dimen/margin_small"
                     android:layout_weight="1"
                     android:hint="@string/booking_hint_check_out"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -107,11 +111,13 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etCheckOut"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/button_height_normal"
                         android:clickable="true"
                         android:cursorVisible="false"
                         android:focusable="false"
-                        android:inputType="none" />
+                        android:inputType="none"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -121,25 +127,28 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_medium"
                 android:text="@string/booking_step_guest_info"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_large"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
                 android:hint="@string/booking_hint_full_name"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etGuestName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
+                    android:layout_height="@dimen/button_height_normal"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -148,11 +157,11 @@
                 android:id="@+id/cardSummary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_large"
                 android:visibility="gone"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
                 app:strokeColor="@android:color/holo_green_light"
                 app:strokeWidth="1dp"
                 tools:visibility="visible">
@@ -161,34 +170,40 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/card_padding">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/booking_summary_title"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvSummaryRoom"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         tools:text="Room: Deluxe #201" />
 
                     <TextView
                         android:id="@+id/tvSummaryDates"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/divider_spacing"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         tools:text="Dates: 2026-03-18 - 2026-03-21" />
 
                     <TextView
                         android:id="@+id/tvSummaryPrice"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/divider_spacing"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:textColor="@android:color/holo_green_dark"
                         android:textStyle="bold"
                         tools:text="Total: $600" />
@@ -205,13 +220,13 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnBook"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/button_height_large"
         android:layout_gravity="bottom"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/margin_medium"
         android:enabled="false"
         android:text="@string/booking_button_book"
-        android:textSize="16sp"
-        app:cornerRadius="12dp" />
+        android:textSize="@dimen/text_size_medium"
+        app:cornerRadius="@dimen/card_corner_radius" />
 
     <ProgressBar
         android:id="@+id/progressBooking"
