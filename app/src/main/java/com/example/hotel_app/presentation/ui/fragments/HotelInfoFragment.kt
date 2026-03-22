@@ -30,10 +30,10 @@ class HotelInfoFragment : Fragment(R.layout.fragment_hotel_info) {
     private lateinit var eventsAdapter: EventAdapter
     private lateinit var recommendationsAdapter: EventAdapter
 
-    // ✅ Данные для контактов
-    private val hotelPhone = "+7 (800) 555-35-35"
-    private val hotelEmail = "info@hotel.ru"
-    private val hotelAddress = "ул. Гостиничная, 1"
+    // ✅ Данные для контактов из ресурсов
+    private val hotelPhone: String by lazy { getString(R.string.hotel_info_phone) }
+    private val hotelEmail: String by lazy { getString(R.string.hotel_info_email) }
+    private val hotelAddress: String by lazy { getString(R.string.hotel_info_address) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

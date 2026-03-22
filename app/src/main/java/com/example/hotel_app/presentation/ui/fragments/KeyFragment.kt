@@ -128,7 +128,7 @@ class KeyFragment : Fragment(R.layout.fragment_key) {
             val key = keyAdapter.currentList[targetPosition]
             viewModel.performAction(key.id, KeyAction.OPEN_DOOR)
         } else {
-            Toast.makeText(requireContext(), "No key selected", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.key_no_key_selected), Toast.LENGTH_SHORT).show()
         }
     }
 

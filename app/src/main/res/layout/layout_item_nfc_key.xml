@@ -52,7 +52,7 @@
             android:id="@+id/tvRoomType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Deluxe Suite"
+            android:text="@string/nfc_key_room_type_deluxe"
             android:textColor="#CCCCCC"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@id/tvRoomNumber"

@@ -24,10 +24,10 @@ class NfcNotificationManager(private val context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
-                "NFC Key Notifications",
+                context.getString(R.string.nfc_notification_channel_name),
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
-                description = "Notifications for NFC key actions"
+                description = context.getString(R.string.nfc_notification_channel_description)
             }
             notificationManager.createNotificationChannel(channel)
         }
@@ -46,8 +46,8 @@ class NfcNotificationManager(private val context: Context) {
 
         val notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(android.R.drawable.ic_lock_lock)
-            .setContentTitle("Дверь открыта")
-            .setContentText("Номер $roomNumber")
+            .setContentTitle(context.getString(R.string.nfc_notification_door_open_title))
+            .setContentText(context.getString(R.string.nfc_notification_door_open_content, roomNumber))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)

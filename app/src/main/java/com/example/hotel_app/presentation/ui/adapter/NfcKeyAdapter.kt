@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hotel_app.R
 import com.example.hotel_app.databinding.LayoutItemNfcKeyBinding
 import com.example.hotel_app.domain.model.NfcKey
 
@@ -24,11 +25,13 @@ class NfcKeyAdapter(
 
     override fun onBindViewHolder(holder: KeyViewHolder, position: Int) {
         val key = getItem(position)
+        val context = holder.itemView.context
         with(holder.binding) {
-            tvRoomNumber.text = "ROOM ${key.roomNumber}"
+            tvRoomNumber.text = context.getString(R.string.nfc_key_room_format, key.roomNumber)
             tvRoomType.text = key.roomType
-            tvValidUntil.text = "Valid until: ${key.validUntil}"
-            tvLastUsed.text = "Last used: ${key.lastUsed ?: "Never"}"
+            tvValidUntil.text = context.getString(R.string.nfc_key_valid_until_format, key.validUntil)
+            val lastUsedText = key.lastUsed ?: context.getString(R.string.nfc_key_last_used_never)
+            tvLastUsed.text = context.getString(R.string.nfc_key_last_used_format, lastUsedText)
 
             root.setOnClickListener { onKeyClick(key) }
         }

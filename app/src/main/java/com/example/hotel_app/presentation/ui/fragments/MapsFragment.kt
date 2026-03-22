@@ -49,8 +49,8 @@ class MapsFragment : Fragment(R.layout.fragment_maps), OnMapReadyCallback {
         map.addMarker(
             MarkerOptions()
                 .position(hotelLocation)
-                .title("Grand Hotel")
-                .snippet("Ваш отель")
+                .title(getString(R.string.maps_hotel_marker_title))
+                .snippet(getString(R.string.maps_hotel_marker_snippet))
         )
 
         // Add restaurant markers
@@ -70,7 +70,7 @@ class MapsFragment : Fragment(R.layout.fragment_maps), OnMapReadyCallback {
         // Set map click listener
         map.setOnMarkerClickListener { marker ->
             val clickedMarker = viewModel.markers.value.find {
-                it.coordinates.latitude == marker.position.latitude && 
+                it.coordinates.latitude == marker.position.latitude &&
                 it.coordinates.longitude == marker.position.longitude
             }
             clickedMarker?.let {
@@ -99,8 +99,8 @@ class MapsFragment : Fragment(R.layout.fragment_maps), OnMapReadyCallback {
                             binding.selectedRestaurantInfo.isVisible = true
                             binding.tvSelectedRestaurantName.text = it.name
                             binding.tvSelectedRestaurantCuisine.text = it.cuisine
-                            binding.tvSelectedRestaurantRating.text = "Рейтинг: ${it.rating}★"
-                            binding.tvSelectedRestaurantDistance.text = "Расстояние: ${it.distance} км"
+                            binding.tvSelectedRestaurantRating.text = getString(R.string.maps_restaurant_rating_format, it.rating)
+                            binding.tvSelectedRestaurantDistance.text = getString(R.string.maps_restaurant_distance_format, it.distance)
                             binding.tvSelectedRestaurantAddress.text = it.address
                         } ?: run {
                             binding.selectedRestaurantInfo.isVisible = false

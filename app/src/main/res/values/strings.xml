@@ -2,6 +2,9 @@
     <!-- App Name -->
     <string name="app_name">Hotel_App</string>
 
+    <!-- Common -->
+    <string name="back_button_content_description">Назад</string>
+
     <!-- NFC Key -->
     <string name="nfc_digital_key">Электронный ключ</string>
     <string name="room_number_format">Номер %1$s</string>
@@ -72,6 +75,8 @@
     <string name="room_status_available">Свободен</string>
     <string name="room_status_booked">Занят</string>
     <string name="room_type_status_format">%1$s • %2$s</string>
+    <string name="room_status_available_en">Available</string>
+    <string name="room_status_booked_en">Booked</string>
 
     <!-- Services Fragment -->
     <string name="services_toolbar_title">Услуги</string>
@@ -121,6 +126,9 @@
     <string name="hotel_info_retry_button">Повторить</string>
     <string name="hotel_info_contacts_title">Контакты отеля</string>
     <string name="hotel_info_reception">🕐 Ресепшн: 24/7</string>
+    <string name="hotel_info_phone">+7 (800) 555-35-35</string>
+    <string name="hotel_info_email">info@hotel.ru</string>
+    <string name="hotel_info_address">ул. Гостиничная, 1</string>
     <string name="error_cannot_call">Не удалось выполнить звонок</string>
     <string name="error_cannot_email">Не удалось открыть почтовый клиент</string>
 
@@ -128,6 +136,13 @@
     <string name="nfc_key_room_format">НОМЕР %1$s</string>
     <string name="nfc_key_valid_until_format">Действует до: %1$s</string>
     <string name="nfc_key_last_used_format">Использован: %1$s</string>
+    <string name="nfc_key_last_used_never">Никогда</string>
+    <string name="nfc_key_room_type_deluxe">Deluxe Suite</string>
+    <string name="nfc_key_valid_until_label">Действует до:</string>
+    <string name="nfc_key_last_used_label">Использован:</string>
+
+    <!-- Key Fragment -->
+    <string name="key_no_key_selected">Нет выбранного ключа</string>
 
     <!-- Paid Services Adapter -->
     <string name="paid_service_price_format">%1$d$</string>

@@ -141,7 +141,8 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                         booking?.let {
                             binding.tvBookingRoom.text = "${it.roomType} #${it.roomNumber}"
                             binding.tvBookingDates.text = "${it.checkIn} - ${it.checkOut}"
-                            binding.tvBookingStatus.text = it.status.name.replace("_", " ")
+                            val statusText = it.status.name.replace("_", " ")
+                            binding.tvBookingStatus.text = statusText
                         } ?: run {
                             binding.tvBookingRoom.text = getString(R.string.dashboard_no_active_booking)
                             binding.tvBookingDates.text = getString(R.string.dashboard_tap_to_reserve)

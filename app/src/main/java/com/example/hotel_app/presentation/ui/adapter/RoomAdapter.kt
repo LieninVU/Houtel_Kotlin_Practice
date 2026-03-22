@@ -53,7 +53,7 @@ class RoomAdapter(
         val room = getItem(position)
         val context = holder.itemView.context
         val isSelected = room.id == selectedRoomId
-        
+
         with(holder.binding) {
             tvRoomType.text = room.type
             tvRoomPrice.text = "$ ${room.price.toInt()} / night"
@@ -69,7 +69,7 @@ class RoomAdapter(
 
             root.alpha = if (room.isAvailable) 1.0f else 0.5f
             root.isClickable = room.isAvailable
-            
+
             val strokeColor = when {
                 isSelected -> ContextCompat.getColor(context, android.R.color.holo_green_dark)
                 !room.isAvailable -> ContextCompat.getColor(context, android.R.color.darker_gray)
@@ -77,8 +77,9 @@ class RoomAdapter(
             }
             root.strokeColor = strokeColor
             root.strokeWidth = if (isSelected) 4 else 0
-            
-            val statusText = if (room.isAvailable) "Available" else "Booked"
+
+            val statusResId = if (room.isAvailable) R.string.room_status_available_en else R.string.room_status_booked_en
+            val statusText = context.getString(statusResId)
             tvRoomType.text = "${room.type} • $statusText"
         }
     }

@@ -14,8 +14,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back_arrow"
-        app:navigationContentDescription="Назад"
-        app:title="Услуги" />
+        app:navigationContentDescription="@string/back_button_content_description"
+        app:title="@string/services_toolbar_title" />
 
     <!-- Search -->
     <com.google.android.material.textfield.TextInputLayout
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:hint="Поиск услуг"
+        android:hint="@string/services_search_hint"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:startIconDrawable="@android:drawable/ic_menu_search">
 
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Все"
+                android:text="@string/services_category_all"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
             <com.google.android.material.button.MaterialButton
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="SPA"
+                android:text="@string/services_category_spa"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
             <com.google.android.material.button.MaterialButton
@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Трансфер"
+                android:text="@string/services_category_transfer"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
             <com.google.android.material.button.MaterialButton
@@ -79,14 +79,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Еда"
+                android:text="@string/services_category_food"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/chipOther"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Другое"
+                android:text="@string/services_category_other"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
         </LinearLayout>
     </HorizontalScrollView>
@@ -107,7 +107,7 @@
         android:id="@+id/tvServicesPlaceholder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Услуги не найдены"
+        android:text="@string/services_not_found"
         android:textSize="16sp"
         android:textColor="@android:color/darker_gray"
         android:visibility="gone"
