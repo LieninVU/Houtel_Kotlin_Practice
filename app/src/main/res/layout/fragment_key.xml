@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back_arrow"
-        app:navigationContentDescription="Назад"
+        app:navigationContentDescription="@string/back_button_content_description"
         app:title="@string/nfc_digital_key" />
 
     <TextView

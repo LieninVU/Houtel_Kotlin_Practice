@@ -52,7 +52,8 @@ class HotelInfoViewModel(context: Context) : ViewModel() {
                 // ✅ parseFromAssets теперь suspend и использует Dispatchers.IO
                 parser.parseFromAssets()
             } catch (e: Exception) {
-                _eventsState.value = UiState.Error("Ошибка загрузки: ${e.localizedMessage}")
+                val errorMessage = ResourceProvider.getString(R.string.hotel_info_load_error_format, e.localizedMessage)
+                _eventsState.value = UiState.Error(errorMessage)
                 parser.getMockEvents()
             }
 

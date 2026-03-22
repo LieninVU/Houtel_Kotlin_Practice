@@ -2,6 +2,8 @@ package com.example.hotel_app.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hotel_app.R
+import com.example.hotel_app.ResourceProvider
 import com.example.hotel_app.domain.model.NfcKey
 import com.example.hotel_app.domain.repository.HotelRepository
 import com.example.hotel_app.domain.repository.KeyAction
@@ -47,8 +49,9 @@ class NfcViewModel(
             val success = repository.useKeyAction(keyId, action)
             if (success) {
                 val actionName = action.name.replace("_", " ").lowercase()
-                _nfcEvent.emit("Success: $actionName for key $keyId")
-                
+                val message = ResourceProvider.getString(R.string.nfc_scan_success_format, actionName, keyId)
+                _nfcEvent.emit(message)
+
                 if (action == KeyAction.OPEN_DOOR) {
                     val key = _nfcKeys.value.find { it.id == keyId }
                     key?.let {

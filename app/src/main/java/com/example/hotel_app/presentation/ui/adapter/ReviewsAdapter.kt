@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hotel_app.R
 import com.example.hotel_app.databinding.LayoutItemReviewBinding
 import com.example.hotel_app.domain.model.Review
 
@@ -21,9 +22,12 @@ class ReviewsAdapter : ListAdapter<Review, ReviewsAdapter.ReviewViewHolder>(Diff
 
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         val review = getItem(position)
+        val context = holder.itemView.context
         with(holder.binding) {
             tvUserName.text = review.userName
-            tvRating.text = "★".repeat(review.rating) + "☆".repeat(5 - review.rating)
+            val starFilled = context.getString(R.string.reviews_star_filled)
+            val starEmpty = context.getString(R.string.reviews_star_empty)
+            tvRating.text = starFilled.repeat(review.rating) + starEmpty.repeat(5 - review.rating)
             tvComment.text = review.comment
             tvDate.text = review.date
         }

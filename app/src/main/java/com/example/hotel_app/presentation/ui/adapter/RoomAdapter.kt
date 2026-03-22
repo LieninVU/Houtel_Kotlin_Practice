@@ -80,7 +80,7 @@ class RoomAdapter(
 
             val statusResId = if (room.isAvailable) R.string.room_status_available_en else R.string.room_status_booked_en
             val statusText = context.getString(statusResId)
-            tvRoomType.text = "${room.type} • $statusText"
+            tvRoomType.text = context.getString(R.string.room_type_status_format, room.type, statusText)
         }
     }
 

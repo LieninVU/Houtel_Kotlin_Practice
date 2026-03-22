@@ -7,6 +7,13 @@
     <string name="text_dash">—</string>
     <string name="button_retry">Повторить</string>
     <string name="paid_status">Оплачено</string>
+    
+    <!-- Navigation -->
+    <string name="nav_dashboard">Главная</string>
+    <string name="nav_services">Услуги</string>
+    <string name="nav_key">Ключ</string>
+    <string name="nav_maps">Карта</string>
+    <string name="nav_info">Инфо</string>
 
     <!-- NFC Key -->
     <string name="nfc_digital_key">Электронный ключ</string>
@@ -113,6 +120,8 @@
     <string name="reviews_error_empty_text">Введите текст отзыва</string>
     <string name="reviews_success_message">Отзыв отправлен!</string>
     <string name="reviews_date_format">dd MMM yyyy</string>
+    <string name="reviews_star_filled">★</string>
+    <string name="reviews_star_empty">☆</string>
 
     <!-- Maps Fragment -->
     <string name="maps_toolbar_title">Рестораны рядом</string>
@@ -187,18 +196,23 @@
     <string name="restaurant_pushkin_name">Кафе Пушкинъ</string>
     <string name="restaurant_pushkin_cuisine">Русская</string>
     <string name="restaurant_pushkin_address">Тверской бульвар, 26А</string>
+    <string name="restaurant_pushkin_phone">+7 (495) 123-45-67</string>
     <string name="restaurant_white_rabbit_name">White Rabbit</string>
     <string name="restaurant_white_rabbit_cuisine">Европейская</string>
     <string name="restaurant_white_rabbit_address">Смоленская площадь, 3</string>
+    <string name="restaurant_white_rabbit_phone">+7 (495) 234-56-78</string>
     <string name="restaurant_turandot_name">Турандот</string>
     <string name="restaurant_turandot_cuisine">Паназиатская</string>
     <string name="restaurant_turandot_address">Тверской бульвар, 26</string>
+    <string name="restaurant_turandot_phone">+7 (495) 345-67-89</string>
     <string name="restaurant_syrovarnya_name">Сыроварня</string>
     <string name="restaurant_syrovarnya_cuisine">Итальянская</string>
     <string name="restaurant_syrovarnya_address">ул. Петровка, 15</string>
+    <string name="restaurant_syrovarnya_phone">+7 (495) 456-78-90</string>
     <string name="restaurant_chaykhona_name">Чайхона №1</string>
     <string name="restaurant_chaykhona_cuisine">Узбекская</string>
     <string name="restaurant_chaykhona_address">ул. Большая Дмитровка, 35</string>
+    <string name="restaurant_chaykhona_phone">+7 (495) 567-89-01</string>
     <string name="restaurant_route_built">Маршрут построен до ресторана</string>
     <string name="restaurant_call_initiated">Звонок инициирован</string>
 

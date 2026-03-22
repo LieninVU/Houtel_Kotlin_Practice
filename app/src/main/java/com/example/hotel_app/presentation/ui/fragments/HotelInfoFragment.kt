@@ -30,9 +30,10 @@ class HotelInfoFragment : Fragment(R.layout.fragment_hotel_info) {
     private lateinit var eventsAdapter: EventAdapter
     private lateinit var recommendationsAdapter: EventAdapter
 
-    // ✅ Данные для контактов из ресурсов
-    private val hotelPhone: String by lazy { getString(R.string.hotel_info_phone_label) + " " + getString(R.string.hotel_info_phone_value) }
-    private val hotelEmail: String by lazy { getString(R.string.hotel_info_email_label) + " " + getString(R.string.hotel_info_email_value) }
+    private val hotelPhoneLabel: String by lazy { getString(R.string.hotel_info_phone_label) }
+    private val hotelPhoneValue: String by lazy { getString(R.string.hotel_info_phone_value) }
+    private val hotelEmailLabel: String by lazy { getString(R.string.hotel_info_email_label) }
+    private val hotelEmailValue: String by lazy { getString(R.string.hotel_info_email_value) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -108,15 +109,15 @@ class HotelInfoFragment : Fragment(R.layout.fragment_hotel_info) {
         val phoneTextView = binding.layoutContacts.findViewById<TextView>(R.id.tvPhone)
         val emailTextView = binding.layoutContacts.findViewById<TextView>(R.id.tvEmail)
 
-        // ✅ Устанавливаем текст из ресурсов
-        phoneTextView.text = hotelPhone
-        emailTextView.text = hotelEmail
+        // ✅ Устанавливаем текст: лейбл + значение
+        phoneTextView.text = "$hotelPhoneLabel $hotelPhoneValue"
+        emailTextView.text = "$hotelEmailLabel $hotelEmailValue"
 
-        // ✅ Телефон - ACTION_DIAL
+        // ✅ Телефон - ACTION_DIAL (используем только значение)
         phoneTextView.setOnClickListener {
             try {
                 val intent = Intent(Intent.ACTION_DIAL).apply {
-                    data = Uri.parse("tel:$hotelPhone")
+                    data = Uri.parse("tel:$hotelPhoneValue")
                 }
                 startActivity(intent)
             } catch (e: Exception) {
@@ -128,11 +129,11 @@ class HotelInfoFragment : Fragment(R.layout.fragment_hotel_info) {
             }
         }
 
-        // ✅ Email - ACTION_SENDTO
+        // ✅ Email - ACTION_SENDTO (используем только значение)
         emailTextView.setOnClickListener {
             try {
                 val intent = Intent(Intent.ACTION_SENDTO).apply {
-                    data = Uri.parse("mailto:$hotelEmail")
+                    data = Uri.parse("mailto:$hotelEmailValue")
                 }
                 startActivity(intent)
             } catch (e: Exception) {

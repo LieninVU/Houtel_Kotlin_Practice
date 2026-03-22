@@ -265,7 +265,7 @@ class MockHotelRepository(
                 distance = 0.5,
                 coordinates = Location(55.760244, 37.605423),
                 address = ResourceProvider.getString(R.string.restaurant_pushkin_address),
-                phone = "+7 (495) 123-45-67"
+                phone = ResourceProvider.getString(R.string.restaurant_pushkin_phone)
             ),
             RestaurantMarker(
                 id = "2",
@@ -275,7 +275,7 @@ class MockHotelRepository(
                 distance = 1.2,
                 coordinates = Location(55.747244, 37.590423),
                 address = ResourceProvider.getString(R.string.restaurant_white_rabbit_address),
-                phone = "+7 (495) 234-56-78"
+                phone = ResourceProvider.getString(R.string.restaurant_white_rabbit_phone)
             ),
             RestaurantMarker(
                 id = "3",
@@ -285,7 +285,7 @@ class MockHotelRepository(
                 distance = 0.8,
                 coordinates = Location(55.755244, 37.610423),
                 address = ResourceProvider.getString(R.string.restaurant_turandot_address),
-                phone = "+7 (495) 345-67-89"
+                phone = ResourceProvider.getString(R.string.restaurant_turandot_phone)
             ),
             RestaurantMarker(
                 id = "4",
@@ -295,7 +295,7 @@ class MockHotelRepository(
                 distance = 0.3,
                 coordinates = Location(55.749244, 37.615423),
                 address = ResourceProvider.getString(R.string.restaurant_syrovarnya_address),
-                phone = "+7 (495) 456-78-90"
+                phone = ResourceProvider.getString(R.string.restaurant_syrovarnya_phone)
             ),
             RestaurantMarker(
                 id = "5",
@@ -305,7 +305,7 @@ class MockHotelRepository(
                 distance = 1.5,
                 coordinates = Location(55.743244, 37.625423),
                 address = ResourceProvider.getString(R.string.restaurant_chaykhona_address),
-                phone = "+7 (495) 567-89-01"
+                phone = ResourceProvider.getString(R.string.restaurant_chaykhona_phone)
             )
         )
     )

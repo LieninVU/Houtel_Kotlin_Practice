@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.DashboardFragment"
-        android:label="Dashboard"
+        android:label="@string/nav_dashboard"
         tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/action_dashboardFragment_to_keyFragment"
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/bookingFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.BookingFragment"
-        android:label="Booking">
+        android:label="@string/booking_toolbar_title">
         <action
             android:id="@+id/action_bookingFragment_to_keyFragment"
             app:destination="@id/keyFragment"
@@ -38,24 +38,24 @@
     <fragment
         android:id="@+id/keyFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.KeyFragment"
-        android:label="NFC Key"
+        android:label="@string/nfc_digital_key"
         tools:layout="@layout/fragment_key" />
 
     <fragment
         android:id="@+id/hotelInfoFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.HotelInfoFragment"
-        android:label="Hotel Info" />
+        android:label="@string/hotel_info_toolbar_title" />
 
     <fragment
         android:id="@+id/servicesFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.ServicesFragment"
-        android:label="Services"
+        android:label="@string/services_toolbar_title"
         tools:layout="@layout/fragment_services" />
 
     <fragment
         android:id="@+id/paymentFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.PaymentFragment"
-        android:label="Payment">
+        android:label="@string/payment_toolbar_title">
         <argument
             android:name="amount"
             app:argType="float" />
@@ -70,11 +70,11 @@
     <fragment
         android:id="@+id/reviewsFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.ReviewsFragment"
-        android:label="Reviews" />
+        android:label="@string/reviews_toolbar_title" />
 
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.example.hotel_app.presentation.ui.fragments.MapsFragment"
-        android:label="Maps" />
+        android:label="@string/maps_toolbar_title" />
 
 </navigation>

@@ -17,7 +17,7 @@
             android:layout_height="@dimen/toolbar_height"
             app:title="@string/booking_toolbar_title"
             app:navigationIcon="@drawable/ic_back_arrow"
-            app:navigationContentDescription="Назад" />
+            app:navigationContentDescription="@string/back_button_content_description" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -29,7 +29,7 @@ class PaidServicesAdapter :
         with(holder.binding) {
             tvServiceIcon.text = service.category.getIcon()
             tvServiceTitle.text = service.title
-            tvServicePrice.text = "$${service.price.toInt()}"
+            tvServicePrice.text = context.getString(R.string.paid_service_price_format, service.price.toInt())
             tvPaidAt.text = service.paidAt
             tvPaidStatus.text = context.getString(R.string.paid_service_paid_status)
         }

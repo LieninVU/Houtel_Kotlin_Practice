@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hotel_app.R
 import com.example.hotel_app.databinding.LayoutItemServiceBinding
 import com.example.hotel_app.domain.model.HotelService
 import com.example.hotel_app.domain.model.getIcon
@@ -24,11 +25,12 @@ class ServicesAdapter(
 
     override fun onBindViewHolder(holder: ServiceViewHolder, position: Int) {
         val service = getItem(position)
+        val context = holder.itemView.context
         with(holder.binding) {
             tvServiceTitle.text = service.title
-            tvServicePrice.text = "$${service.price.toInt()}"
+            tvServicePrice.text = context.getString(R.string.services_price_format, service.price.toInt())
             tvServiceIcon.text = service.category.getIcon()
-            
+
             root.setOnClickListener {
                 onServiceClick(service)
             }

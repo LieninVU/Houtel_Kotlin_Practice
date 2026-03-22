@@ -2,6 +2,8 @@ package com.example.hotel_app.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hotel_app.R
+import com.example.hotel_app.ResourceProvider
 import com.example.hotel_app.domain.model.HotelService
 import com.example.hotel_app.domain.model.ServiceCategory
 import com.example.hotel_app.domain.model.getIcon
@@ -81,16 +83,17 @@ class ServicesViewModel(private val repository: HotelRepository) : ViewModel() {
     fun payForService(service: HotelService) {
         viewModelScope.launch {
             _isLoading.value = true
-            
+
             when (val result = repository.payForService(service)) {
                 is PaymentResult.Success -> {
-                    _paymentResult.emit(PaymentUiState.Success("Услуга '${service.title}' оплачена!"))
+                    val message = ResourceProvider.getString(R.string.services_service_paid_format, service.title)
+                    _paymentResult.emit(PaymentUiState.Success(message))
                 }
                 is PaymentResult.Error -> {
                     _paymentResult.emit(PaymentUiState.Error(result.message))
                 }
             }
-            
+
             _isLoading.value = false
         }
     }
