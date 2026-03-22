@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.hotel_app.data.parser.XlsEventParser
 import com.example.hotel_app.data.preferences.UserPreferences
 import com.example.hotel_app.domain.model.Event
+import kotlinx.coroutines.launch
 
 sealed class UiState<out T> {
     object Loading : UiState<Nothing>()
@@ -36,22 +38,29 @@ class HotelInfoViewModel(context: Context) : ViewModel() {
         loadEvents()
     }
 
+    /**
+     * Загрузка событий из assets.
+     * Использует viewModelScope.launch с Dispatchers.IO внутри parseFromAssets.
+     */
     fun loadEvents() {
-        _eventsState.value = UiState.Loading
-        
-        val allEvents = try {
-            parser.parseFromAssets()
-        } catch (e: Exception) {
-            _eventsState.value = UiState.Error("Ошибка загрузки: ${e.localizedMessage}")
-            parser.getMockEvents()
-        }
+        viewModelScope.launch {
+            _eventsState.value = UiState.Loading
 
-        _eventsState.value = when {
-            allEvents.isEmpty() -> UiState.Error("Нет данных о мероприятиях")
-            else -> UiState.Success(allEvents)
+            val allEvents = try {
+                // ✅ parseFromAssets теперь suspend и использует Dispatchers.IO
+                parser.parseFromAssets()
+            } catch (e: Exception) {
+                _eventsState.value = UiState.Error("Ошибка загрузки: ${e.localizedMessage}")
+                parser.getMockEvents()
+            }
+
+            _eventsState.value = when {
+                allEvents.isEmpty() -> UiState.Error("Нет данных о мероприятиях")
+                else -> UiState.Success(allEvents)
+            }
+
+            _recommendations.value = getRecommendations(allEvents)
         }
-        
-        _recommendations.value = getRecommendations(allEvents)
     }
 
     /**

@@ -6,10 +6,10 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.example.hotel_app.R
 import com.example.hotel_app.databinding.LayoutItemRoomBinding
 import com.example.hotel_app.domain.model.Room
+import com.example.hotel_app.presentation.ui.utils.ImageLoadingUtils
 
 class RoomAdapter(
     private val onRoomSelected: (Room) -> Unit
@@ -58,13 +58,15 @@ class RoomAdapter(
             tvRoomType.text = room.type
             tvRoomPrice.text = "$ ${room.price.toInt()} / night"
             tvRoomDescription.text = room.description
-            
-            ivRoom.load(room.imageUrl) {
-                crossfade(true)
-                placeholder(R.drawable.ic_launcher_background)
-                error(R.drawable.ic_launcher_background)
-            }
-            
+
+            // ✅ Загрузка изображения с правильными Dispatchers и обработкой ошибок
+            ImageLoadingUtils.loadImage(
+                imageView = ivRoom,
+                imageUrl = room.imageUrl,
+                placeholder = R.drawable.ic_launcher_background,
+                error = R.drawable.ic_launcher_background
+            )
+
             root.alpha = if (room.isAvailable) 1.0f else 0.5f
             root.isClickable = room.isAvailable
             

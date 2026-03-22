@@ -2,6 +2,8 @@ package com.example.hotel_app.data.parser
 
 import android.content.Context
 import com.example.hotel_app.domain.model.Event
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.InputStream
@@ -16,14 +18,21 @@ import java.io.InputStream
  */
 class XlsEventParser(private val context: Context) {
 
-    fun parseFromAssets(fileName: String = "events.xlsx"): List<Event> {
-        return try {
-            val inputStream: InputStream = context.assets.open(fileName)
-            if (fileName.endsWith(".xlsx")) parseXlsx(inputStream)
-            else parseXls(inputStream)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            getMockEvents() // fallback на моки если файл не найден
+    /**
+     * Парсинг файла из assets.
+     * Выполняется на Dispatchers.IO для избежания блокировки Main потока.
+     */
+    suspend fun parseFromAssets(fileName: String = "events.xlsx"): List<Event> {
+        // ✅ Явное указание Dispatchers.IO для IO-операций
+        return withContext(Dispatchers.IO) {
+            try {
+                val inputStream: InputStream = context.assets.open(fileName)
+                if (fileName.endsWith(".xlsx")) parseXlsx(inputStream)
+                else parseXls(inputStream)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                getMockEvents() // fallback на моки если файл не найден
+            }
         }
     }
 
