@@ -224,30 +224,31 @@
     <!-- Mock Data (MockHotelRepository) -->
     <string name="mock_user_name">John Doe</string>
     <string name="mock_user_email">john.doe@example.com</string>
-    <string name="mock_room_type_standard">Standard</string>
-    <string name="mock_room_type_deluxe">Deluxe</string>
-    <string name="mock_room_type_suite">Suite</string>
-    <string name="mock_room_type_presidential">Presidential</string>
-    <string name="mock_room_description_standard">Comfortable room with essential amenities. Queen bed, TV, Wi-Fi, bathroom.</string>
-    <string name="mock_room_description_deluxe">Spacious room with premium amenities. King bed, work desk, minibar, city view.</string>
-    <string name="mock_room_description_suite">Luxurious suite with separate living area. King bed, jacuzzi, panoramic view.</string>
-    <string name="mock_room_description_presidential">Ultimate luxury experience. Two bedrooms, private terrace, butler service.</string>
-    <string name="mock_error_room_not_found">Room not found</string>
-    <string name="mock_error_room_not_available">Room is not available</string>
+    <string name="mock_room_type_standard">Стандарт</string>
+    <string name="mock_room_type_deluxe">Делюкс</string>
+    <string name="mock_room_type_suite">Люкс</string>
+    <string name="mock_room_type_presidential">Президентский</string>
+    <string name="mock_room_description_standard">Уютный номер со всеми удобствами. Кровать queen-size, ТВ, Wi-Fi, ванная комната.</string>
+    <string name="mock_room_description_deluxe">Просторный номер с премиальными удобствами. Кровать king-size, рабочий стол, минибар, вид на город.</string>
+    <string name="mock_room_description_suite">Роскошный люкс с отдельной гостиной. Кровать king-size, джакузи, панорамный вид.</string>
+    <string name="mock_room_description_presidential">Максимальная роскошь. Две спальни, частная терраса, услуги дворецкого.</string>
+    <string name="mock_error_room_not_found">Номер не найден</string>
+    <string name="mock_error_room_not_available">Номер недоступен</string>
+    <string name="mock_room_price_per_night_format">%1$d$ / ночь</string>
 
     <!-- Mock Services -->
-    <string name="mock_service_spa">SPA Treatment</string>
-    <string name="mock_service_transfer">Airport Transfer</string>
-    <string name="mock_service_breakfast">Breakfast Buffet</string>
-    <string name="mock_service_gym">Gym Access</string>
-    <string name="mock_service_room_service">Room Service</string>
-    <string name="mock_service_laundry">Laundry</string>
-    <string name="mock_service_description_spa">Relaxing spa experience</string>
-    <string name="mock_service_description_transfer">Comfortable ride to airport</string>
-    <string name="mock_service_description_breakfast">Delicious breakfast spread</string>
-    <string name="mock_service_description_gym">Modern fitness equipment</string>
-    <string name="mock_service_description_room_service">24/7 in-room dining</string>
-    <string name="mock_service_description_laundry">Same-day laundry service</string>
+    <string name="mock_service_spa">SPA-процедуры</string>
+    <string name="mock_service_transfer">Трансфер в аэропорт</string>
+    <string name="mock_service_breakfast">Шведский стол (завтрак)</string>
+    <string name="mock_service_gym">Доступ в спортзал</string>
+    <string name="mock_service_room_service">Обслуживание в номере</string>
+    <string name="mock_service_laundry">Прачечная</string>
+    <string name="mock_service_description_spa">Расслабляющие спа-процедуры</string>
+    <string name="mock_service_description_transfer">Комфортная поездка в аэропорт</string>
+    <string name="mock_service_description_breakfast">Вкусный завтрак</string>
+    <string name="mock_service_description_gym">Современное фитнес-оборудование</string>
+    <string name="mock_service_description_room_service">Питание в номере 24/7</string>
+    <string name="mock_service_description_laundry">Услуги прачечной в тот же день</string>
 
     <!-- NFC Notification -->
     <string name="nfc_notification_channel_name">NFC Key Notifications</string>

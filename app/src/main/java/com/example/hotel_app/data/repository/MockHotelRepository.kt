@@ -54,28 +54,21 @@ class MockHotelRepository(
 
     private fun generateInitialRooms(): List<Room> {
         val roomTypes = listOf(
-            "Standard" to 120.0,
-            "Deluxe" to 200.0,
-            "Suite" to 350.0,
-            "Presidential" to 800.0
-        )
-        
-        val descriptions = mapOf(
-            "Standard" to "Comfortable room with essential amenities. Queen bed, TV, Wi-Fi, bathroom.",
-            "Deluxe" to "Spacious room with premium amenities. King bed, work desk, minibar, city view.",
-            "Suite" to "Luxurious suite with separate living area. King bed, jacuzzi, panoramic view.",
-            "Presidential" to "Ultimate luxury experience. Two bedrooms, private terrace, butler service."
+            ResourceProvider.getString(R.string.mock_room_type_standard) to 120.0,
+            ResourceProvider.getString(R.string.mock_room_type_deluxe) to 200.0,
+            ResourceProvider.getString(R.string.mock_room_type_suite) to 350.0,
+            ResourceProvider.getString(R.string.mock_room_type_presidential) to 800.0
         )
         
         return listOf(
-            Room("room_101", "Standard", descriptions["Standard"]!!, 120.0, "https://picsum.photos/seed/101/400/300", true),
-            Room("room_102", "Standard", descriptions["Standard"]!!, 120.0, "https://picsum.photos/seed/102/400/300", true),
-            Room("room_201", "Deluxe", descriptions["Deluxe"]!!, 200.0, "https://picsum.photos/seed/201/400/300", true),
-            Room("room_202", "Deluxe", descriptions["Deluxe"]!!, 220.0, "https://picsum.photos/seed/202/400/300", true),
-            Room("room_301", "Suite", descriptions["Suite"]!!, 350.0, "https://picsum.photos/seed/301/400/300", true),
-            Room("room_302", "Suite", descriptions["Suite"]!!, 380.0, "https://picsum.photos/seed/302/400/300", false),
-            Room("room_401", "Presidential", descriptions["Presidential"]!!, 800.0, "https://picsum.photos/seed/401/400/300", true),
-            Room("room_402", "Presidential", descriptions["Presidential"]!!, 950.0, "https://picsum.photos/seed/402/400/300", false)
+            Room("room_101", ResourceProvider.getString(R.string.mock_room_type_standard), ResourceProvider.getString(R.string.mock_room_description_standard), 120.0, "https://picsum.photos/seed/101/400/300", true),
+            Room("room_102", ResourceProvider.getString(R.string.mock_room_type_standard), ResourceProvider.getString(R.string.mock_room_description_standard), 120.0, "https://picsum.photos/seed/102/400/300", true),
+            Room("room_201", ResourceProvider.getString(R.string.mock_room_type_deluxe), ResourceProvider.getString(R.string.mock_room_description_deluxe), 200.0, "https://picsum.photos/seed/201/400/300", true),
+            Room("room_202", ResourceProvider.getString(R.string.mock_room_type_deluxe), ResourceProvider.getString(R.string.mock_room_description_deluxe), 220.0, "https://picsum.photos/seed/202/400/300", true),
+            Room("room_301", ResourceProvider.getString(R.string.mock_room_type_suite), ResourceProvider.getString(R.string.mock_room_description_suite), 350.0, "https://picsum.photos/seed/301/400/300", true),
+            Room("room_302", ResourceProvider.getString(R.string.mock_room_type_suite), ResourceProvider.getString(R.string.mock_room_description_suite), 380.0, "https://picsum.photos/seed/302/400/300", false),
+            Room("room_401", ResourceProvider.getString(R.string.mock_room_type_presidential), ResourceProvider.getString(R.string.mock_room_description_presidential), 800.0, "https://picsum.photos/seed/401/400/300", true),
+            Room("room_402", ResourceProvider.getString(R.string.mock_room_type_presidential), ResourceProvider.getString(R.string.mock_room_description_presidential), 950.0, "https://picsum.photos/seed/402/400/300", false)
         )
     }
 
@@ -87,12 +80,12 @@ class MockHotelRepository(
 
     override fun getServices(): Flow<List<HotelService>> = MutableStateFlow(
         listOf(
-            HotelService("srv_1", "SPA Treatment", ServiceCategory.SPA, 80.0, "https://picsum.photos/seed/spa/200/200", "Relaxing spa experience"),
-            HotelService("srv_2", "Airport Transfer", ServiceCategory.TRANSFER, 45.0, "https://picsum.photos/seed/transfer/200/200", "Comfortable ride to airport"),
-            HotelService("srv_3", "Breakfast Buffet", ServiceCategory.FOOD, 25.0, "https://picsum.photos/seed/breakfast/200/200", "Delicious breakfast spread"),
-            HotelService("srv_4", "Gym Access", ServiceCategory.OTHER, 15.0, "https://picsum.photos/seed/gym/200/200", "Modern fitness equipment"),
-            HotelService("srv_5", "Room Service", ServiceCategory.FOOD, 35.0, "https://picsum.photos/seed/room/200/200", "24/7 in-room dining"),
-            HotelService("srv_6", "Laundry", ServiceCategory.OTHER, 20.0, "https://picsum.photos/seed/laundry/200/200", "Same-day laundry service")
+            HotelService("srv_1", ResourceProvider.getString(R.string.mock_service_spa), ServiceCategory.SPA, 80.0, "https://picsum.photos/seed/spa/200/200", ResourceProvider.getString(R.string.mock_service_description_spa)),
+            HotelService("srv_2", ResourceProvider.getString(R.string.mock_service_transfer), ServiceCategory.TRANSFER, 45.0, "https://picsum.photos/seed/transfer/200/200", ResourceProvider.getString(R.string.mock_service_description_transfer)),
+            HotelService("srv_3", ResourceProvider.getString(R.string.mock_service_breakfast), ServiceCategory.FOOD, 25.0, "https://picsum.photos/seed/breakfast/200/200", ResourceProvider.getString(R.string.mock_service_description_breakfast)),
+            HotelService("srv_4", ResourceProvider.getString(R.string.mock_service_gym), ServiceCategory.OTHER, 15.0, "https://picsum.photos/seed/gym/200/200", ResourceProvider.getString(R.string.mock_service_description_gym)),
+            HotelService("srv_5", ResourceProvider.getString(R.string.mock_service_room_service), ServiceCategory.FOOD, 35.0, "https://picsum.photos/seed/room/200/200", ResourceProvider.getString(R.string.mock_service_description_room_service)),
+            HotelService("srv_6", ResourceProvider.getString(R.string.mock_service_laundry), ServiceCategory.OTHER, 20.0, "https://picsum.photos/seed/laundry/200/200", ResourceProvider.getString(R.string.mock_service_description_laundry))
         )
     )
 

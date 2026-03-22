@@ -56,7 +56,7 @@ class RoomAdapter(
 
         with(holder.binding) {
             tvRoomType.text = room.type
-            tvRoomPrice.text = "$ ${room.price.toInt()} / night"
+            tvRoomPrice.text = context.getString(R.string.mock_room_price_per_night_format, room.price.toInt())
             tvRoomDescription.text = room.description
 
             // ✅ Загрузка изображения с правильными Dispatchers и обработкой ошибок
