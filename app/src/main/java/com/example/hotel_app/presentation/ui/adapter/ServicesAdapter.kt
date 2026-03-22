@@ -25,10 +25,9 @@ class ServicesAdapter(
     override fun onBindViewHolder(holder: ServiceViewHolder, position: Int) {
         val service = getItem(position)
         with(holder.binding) {
-            tvServiceIcon.text = service.category.getIcon()
             tvServiceTitle.text = service.title
-            tvServicePrice.text = "${service.price}₽"
-            tvServiceDescription.text = service.description
+            tvServicePrice.text = "$${service.price.toInt()}"
+            tvServiceIcon.text = service.category.getIcon()
             
             root.setOnClickListener {
                 onServiceClick(service)

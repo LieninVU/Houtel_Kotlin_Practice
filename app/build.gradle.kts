@@ -66,6 +66,22 @@ dependencies {
 
     // Faker
     implementation(libs.kotlin.faker)
+    
+    // Image Loading - Coil
+    implementation(libs.coil)
+
+    // Apache POI — парсинг XLS/XLSX
+    implementation(libs.poi)
+    implementation(libs.poi.ooxml)
+
+    // Room Database
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
+    // Google Maps
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 
     // Room Database
     implementation(libs.room.runtime)

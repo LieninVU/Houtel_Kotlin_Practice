@@ -1,101 +1,103 @@
 package com.example.hotel_app.data.repository
 
+import com.example.hotel_app.R
+import com.example.hotel_app.ResourceProvider
 import com.example.hotel_app.data.local.ReviewDao
 import com.example.hotel_app.data.local.ReviewEntity
 import com.example.hotel_app.domain.model.*
+import com.example.hotel_app.domain.repository.BookingResult
 import com.example.hotel_app.domain.repository.HotelRepository
 import com.example.hotel_app.domain.repository.KeyAction
+import com.example.hotel_app.domain.repository.PaymentResult
+import com.example.hotel_app.domain.model.PaymentStatus
 import io.github.serpro69.kfaker.Faker
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MockHotelRepository(private val reviewDao: ReviewDao) : HotelRepository {
+/**
+ * Результат валидации бронирования.
+ */
+private sealed class BookingValidationResult {
+    data object Valid : BookingValidationResult()
+    data class Error(val message: String) : BookingValidationResult()
+}
+
+/**
+ * Успешный результат валидации с данными комнаты.
+ * Наследует BookingValidationResult для использования в when.
+ */
+private data class ValidatedRoom(val room: Room) : BookingValidationResult()
+
+class MockHotelRepository(
+    private val reviewDao: ReviewDao
+) : HotelRepository {
     private val faker = Faker()
     private val random = Random()
-
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    private val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+    
+    private val _rooms = MutableStateFlow<List<Room>>(generateInitialRooms())
     private val _nfcKeys = MutableStateFlow<List<NfcKey>>(emptyList())
+    private val _activeBooking = MutableStateFlow<Booking?>(null)
+    private val _bookings = MutableStateFlow<List<Booking>>(emptyList())
+    private val _paidServices = MutableStateFlow<List<PaidService>>(emptyList())
+    private val baseUser = User(
+        id = "user_123",
+        name = faker.name.name(),
+        email = faker.internet.email(),
+        bookingHistory = emptyList()
+    )
 
-    override fun getRooms(): Flow<List<Room>> = flow {
-        delay(500)
-        val rooms = List(10) {
-            Room(
-                id = UUID.randomUUID().toString(),
-                type = listOf("Standard", "Deluxe", "Suite", "Presidential").random(),
-                description = "Spacious room with modern amenities and a beautiful view.",
-                price = 100.0 + random.nextInt(900),
-                imageUrl = "https://picsum.photos/seed/${random.nextInt(1000)}/400/300",
-                isAvailable = random.nextBoolean()
-            )
-        }
-        emit(rooms)
+    private fun generateInitialRooms(): List<Room> {
+        val roomTypes = listOf(
+            "Standard" to 120.0,
+            "Deluxe" to 200.0,
+            "Suite" to 350.0,
+            "Presidential" to 800.0
+        )
+        
+        val descriptions = mapOf(
+            "Standard" to "Comfortable room with essential amenities. Queen bed, TV, Wi-Fi, bathroom.",
+            "Deluxe" to "Spacious room with premium amenities. King bed, work desk, minibar, city view.",
+            "Suite" to "Luxurious suite with separate living area. King bed, jacuzzi, panoramic view.",
+            "Presidential" to "Ultimate luxury experience. Two bedrooms, private terrace, butler service."
+        )
+        
+        return listOf(
+            Room("room_101", "Standard", descriptions["Standard"]!!, 120.0, "https://picsum.photos/seed/101/400/300", true),
+            Room("room_102", "Standard", descriptions["Standard"]!!, 120.0, "https://picsum.photos/seed/102/400/300", true),
+            Room("room_201", "Deluxe", descriptions["Deluxe"]!!, 200.0, "https://picsum.photos/seed/201/400/300", true),
+            Room("room_202", "Deluxe", descriptions["Deluxe"]!!, 220.0, "https://picsum.photos/seed/202/400/300", true),
+            Room("room_301", "Suite", descriptions["Suite"]!!, 350.0, "https://picsum.photos/seed/301/400/300", true),
+            Room("room_302", "Suite", descriptions["Suite"]!!, 380.0, "https://picsum.photos/seed/302/400/300", false),
+            Room("room_401", "Presidential", descriptions["Presidential"]!!, 800.0, "https://picsum.photos/seed/401/400/300", true),
+            Room("room_402", "Presidential", descriptions["Presidential"]!!, 950.0, "https://picsum.photos/seed/402/400/300", false)
+        )
     }
 
-    override fun getServices(): Flow<List<HotelService>> = flow {
-        delay(500)
-        val services = List(8) {
-            HotelService(
-                id = UUID.randomUUID().toString(),
-                title = listOf("SPA Treatment", "Airport Transfer", "Breakfast Buffet", "Gym Access", "Laundry", "Excursion").random(),
-                category = ServiceCategory.values().random(),
-                price = 20.0 + random.nextInt(180),
-                imageUrl = "https://picsum.photos/seed/${random.nextInt(1000)}/200/200",
-                description = "Premium ${listOf("SPA", "Transfer", "Food", "Service").random()} service"
-            )
-        }
-        emit(services)
+    override fun getRooms(): Flow<List<Room>> = _rooms
+
+    override fun getAvailableRooms(): Flow<List<Room>> = _rooms.map { rooms ->
+        rooms.filter { it.isAvailable }
     }
+
+    override fun getServices(): Flow<List<HotelService>> = MutableStateFlow(
+        listOf(
+            HotelService("srv_1", "SPA Treatment", ServiceCategory.SPA, 80.0, "https://picsum.photos/seed/spa/200/200", "Relaxing spa experience"),
+            HotelService("srv_2", "Airport Transfer", ServiceCategory.TRANSFER, 45.0, "https://picsum.photos/seed/transfer/200/200", "Comfortable ride to airport"),
+            HotelService("srv_3", "Breakfast Buffet", ServiceCategory.FOOD, 25.0, "https://picsum.photos/seed/breakfast/200/200", "Delicious breakfast spread"),
+            HotelService("srv_4", "Gym Access", ServiceCategory.OTHER, 15.0, "https://picsum.photos/seed/gym/200/200", "Modern fitness equipment"),
+            HotelService("srv_5", "Room Service", ServiceCategory.FOOD, 35.0, "https://picsum.photos/seed/room/200/200", "24/7 in-room dining"),
+            HotelService("srv_6", "Laundry", ServiceCategory.OTHER, 20.0, "https://picsum.photos/seed/laundry/200/200", "Same-day laundry service")
+        )
+    )
 
     override fun getReviews(): Flow<List<Review>> = reviewDao.getAllReviews().map { entities ->
         entities.map { it.toReview() }
-    }
-
-    override fun getCurrentUser(): Flow<User> = flow {
-        delay(500)
-        val user = User(
-            id = "user_123",
-            name = faker.name.name(),
-            email = faker.internet.email(),
-            bookingHistory = emptyList()
-        )
-        emit(user)
-    }
-
-    override suspend fun bookRoom(roomId: String, checkIn: String, checkOut: String): Boolean {
-        delay(500)
-        return true
-    }
-
-    override fun getNfcKeys(): Flow<List<NfcKey>> = _nfcKeys
-
-    override suspend fun activateNfcKey(bookingId: String): Boolean {
-        delay(1000)
-        val newKey = NfcKey(
-            id = UUID.randomUUID().toString(),
-            roomNumber = (100 + random.nextInt(400)).toString(),
-            roomType = listOf("Deluxe", "Suite", "Standard").random(),
-            isActive = true,
-            validUntil = "2026-12-31"
-        )
-        val currentList = _nfcKeys.value.toMutableList()
-        currentList.add(newKey)
-        _nfcKeys.value = currentList
-        return true
-    }
-
-    override suspend fun useKeyAction(keyId: String, action: KeyAction): Boolean {
-        delay(800)
-        val currentList = _nfcKeys.value.map { key ->
-            if (key.id == keyId) {
-                key.copy(lastUsed = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date()))
-            } else key
-        }
-        _nfcKeys.value = currentList
-        return true
     }
 
     suspend fun saveReview(review: Review) {
@@ -105,9 +107,157 @@ class MockHotelRepository(private val reviewDao: ReviewDao) : HotelRepository {
     suspend fun deleteReview(reviewId: String) {
         reviewDao.deleteReview(reviewId)
     }
+
+    override fun getCurrentUser(): Flow<User> = _bookings.map { bookings ->
+        baseUser.copy(bookingHistory = bookings)
+    }
+
+    override fun getActiveBooking(): Flow<Booking?> = _activeBooking
+
+    override fun getBookings(): Flow<List<Booking>> = _bookings
+
+    override suspend fun bookRoom(
+        roomId: String,
+        guestName: String,
+        checkIn: String,
+        checkOut: String
+    ): BookingResult {
+        delay(1000)
+
+        // ✅ Валидация через отдельный метод
+        val room = when (val validation = validateBooking(roomId)) {
+            is BookingValidationResult.Error -> return BookingResult.Error(validation.message)
+            is ValidatedRoom -> validation.room
+            BookingValidationResult.Valid -> return BookingResult.Error("Unexpected validation state")
+        }
+
+        val roomNumber = roomId.removePrefix("room_")
+        val bookingId = UUID.randomUUID().toString()
+        val nfcKeyId = UUID.randomUUID().toString()
+
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, 7)
+        val validUntil = dateFormat.format(calendar.time)
+
+        val nfcKey = NfcKey(
+            id = nfcKeyId,
+            roomNumber = roomNumber,
+            roomType = room.type,
+            isActive = true,
+            validUntil = validUntil
+        )
+
+        val booking = Booking(
+            id = bookingId,
+            roomId = roomId,
+            roomNumber = roomNumber,
+            roomType = room.type,
+            guestName = guestName,
+            checkIn = checkIn,
+            checkOut = checkOut,
+            status = BookingStatus.CONFIRMED,
+            nfcKeyId = nfcKeyId
+        )
+
+        updateRoomAvailability(roomId, isAvailable = false)
+        addNfcKey(nfcKey)
+        addBooking(booking)
+
+        return BookingResult.Success(booking, nfcKey)
+    }
+
+    /**
+     * Валидация данных для бронирования.
+     * Вынесена в отдельный метод для упрощения основной логики.
+     */
+    private fun validateBooking(roomId: String): BookingValidationResult {
+        val room = _rooms.value.find { it.id == roomId }
+            ?: return BookingValidationResult.Error(
+                ResourceProvider.getString(R.string.mock_error_room_not_found)
+            )
+
+        if (!room.isAvailable) {
+            return BookingValidationResult.Error(
+                ResourceProvider.getString(R.string.mock_error_room_not_available)
+            )
+        }
+
+        // Возвращаем комнату для дальнейшего использования
+        return ValidatedRoom(room)
+    }
+
+    /**
+     * Обновление доступности номера.
+     * Вынесено в отдельный метод для читаемости.
+     */
+    private fun updateRoomAvailability(roomId: String, isAvailable: Boolean) {
+        _rooms.value = _rooms.value.map {
+            if (it.id == roomId) it.copy(isAvailable = isAvailable) else it
+        }
+    }
+
+    /**
+     * Добавление NFC ключа.
+     * Вынесено в отдельный метод для читаемости.
+     */
+    private fun addNfcKey(key: NfcKey) {
+        val currentKeys = _nfcKeys.value.toMutableList()
+        currentKeys.add(key)
+        _nfcKeys.value = currentKeys
+    }
+
+    /**
+     * Добавление бронирования.
+     * Вынесено в отдельный метод для читаемости.
+     */
+    private fun addBooking(booking: Booking) {
+        val currentBookings = _bookings.value.toMutableList()
+        currentBookings.add(booking)
+        _bookings.value = currentBookings
+        _activeBooking.value = booking
+    }
+
+    override fun getNfcKeys(): Flow<List<NfcKey>> = _nfcKeys
+
+    override suspend fun activateNfcKey(bookingId: String): Boolean {
+        delay(500)
+        return true
+    }
+
+    override suspend fun useKeyAction(keyId: String, action: KeyAction): Boolean {
+        delay(800)
+        _nfcKeys.value = _nfcKeys.value.map { key ->
+            if (key.id == keyId) {
+                key.copy(lastUsed = timeFormat.format(Date()))
+            } else key
+        }
+        return true
+    }
+
+    override fun getPaidServices(): Flow<List<PaidService>> = _paidServices
+
+    override suspend fun payForService(service: HotelService): PaymentResult {
+        delay(1000) // Имитация обработки платежа
+        
+        val paidService = PaidService(
+            id = "paid_${UUID.randomUUID()}",
+            serviceId = service.id,
+            title = service.title,
+            price = service.price,
+            category = service.category,
+            paidAt = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault()).format(Date()),
+            status = PaymentStatus.PAID
+        )
+        
+        val currentList = _paidServices.value.toMutableList()
+        currentList.add(paidService)
+        _paidServices.value = currentList
+        
+        return PaymentResult.Success(paidService)
+    }
 }
 
-// Extension functions for conversion
+// Extension functions for Review conversion
 fun Review.toEntity(): ReviewEntity = ReviewEntity(
     id = id,
     userName = userName,

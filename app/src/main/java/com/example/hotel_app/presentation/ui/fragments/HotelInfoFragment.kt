@@ -2,59 +2,128 @@ package com.example.hotel_app.presentation.ui.fragments
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hotel_app.R
 import com.example.hotel_app.databinding.FragmentHotelInfoBinding
+import com.example.hotel_app.presentation.ui.adapter.EventAdapter
 import com.example.hotel_app.presentation.viewmodel.HotelInfoViewModel
-import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.example.hotel_app.presentation.viewmodel.HotelInfoViewModelFactory
+import com.example.hotel_app.presentation.viewmodel.UiState
+import com.google.android.material.snackbar.Snackbar
 
 class HotelInfoFragment : Fragment(R.layout.fragment_hotel_info) {
 
-    private val viewModel: HotelInfoViewModel by viewModel()
     private var _binding: FragmentHotelInfoBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: HotelInfoViewModel by viewModels {
+        HotelInfoViewModelFactory(requireContext())
+    }
+
+    private lateinit var eventsAdapter: EventAdapter
+    private lateinit var recommendationsAdapter: EventAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHotelInfoBinding.bind(view)
 
-        observeState()
+        binding.toolbar?.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        setupAdapters()
+        observeViewModel()
+        setupTabs()
+        setupRetry()
     }
 
-    private fun observeState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.hotelInfo.collect { info ->
-                        binding.tvHotelName.text = info.name
-                        binding.tvAddress.text = info.address
-                        binding.tvPhone.text = info.phone
-                        binding.tvEmail.text = info.email
-                        binding.tvCheckIn.text = "Заезд: ${info.checkInTime}"
-                        binding.tvCheckOut.text = "Выезд: ${info.checkOutTime}"
-                        binding.tvDescription.text = info.description
-                        binding.tvFacilities.text = info.facilities.joinToString("\n") { "• $it" }
-                        
-                        binding.tvBreakfast.text = "Завтрак: ${info.schedule.breakfast}"
-                        binding.tvLunch.text = "Обед: ${info.schedule.lunch}"
-                        binding.tvDinner.text = "Ужин: ${info.schedule.dinner}"
-                        binding.tvSpa.text = "SPA: ${info.schedule.spa}"
-                        binding.tvGym.text = "Спортзал: ${info.schedule.gym}"
-                    }
-                }
+    private fun setupAdapters() {
+        eventsAdapter = EventAdapter { event -> viewModel.onEventViewed(event) }
+        recommendationsAdapter = EventAdapter { event -> viewModel.onEventViewed(event) }
 
-                launch {
-                    viewModel.isLoading.collect { isLoading ->
-                        binding.progressBar.isVisible = isLoading
-                    }
+        binding.rvEvents.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = eventsAdapter
+        }
+        binding.rvRecommendations.apply {
+            layoutManager = LinearLayoutManager(
+                requireContext(), LinearLayoutManager.HORIZONTAL, false
+            )
+            adapter = recommendationsAdapter
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.eventsState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.layoutErrorInfo.visibility = View.GONE
+                    binding.rvEvents.visibility = View.GONE
+                }
+                is UiState.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.layoutErrorInfo.visibility = View.GONE
+                    binding.rvEvents.visibility = View.VISIBLE
+                    eventsAdapter.submitList(state.data)
+                }
+                is UiState.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.layoutErrorInfo.visibility = View.VISIBLE
+                    binding.rvEvents.visibility = View.GONE
+                    Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
                 }
             }
         }
+
+        viewModel.recommendations.observe(viewLifecycleOwner) { recs ->
+            recommendationsAdapter.submitList(recs)
+        }
+    }
+
+    private fun setupRetry() {
+        binding.btnRetryInfo.setOnClickListener {
+            viewModel.loadEvents()
+        }
+    }
+
+    private fun setupTabs() {
+        binding.tabLayout.addOnTabSelectedListener(object :
+            com.google.android.material.tabs.TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: com.google.android.material.tabs.TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> showEventsTab()
+                    1 -> showMapTab()
+                    2 -> showContactsTab()
+                }
+            }
+            override fun onTabUnselected(tab: com.google.android.material.tabs.TabLayout.Tab?) {}
+            override fun onTabReselected(tab: com.google.android.material.tabs.TabLayout.Tab?) {}
+        })
+    }
+
+    private fun showEventsTab() {
+        binding.rvEvents.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
+        binding.ivHotelMap.visibility = View.GONE
+        binding.layoutContacts.visibility = View.GONE
+    }
+
+    private fun showMapTab() {
+        binding.rvEvents.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+        binding.ivHotelMap.visibility = View.VISIBLE
+        binding.layoutContacts.visibility = View.GONE
+    }
+
+    private fun showContactsTab() {
+        binding.rvEvents.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+        binding.ivHotelMap.visibility = View.GONE
+        binding.layoutContacts.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {

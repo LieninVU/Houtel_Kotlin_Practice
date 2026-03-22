@@ -12,9 +12,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.hotel_app.R
 import com.example.hotel_app.databinding.FragmentServicesBinding
+import com.example.hotel_app.domain.model.HotelService
 import com.example.hotel_app.domain.model.ServiceCategory
 import com.example.hotel_app.presentation.ui.adapter.ServicesAdapter
+import com.example.hotel_app.presentation.viewmodel.PaymentUiState
 import com.example.hotel_app.presentation.viewmodel.ServicesViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -34,12 +37,14 @@ class ServicesFragment : Fragment(R.layout.fragment_services) {
         setupCategoryFilter()
         setupSearch()
         observeState()
+        
+        // Загружаем услуги
         viewModel.loadServices()
     }
 
     private fun setupRecyclerView() {
         servicesAdapter = ServicesAdapter { service ->
-            Toast.makeText(requireContext(), service.title, Toast.LENGTH_SHORT).show()
+            showPaymentDialog(service)
         }
         binding.rvServices.apply {
             adapter = servicesAdapter
@@ -47,22 +52,43 @@ class ServicesFragment : Fragment(R.layout.fragment_services) {
         }
     }
 
+    private fun showPaymentDialog(service: HotelService) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Оплата услуги")
+            .setMessage("${service.title}\n\nЦена: $${service.price.toInt()}\n\nОплатить эту услугу?")
+            .setPositiveButton("Оплатить") { _, _ ->
+                viewModel.payForService(service)
+            }
+            .setNegativeButton("Отмена", null)
+            .show()
+    }
+
+    /**
+     * Маппинг кнопок категорий на соответствующие ServiceCategory.
+     * Используется для упрощения обработки кликов.
+     */
+    private val categoryButtons: Map<View, ServiceCategory?> by lazy {
+        mapOf(
+            binding.chipAll to null,
+            binding.chipSpa to ServiceCategory.SPA,
+            binding.chipTransfer to ServiceCategory.TRANSFER,
+            binding.chipFood to ServiceCategory.FOOD,
+            binding.chipOther to ServiceCategory.OTHER
+        )
+    }
+
     private fun setupCategoryFilter() {
-        binding.chipSpa.setOnClickListener {
-            viewModel.selectCategory(ServiceCategory.SPA)
+        categoryButtons.forEach { (button, category) ->
+            button.setOnClickListener {
+                disableCategoryButtons()
+                button.isEnabled = false
+                viewModel.selectCategory(category)
+            }
         }
-        binding.chipTransfer.setOnClickListener {
-            viewModel.selectCategory(ServiceCategory.TRANSFER)
-        }
-        binding.chipFood.setOnClickListener {
-            viewModel.selectCategory(ServiceCategory.FOOD)
-        }
-        binding.chipOther.setOnClickListener {
-            viewModel.selectCategory(ServiceCategory.OTHER)
-        }
-        binding.chipAll.setOnClickListener {
-            viewModel.selectCategory(null)
-        }
+    }
+
+    private fun disableCategoryButtons() {
+        categoryButtons.keys.forEach { it.isEnabled = true }
     }
 
     private fun setupSearch() {
@@ -85,6 +111,19 @@ class ServicesFragment : Fragment(R.layout.fragment_services) {
                 launch {
                     viewModel.isLoading.collect { isLoading ->
                         binding.progressBar.isVisible = isLoading
+                    }
+                }
+
+                launch {
+                    viewModel.paymentResult.collect { state ->
+                        when (state) {
+                            is PaymentUiState.Success -> {
+                                Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                            }
+                            is PaymentUiState.Error -> {
+                                Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     }
                 }
             }

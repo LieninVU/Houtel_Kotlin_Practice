@@ -3,27 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Каталог услуг"
-        android:textSize="24sp"
-        android:textStyle="bold"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorSurface"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@android:drawable/ic_media_previous"
+        app:title="Услуги" />
 
     <!-- Search -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_margin="16dp"
         android:hint="Поиск услуг"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:startIconDrawable="@android:drawable/ic_menu_search">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -33,7 +33,7 @@
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Category Filter -->
+    <!-- Category Filter - Using Buttons instead of Chips -->
     <HorizontalScrollView
         android:id="@+id/scrollCategories"
         android:layout_width="match_parent"
@@ -42,42 +42,52 @@
         android:scrollbars="none"
         app:layout_constraintTop_toBottomOf="@id/layoutSearch">
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroup"
+        <LinearLayout
+            android:id="@+id/layoutCategories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:singleSelection="true">
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
 
-            <com.google.android.material.chip.Chip
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/chipAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Все" />
+                android:layout_marginEnd="8dp"
+                android:text="Все"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
-            <com.google.android.material.chip.Chip
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/chipSpa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SPA" />
+                android:layout_marginEnd="8dp"
+                android:text="SPA"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
-            <com.google.android.material.chip.Chip
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/chipTransfer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Трансфер" />
+                android:layout_marginEnd="8dp"
+                android:text="Трансфер"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
-            <com.google.android.material.chip.Chip
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/chipFood"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Еда" />
+                android:layout_marginEnd="8dp"
+                android:text="Еда"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
-            <com.google.android.material.chip.Chip
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/chipOther"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Другое" />
-        </com.google.android.material.chip.ChipGroup>
+                android:text="Другое"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+        </LinearLayout>
     </HorizontalScrollView>
 
     <!-- Services Grid -->
@@ -85,7 +95,7 @@
         android:id="@+id/rvServices"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:padding="8dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/scrollCategories"
@@ -98,11 +108,12 @@
         android:layout_height="wrap_content"
         android:text="Услуги не найдены"
         android:textSize="16sp"
+        android:textColor="@android:color/darker_gray"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/scrollCategories" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -112,6 +123,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/scrollCategories" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

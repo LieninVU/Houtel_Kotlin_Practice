@@ -1,76 +1,94 @@
 package com.example.hotel_app.presentation.viewmodel
 
+import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.hotel_app.domain.repository.HotelRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.example.hotel_app.data.parser.XlsEventParser
+import com.example.hotel_app.data.preferences.UserPreferences
+import com.example.hotel_app.domain.model.Event
 import kotlinx.coroutines.launch
 
-class HotelInfoViewModel(private val repository: HotelRepository) : ViewModel() {
-
-    private val _hotelInfo = MutableStateFlow(HotelInfoData())
-    val hotelInfo: StateFlow<HotelInfoData> = _hotelInfo.asStateFlow()
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-    init {
-        loadHotelInfo()
-    }
-
-    fun loadHotelInfo() {
-        viewModelScope.launch {
-            _isLoading.value = true
-            // Mock data - in real app would parse XLS or fetch from API
-            _hotelInfo.value = HotelInfoData(
-                name = "Grand Hotel",
-                address = "ул. Примерная, 123, Москва",
-                phone = "+7 (495) 123-45-67",
-                email = "info@grandhotel.ru",
-                checkInTime = "14:00",
-                checkOutTime = "12:00",
-                description = "Роскошный отель в центре города с прекрасным видом на парк.",
-                facilities = listOf(
-                    "Бесплатный Wi-Fi",
-                    "Фитнес-центр",
-                    "SPA-салон",
-                    "Ресторан",
-                    "Бар",
-                    "Конференц-залы",
-                    "Парковка",
-                    "Трансфер до аэропорта"
-                ),
-                schedule = ScheduleData(
-                    breakfast = "07:00 - 10:00",
-                    lunch = "12:00 - 15:00",
-                    dinner = "18:00 - 22:00",
-                    spa = "09:00 - 21:00",
-                    gym = "06:00 - 23:00"
-                )
-            )
-            _isLoading.value = false
-        }
-    }
+sealed class UiState<out T> {
+    object Loading : UiState<Nothing>()
+    data class Success<T>(val data: T) : UiState<T>()
+    data class Error(val message: String) : UiState<Nothing>()
 }
 
-data class HotelInfoData(
-    val name: String = "",
-    val address: String = "",
-    val phone: String = "",
-    val email: String = "",
-    val checkInTime: String = "",
-    val checkOutTime: String = "",
-    val description: String = "",
-    val facilities: List<String> = emptyList(),
-    val schedule: ScheduleData = ScheduleData()
-)
+class HotelInfoViewModel(context: Context) : ViewModel() {
 
-data class ScheduleData(
-    val breakfast: String = "",
-    val lunch: String = "",
-    val dinner: String = "",
-    val spa: String = "",
-    val gym: String = ""
-)
+    private val parser = XlsEventParser(context)
+    private val userPrefs = UserPreferences.getInstance(context)
+
+    private val _eventsState = MutableLiveData<UiState<List<Event>>>()
+    val eventsState: LiveData<UiState<List<Event>>> = _eventsState
+
+    private val _recommendations = MutableLiveData<List<Event>>()
+    val recommendations: LiveData<List<Event>> = _recommendations
+
+    // Удобный доступ к списку событий для Dashboard
+    val events: LiveData<List<Event>> get() = MutableLiveData<List<Event>>().also { ld ->
+        eventsState.observeForever { state ->
+            if (state is UiState.Success) ld.value = state.data
+        }
+    }
+
+    init {
+        loadEvents()
+    }
+
+    /**
+     * Загрузка событий из assets.
+     * Использует viewModelScope.launch с Dispatchers.IO внутри parseFromAssets.
+     */
+    fun loadEvents() {
+        viewModelScope.launch {
+            _eventsState.value = UiState.Loading
+
+            val allEvents = try {
+                // ✅ parseFromAssets теперь suspend и использует Dispatchers.IO
+                parser.parseFromAssets()
+            } catch (e: Exception) {
+                _eventsState.value = UiState.Error("Ошибка загрузки: ${e.localizedMessage}")
+                parser.getMockEvents()
+            }
+
+            _eventsState.value = when {
+                allEvents.isEmpty() -> UiState.Error("Нет данных о мероприятиях")
+                else -> UiState.Success(allEvents)
+            }
+
+            _recommendations.value = getRecommendations(allEvents)
+        }
+    }
+
+    /**
+     * Алгоритм рекомендаций:
+     * 1. Если есть история — показываем события той же категории
+     * 2. Иначе — случайные 3 события
+     */
+    private fun getRecommendations(events: List<Event>): List<Event> {
+        val lastCategory = userPrefs.lastViewedCategory
+        
+        return when {
+            lastCategory.isBlank() -> events.shuffled().take(3)
+            else -> {
+                val byCat = events.filter { it.category == lastCategory }
+                when {
+                    byCat.isNotEmpty() -> byCat.take(5)
+                    else -> events.shuffled().take(3)
+                }
+            }
+        }
+    }
+
+    fun onEventViewed(event: Event) {
+        userPrefs.lastViewedCategory = event.category
+        userPrefs.markEventViewed(event.title)
+        // Обновляем рекомендации после просмотра
+        val current = (eventsState.value as? UiState.Success)?.data
+            ?: parser.getMockEvents()
+        _recommendations.value = getRecommendations(current)
+    }
+}

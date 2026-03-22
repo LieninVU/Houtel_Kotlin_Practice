@@ -4,22 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
+    android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="2dp">
+    app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <!-- Emoji Icon -->
         <TextView
             android:id="@+id/tvServiceIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:background="@drawable/circle_background_blue"
             android:gravity="center"
-            android:textSize="24sp"
+            android:textSize="32sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="🧖" />
@@ -31,7 +32,7 @@
             android:layout_marginStart="12dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvServiceIcon"
@@ -42,26 +43,13 @@
             android:id="@+id/tvServicePrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:textColor="@color/design_default_color_primary"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@id/tvServiceIcon"
-            app:layout_constraintTop_toBottomOf="@id/tvServiceTitle"
-            tools:text="500₽" />
-
-        <TextView
-            android:id="@+id/tvServiceDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvServiceIcon"
-            tools:text="Premium SPA service" />
+            android:textColor="@color/design_default_color_primary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tvServiceTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvServiceTitle"
+            tools:text="$80" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -38,7 +38,6 @@ class PaymentViewModel : ViewModel() {
             }
 
             // Simulate payment processing
-            _isLoading.value = true
             delay(2000)
             
             _isLoading.value = false

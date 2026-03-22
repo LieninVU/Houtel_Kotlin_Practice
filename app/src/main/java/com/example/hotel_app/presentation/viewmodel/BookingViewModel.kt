@@ -2,87 +2,236 @@ package com.example.hotel_app.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hotel_app.R
+import com.example.hotel_app.ResourceProvider
 import com.example.hotel_app.domain.model.Booking
-import com.example.hotel_app.domain.model.BookingStatus
+import com.example.hotel_app.domain.model.NfcKey
 import com.example.hotel_app.domain.model.Room
+import com.example.hotel_app.domain.repository.BookingResult
 import com.example.hotel_app.domain.repository.HotelRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+
+/**
+ * Единое состояние UI для экрана бронирования.
+ * Используется immutable data class для предсказуемости.
+ */
+data class BookingUiState(
+    val rooms: List<Room> = emptyList(),
+    val selectedRoom: Room? = null,
+    val checkInDate: String? = null,
+    val checkOutDate: String? = null,
+    val guestName: String = "",
+    val isRoomsLoading: Boolean = false,
+    val isBookingLoading: Boolean = false,
+    val error: String? = null
+) {
+    /**
+     * Вычисляемое свойство: валидна ли форма для бронирования.
+     * Инкапсулирует логику валидации внутри состояния.
+     */
+    val isFormValid: Boolean
+        get() = selectedRoom != null &&
+                !checkInDate.isNullOrBlank() &&
+                !checkOutDate.isNullOrBlank() &&
+                guestName.isNotBlank()
+
+    /**
+     * Вычисляемая стоимость бронирования.
+     * Возвращает 0.0, если недостаточно данных для расчёта.
+     */
+    val totalPrice: Double
+        get() {
+            val room = selectedRoom ?: return 0.0
+            val checkIn = checkInDate ?: return 0.0
+            val checkOut = checkOutDate ?: return 0.0
+
+            return try {
+                val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val startDate = sdf.parse(checkIn)
+                val endDate = sdf.parse(checkOut)
+                if (startDate != null && endDate != null) {
+                    val days = ((endDate.time - startDate.time) / (1000 * 60 * 60 * 24)).toInt()
+                    if (days > 0) room.price * days else room.price
+                } else {
+                    room.price
+                }
+            } catch (e: Exception) {
+                room.price
+            }
+        }
+}
+
+/**
+ * События от UI (Actions) — что пользователь сделал.
+ * MVI-подход: UI отправляет действия, ViewModel обрабатывает.
+ */
+sealed class BookingAction {
+    data class SelectRoom(val room: Room) : BookingAction()
+    data class SetCheckInDate(val date: String) : BookingAction()
+    data class SetCheckOutDate(val date: String) : BookingAction()
+    data class SetGuestName(val name: String) : BookingAction()
+    data object CreateBooking : BookingAction()
+    data object LoadRooms : BookingAction()
+    data object ClearError : BookingAction()
+}
+
+/**
+ * Одноразовые события от ViewModel к UI (навигация, тоасты, диалоги).
+ * Используем SharedFlow для событий, которые должны быть обработаны один раз.
+ */
+sealed class BookingEvent {
+    data class BookingSuccess(
+        val booking: Booking,
+        val nfcKey: NfcKey,
+        val message: String
+    ) : BookingEvent()
+
+    data class NavigateToPayment(
+        val booking: Booking,
+        val nfcKey: NfcKey,
+        val amount: Double
+    ) : BookingEvent()
+
+    data class BookingError(val message: String) : BookingEvent()
+    data class ValidationError(val message: String) : BookingEvent()
+}
+
+/**
+ * Результат валидации формы бронирования.
+ * Используется для упрощения логики валидации.
+ */
+private sealed class ValidationResult {
+    data object Valid : ValidationResult()
+    data class Error(val message: String) : ValidationResult()
+}
 
 class BookingViewModel(private val repository: HotelRepository) : ViewModel() {
 
-    private val _rooms = MutableStateFlow<List<Room>>(emptyList())
-    val rooms: StateFlow<List<Room>> = _rooms.asStateFlow()
+    // ✅ ХОРОШО: Единый StateFlow для всего состояния UI
+    private val _state = MutableStateFlow(BookingUiState())
+    val state: StateFlow<BookingUiState> = _state.asStateFlow()
 
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+    // ✅ ХОРОШО: SharedFlow только для одноразовых событий (навигация, ошибки)
+    private val _event = MutableSharedFlow<BookingEvent>()
+    val event: SharedFlow<BookingEvent> = _event.asSharedFlow()
 
-    private val _bookingResult = MutableStateFlow<Result<String>?>(null)
-    val bookingResult: StateFlow<Result<String>?> = _bookingResult.asStateFlow()
+    // ✅ ХОРОШО: Холодный Flow для загрузки комнат — создаётся по подписке
+    val roomsFlow = repository.getAvailableRooms()
+        .map { rooms -> rooms }
 
-    private val _selectedRoom = MutableStateFlow<Room?>(null)
-    val selectedRoom: StateFlow<Room?> = _selectedRoom.asStateFlow()
+    init {
+        loadRooms()
+    }
 
-    private val _checkInDate = MutableStateFlow("")
-    val checkInDate: StateFlow<String> = _checkInDate.asStateFlow()
-
-    private val _checkOutDate = MutableStateFlow("")
-    val checkOutDate: StateFlow<String> = _checkOutDate.asStateFlow()
-
-    fun loadRooms() {
-        viewModelScope.launch {
-            _isLoading.value = true
-            repository.getRooms().collect {
-                _rooms.value = it
-                _isLoading.value = false
+    /**
+     * Обработка действий от UI.
+     * Централизованная логика — все изменения состояния в одном месте.
+     */
+    fun onAction(action: BookingAction) {
+        when (action) {
+            is BookingAction.SelectRoom -> {
+                _state.value = _state.value.copy(selectedRoom = action.room)
+            }
+            is BookingAction.SetCheckInDate -> {
+                _state.value = _state.value.copy(checkInDate = action.date)
+            }
+            is BookingAction.SetCheckOutDate -> {
+                _state.value = _state.value.copy(checkOutDate = action.date)
+            }
+            is BookingAction.SetGuestName -> {
+                _state.value = _state.value.copy(guestName = action.name)
+            }
+            is BookingAction.CreateBooking -> {
+                createBooking()
+            }
+            is BookingAction.LoadRooms -> {
+                loadRooms()
+            }
+            is BookingAction.ClearError -> {
+                _state.value = _state.value.copy(error = null)
             }
         }
     }
 
-    fun selectRoom(room: Room) {
-        _selectedRoom.value = room
-    }
-
-    fun setCheckInDate(date: Long) {
-        _checkInDate.value = formatDate(date)
-    }
-
-    fun setCheckOutDate(date: Long) {
-        _checkOutDate.value = formatDate(date)
-    }
-
-    fun bookRoom() {
-        val room = _selectedRoom.value ?: run {
-            _bookingResult.value = Result.failure(Exception("Выберите номер"))
-            return
-        }
-
-        if (_checkInDate.value.isEmpty() || _checkOutDate.value.isEmpty()) {
-            _bookingResult.value = Result.failure(Exception("Выберите даты заезда и выезда"))
-            return
-        }
-
+    private fun loadRooms() {
         viewModelScope.launch {
-            _isLoading.value = true
-            val success = repository.bookRoom(room.id, _checkInDate.value, _checkOutDate.value)
-            _isLoading.value = false
-            _bookingResult.value = if (success) {
-                Result.success("Бронирование успешно!")
-            } else {
-                Result.failure(Exception("Ошибка бронирования"))
+            _state.value = _state.value.copy(isRoomsLoading = true, error = null)
+            repository.getAvailableRooms().collect { roomList ->
+                _state.value = _state.value.copy(
+                    rooms = roomList,
+                    isRoomsLoading = false
+                )
             }
         }
     }
 
-    fun clearBookingResult() {
-        _bookingResult.value = null
+    /**
+     * Валидация формы бронирования.
+     * Возвращает ValidationResult с ошибкой или Valid.
+     */
+    private fun validateBookingForm(state: BookingUiState): ValidationResult {
+        return when {
+            state.selectedRoom == null ->
+                ValidationResult.Error(ResourceProvider.getString(R.string.booking_error_no_room))
+            
+            state.checkInDate.isNullOrBlank() || state.checkOutDate.isNullOrBlank() ->
+                ValidationResult.Error(ResourceProvider.getString(R.string.booking_error_no_dates))
+            
+            state.guestName.isBlank() ->
+                ValidationResult.Error(ResourceProvider.getString(R.string.booking_error_no_guest_name))
+            
+            else -> ValidationResult.Valid
+        }
     }
 
-    private fun formatDate(timestamp: Long): String {
-        return SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date(timestamp))
+    private fun createBooking() {
+        val currentState = _state.value
+
+        // ✅ Валидация через отдельный метод
+        when (val validation = validateBookingForm(currentState)) {
+            is ValidationResult.Error -> {
+                viewModelScope.launch {
+                    _event.emit(BookingEvent.ValidationError(validation.message))
+                }
+                return
+            }
+            is ValidationResult.Valid -> { /* Продолжаем бронирование */ }
+        }
+
+        viewModelScope.launch {
+            _state.value = _state.value.copy(isBookingLoading = true, error = null)
+
+            when (val result = repository.bookRoom(
+                roomId = currentState.selectedRoom!!.id,
+                guestName = currentState.guestName,
+                checkIn = currentState.checkInDate!!,
+                checkOut = currentState.checkOutDate!!
+            )) {
+                is BookingResult.Success -> {
+                    _event.emit(
+                        BookingEvent.NavigateToPayment(
+                            booking = result.booking,
+                            nfcKey = result.nfcKey,
+                            amount = currentState.totalPrice
+                        )
+                    )
+                }
+                is BookingResult.Error -> {
+                    _event.emit(BookingEvent.BookingError(result.message))
+                    _state.value = _state.value.copy(error = result.message)
+                }
+            }
+
+            _state.value = _state.value.copy(isBookingLoading = false)
+        }
     }
 }

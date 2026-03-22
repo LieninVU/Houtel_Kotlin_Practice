@@ -22,7 +22,7 @@ data class HotelService(
     val category: ServiceCategory,
     val price: Double,
     val imageUrl: String,
-    val description: String
+    val description: String = ""
 )
 
 enum class ServiceCategory {
@@ -48,9 +48,12 @@ data class Booking(
     val id: String,
     val roomId: String,
     val roomNumber: String,
+    val roomType: String,
+    val guestName: String,
     val checkIn: String,
     val checkOut: String,
-    val status: BookingStatus
+    val status: BookingStatus,
+    val nfcKeyId: String? = null
 )
 
 enum class BookingStatus {
@@ -65,3 +68,17 @@ data class NfcKey(
     val validUntil: String,
     val lastUsed: String? = null
 )
+
+data class PaidService(
+    val id: String,
+    val serviceId: String,
+    val title: String,
+    val price: Double,
+    val category: ServiceCategory,
+    val paidAt: String,
+    val status: PaymentStatus
+)
+
+enum class PaymentStatus {
+    PENDING, PAID, CANCELLED
+}

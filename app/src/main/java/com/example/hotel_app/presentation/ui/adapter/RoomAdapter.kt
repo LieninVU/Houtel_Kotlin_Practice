@@ -2,17 +2,45 @@ package com.example.hotel_app.presentation.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hotel_app.R
 import com.example.hotel_app.databinding.LayoutItemRoomBinding
 import com.example.hotel_app.domain.model.Room
+import com.example.hotel_app.presentation.ui.utils.ImageLoadingUtils
 
 class RoomAdapter(
-    private val onRoomClick: (Room) -> Unit
+    private val onRoomSelected: (Room) -> Unit
 ) : ListAdapter<Room, RoomAdapter.RoomViewHolder>(DiffCallback) {
 
-    class RoomViewHolder(val binding: LayoutItemRoomBinding) : RecyclerView.ViewHolder(binding.root)
+    private var selectedRoomId: String? = null
+
+    fun setSelectedRoom(roomId: String?) {
+        val previousSelected = selectedRoomId
+        selectedRoomId = roomId
+        
+        currentList.forEachIndexed { index, room ->
+            if (room.id == previousSelected || room.id == roomId) {
+                notifyItemChanged(index)
+            }
+        }
+    }
+
+    inner class RoomViewHolder(val binding: LayoutItemRoomBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.root.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val room = getItem(position)
+                    if (room.isAvailable) {
+                        onRoomSelected(room)
+                    }
+                }
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoomViewHolder {
         val binding = LayoutItemRoomBinding.inflate(
@@ -23,15 +51,35 @@ class RoomAdapter(
 
     override fun onBindViewHolder(holder: RoomViewHolder, position: Int) {
         val room = getItem(position)
+        val context = holder.itemView.context
+        val isSelected = room.id == selectedRoomId
+        
         with(holder.binding) {
             tvRoomType.text = room.type
+            tvRoomPrice.text = "$ ${room.price.toInt()} / night"
             tvRoomDescription.text = room.description
-            tvRoomPrice.text = "${room.price}₽ / ночь"
-            tvRoomAvailable.text = if (room.isAvailable) "Доступен" else "Занят"
+
+            // ✅ Загрузка изображения с правильными Dispatchers и обработкой ошибок
+            ImageLoadingUtils.loadImage(
+                imageView = ivRoom,
+                imageUrl = room.imageUrl,
+                placeholder = R.drawable.ic_launcher_background,
+                error = R.drawable.ic_launcher_background
+            )
+
+            root.alpha = if (room.isAvailable) 1.0f else 0.5f
+            root.isClickable = room.isAvailable
             
-            root.setOnClickListener {
-                onRoomClick(room)
+            val strokeColor = when {
+                isSelected -> ContextCompat.getColor(context, android.R.color.holo_green_dark)
+                !room.isAvailable -> ContextCompat.getColor(context, android.R.color.darker_gray)
+                else -> ContextCompat.getColor(context, android.R.color.transparent)
             }
+            root.strokeColor = strokeColor
+            root.strokeWidth = if (isSelected) 4 else 0
+            
+            val statusText = if (room.isAvailable) "Available" else "Booked"
+            tvRoomType.text = "${room.type} • $statusText"
         }
     }
 

@@ -2,6 +2,7 @@ package com.example.hotel_app.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,9 +28,9 @@ class RestaurantViewModel : ViewModel() {
 
         viewModelScope.launch {
             _orderStatus.value = OrderStatus.Preparing
-            kotlinx.coroutines.delay(2000)
+            delay(2000)
             _orderStatus.value = OrderStatus.Delivering(roomNumber, item.name)
-            kotlinx.coroutines.delay(3000)
+            delay(3000)
             _orderStatus.value = OrderStatus.Delivered
         }
     }

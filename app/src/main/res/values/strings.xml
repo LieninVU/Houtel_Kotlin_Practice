@@ -1,62 +1,237 @@
 <resources>
-    <string name="app_name">Отель</string>
-    
+    <!-- App Name -->
+    <string name="app_name">Hotel_App</string>
+
     <!-- NFC Key -->
-    <string name="nfc_digital_key">Электронный ключ NFC</string>
-    <string name="room_number_format">НОМЕР %1$s</string>
-    <string name="room_empty">НОМЕР ---</string>
-    <string name="valid_until_format">Действует до: %1$s</string>
-    <string name="valid_until_empty">Действует до: --/--/--</string>
-    <string name="key_active_status">Ключ активен. Поднесите телефон к замку двери.</string>
-    <string name="no_key_status">Активный ключ не найден. Пожалуйста, зарегистрируйтесь.</string>
-    <string name="simulate_nfc_scan">Симуляция NFC (Открыть дверь)</string>
-    <string name="request_digital_key">Запросить электронный ключ</string>
-    
-    <!-- Dashboard -->
-    <string name="welcome">Добро пожаловать,</string>
-    <string name="guest">Гость</string>
-    <string name="my_key">Мой ключ</string>
-    <string name="services">Услуги</string>
-    <string name="support">Поддержка</string>
-    <string name="current_booking">Текущее бронирование</string>
-    <string name="special_offers">Спецпредложения</string>
-    
-    <!-- Booking -->
-    <string name="booking_title">Бронирование номера</string>
-    <string name="check_in_date">Дата заезда</string>
-    <string name="check_out_date">Дата выезда</string>
-    <string name="select_room">Выберите номер</string>
-    <string name="book_room">Забронировать</string>
-    
-    <!-- Services -->
-    <string name="services_catalog">Каталог услуг</string>
-    <string name="search_services">Поиск услуг</string>
-    <string name="all">Все</string>
-    <string name="spa">SPA</string>
-    <string name="transfer">Трансфер</string>
-    <string name="food">Еда</string>
-    <string name="other">Другое</string>
-    
-    <!-- Hotel Info -->
-    <string name="hotel_info">Информация об отеле</string>
-    <string name="contacts">Контакты</string>
-    <string name="schedule">Расписание</string>
-    <string name="facilities">Удобства</string>
-    
-    <!-- Payment -->
-    <string name="payment">Оплата услуг</string>
-    <string name="pay">Оплатить</string>
-    <string name="cancel">Отмена</string>
-    
-    <!-- Reviews -->
-    <string name="reviews">Отзывы</string>
-    <string name="leave_review">Оставить отзыв</string>
-    <string name="your_name">Ваше имя</string>
-    <string name="your_review">Ваш отзыв</string>
-    <string name="submit_review">Отправить отзыв</string>
-    
-    <!-- Maps -->
-    <string name="maps">Карта</string>
-    <string name="route">Маршрут</string>
-    <string name="call">Позвонить</string>
+    <string name="nfc_digital_key">NFC Digital Key</string>
+    <string name="room_number_format">ROOM %1$s</string>
+    <string name="room_empty">ROOM ---</string>
+    <string name="valid_until_format">Valid until: %1$s</string>
+    <string name="valid_until_empty">Valid until: --/--/--</string>
+    <string name="key_active_status">Key is active. Bring phone to the door lock.</string>
+    <string name="no_key_status">No active key found. Please check-in first.</string>
+    <string name="simulate_nfc_scan">Simulate NFC Scan (Open Door)</string>
+    <string name="request_digital_key">Request Digital Key</string>
+    <string name="last_used_format">Last used: %1$s</string>
+    <string name="last_used_never">Last used: Never</string>
+
+    <!-- Booking Fragment -->
+    <string name="booking_toolbar_title">Book a Room</string>
+    <string name="booking_step_select_room">1. Select a Room</string>
+    <string name="booking_step_select_dates">2. Select Dates</string>
+    <string name="booking_step_guest_info">3. Guest Information</string>
+    <string name="booking_hint_check_in">Check-in</string>
+    <string name="booking_hint_check_out">Check-out</string>
+    <string name="booking_hint_full_name">Full Name</string>
+    <string name="booking_summary_title">Booking Summary</string>
+    <string name="booking_summary_room_format">Room: %1$s #%2$s</string>
+    <string name="booking_summary_dates_format">Dates: %1$s - %2$s</string>
+    <string name="booking_summary_dates_select">Dates: Select dates</string>
+    <string name="booking_summary_price_per_night">Price: $%1$d / night</string>
+    <string name="booking_summary_total_format">Total: $%1$d</string>
+    <string name="booking_button_book">Book Now</string>
+    <string name="booking_dialog_confirmed_title">Booking Confirmed!</string>
+    <string name="booking_dialog_confirmed_message">%1$s\n\nYour digital NFC key has been automatically created and is ready to use.</string>
+    <string name="booking_dialog_view_key">View My Key</string>
+    <string name="booking_dialog_back_to_dashboard">Back to Dashboard</string>
+    <string name="booking_error_no_room">Please select a room</string>
+    <string name="booking_error_no_dates">Please select check-in and check-out dates</string>
+    <string name="booking_error_no_guest_name">Please enter guest name</string>
+
+    <!-- Dashboard Fragment -->
+    <string name="dashboard_welcome">Welcome Home,</string>
+    <string name="dashboard_quick_action_key">My Key</string>
+    <string name="dashboard_quick_action_booking">Booking</string>
+    <string name="dashboard_quick_action_services">Services</string>
+    <string name="dashboard_hotel_info_button">Hotel information</string>
+    <string name="dashboard_recommended_title">Recommended for you</string>
+    <string name="dashboard_error_load_recommendations">Failed to load recommendations</string>
+    <string name="dashboard_button_retry">Retry</string>
+    <string name="dashboard_current_booking_title">Current Booking</string>
+    <string name="dashboard_no_active_booking">No active booking</string>
+    <string name="dashboard_tap_to_reserve">Tap Booking to reserve a room</string>
+    <string name="dashboard_bookings_count_format">Bookings: %1$d</string>
+    <string name="dashboard_paid_services_title">Оплаченные услуги</string>
+    <string name="dashboard_no_paid_services">Нет оплаченных услуг</string>
+    <string name="dashboard_special_offers">Special Offers</string>
+
+    <!-- Payment Fragment -->
+    <string name="payment_toolbar_title">Payment</string>
+    <string name="payment_room_title_format">Оплата номера %1$s</string>
+    <string name="payment_timer_format">Оплата через: %1$dс</string>
+    <string name="payment_amount_format">Сумма: $%1$d</string>
+    <string name="payment_button_pay">Оплатить</string>
+    <string name="payment_button_cancel">Отмена</string>
+    <string name="payment_button_continue">Перейти к ключу</string>
+    <string name="payment_success_message">Оплата прошла успешно!</string>
+    <string name="payment_cancelled_message">Оплата отменена</string>
+
+    <!-- Services Fragment -->
+    <string name="services_dialog_payment_title">Оплата услуги</string>
+    <string name="services_dialog_payment_message_format">%1$s\n\nЦена: $%2$d\n\nОплатить эту услугу?</string>
+    <string name="services_dialog_pay_button">Оплатить</string>
+    <string name="services_dialog_cancel_button">Отмена</string>
+    <string name="services_paid_status">Оплачено</string>
+    <string name="services_price_format">$%1$d</string>
+    <string name="services_service_paid_format">Услуга \'%1$s\' оплачена!</string>
+
+    <!-- Reviews Fragment -->
+    <string name="reviews_error_empty_name">Введите ваше имя</string>
+    <string name="reviews_error_empty_rating">Выберите рейтинг от 1 до 5</string>
+    <string name="reviews_error_empty_text">Введите текст отзыва</string>
+    <string name="reviews_success_message">Отзыв отправлен!</string>
+    <string name="reviews_date_format">dd MMM yyyy</string>
+
+    <!-- Maps Fragment -->
+    <string name="maps_hotel_marker_title">Grand Hotel</string>
+    <string name="maps_hotel_marker_snippet">Ваш отель</string>
+    <string name="maps_restaurant_snippet_format">%1$s • %2$s★ • %3$s км</string>
+    <string name="maps_route_toast_format">Маршрут до %1$s</string>
+    <string name="maps_call_toast_format">Звонок в %1$s</string>
+    <string name="maps_restaurant_rating_format">Рейтинг: %1$s★</string>
+    <string name="maps_restaurant_distance_format">Расстояние: %1$s км</string>
+
+    <!-- Hotel Info Fragment -->
+    <string name="hotel_info_events_error">Нет данных о мероприятиях</string>
+    <string name="hotel_info_load_error_format">Ошибка загрузки: %1$s</string>
+
+    <!-- Room Adapter -->
+    <string name="room_price_per_night_format">$ %1$d / night</string>
+    <string name="room_status_available">Available</string>
+    <string name="room_status_booked">Booked</string>
+    <string name="room_type_status_format">%1$s • %2$s</string>
+
+    <!-- Nfc Key Adapter -->
+    <string name="nfc_key_room_format">ROOM %1$s</string>
+    <string name="nfc_key_valid_until_format">Valid until: %1$s</string>
+    <string name="nfc_key_last_used_format">Last used: %1$s</string>
+
+    <!-- Paid Services Adapter -->
+    <string name="paid_service_price_format">$%1$d</string>
+    <string name="paid_service_paid_status">Оплачено</string>
+
+    <!-- Restaurant Menu (MapsViewModel) -->
+    <string name="menu_caesar_chicken">Цезарь с курицей</string>
+    <string name="menu_borscht_moscow">Борщ московский</string>
+    <string name="menu_steak_ribeye">Стейк рибай</string>
+    <string name="menu_salmon_grill">Лосось на гриле</string>
+    <string name="menu_pasta_carbonara">Паста Карбонара</string>
+    <string name="menu_tiramisu">Тирамису</string>
+    <string name="menu_cheesecake_ny">Чизкейк Нью-Йорк</string>
+    <string name="menu_coffee_espresso">Кофе эспрессо</string>
+    <string name="menu_fresh_juice">Свежевыжатый сок</string>
+    <string name="menu_description_caesar">Салат с курицей, пармезаном и сухариками</string>
+    <string name="menu_description_borscht">Традиционный русский суп со сметаной</string>
+    <string name="menu_description_steak">Сочный стейк из мраморной говядины</string>
+    <string name="menu_description_salmon">Свежий лосось с овощами</string>
+    <string name="menu_description_pasta">Классическая итальянская паста</string>
+    <string name="menu_description_tiramisu">Итальянский десерт с маскарпоне</string>
+    <string name="menu_description_cheesecake">Классический чизкейк</string>
+    <string name="menu_description_coffee">Арабика 100%</string>
+    <string name="menu_description_juice">Апельсиновый или яблочный</string>
+
+    <!-- Restaurant Markers (MapsViewModel) -->
+    <string name="restaurant_pushkin_name">Кафе Пушкинъ</string>
+    <string name="restaurant_pushkin_cuisine">Русская</string>
+    <string name="restaurant_pushkin_address">Тверской бульвар, 26А</string>
+    <string name="restaurant_white_rabbit_name">White Rabbit</string>
+    <string name="restaurant_white_rabbit_cuisine">Европейская</string>
+    <string name="restaurant_white_rabbit_address">Смоленская площадь, 3</string>
+    <string name="restaurant_turandot_name">Турандот</string>
+    <string name="restaurant_turandot_cuisine">Паназиатская</string>
+    <string name="restaurant_turandot_address">Тверской бульвар, 26</string>
+    <string name="restaurant_syrovarnya_name">Сыроварня</string>
+    <string name="restaurant_syrovarnya_cuisine">Итальянская</string>
+    <string name="restaurant_syrovarnya_address">ул. Петровка, 15</string>
+    <string name="restaurant_chaykhona_name">Чайхона №1</string>
+    <string name="restaurant_chaykhona_cuisine">Узбекская</string>
+    <string name="restaurant_chaykhona_address">ул. Большая Дмитровка, 35</string>
+
+    <!-- Events (XlsEventParser) -->
+    <string name="event_music_evening_name">Вечер живой музыки</string>
+    <string name="event_music_evening_description">Джазовый концерт в лобби</string>
+    <string name="event_music_evening_date">15.06.2024</string>
+    <string name="event_music_evening_time">19:00</string>
+    <string name="event_music_evening_location">Лобби</string>
+    <string name="event_music_evening_category">Концерт</string>
+
+    <string name="event_city_tour_name">Экскурсия по городу</string>
+    <string name="event_city_tour_description">Обзорная экскурсия с гидом</string>
+    <string name="event_city_tour_date">16.06.2024</string>
+    <string name="event_city_tour_time">10:00</string>
+    <string name="event_city_tour_location">Главный вход</string>
+    <string name="event_city_tour_category">Экскурсия</string>
+
+    <string name="event_yoga_dawn_name">Йога на рассвете</string>
+    <string name="event_yoga_dawn_description">Утренняя йога на террасе</string>
+    <string name="event_yoga_dawn_date">17.06.2024</string>
+    <string name="event_yoga_dawn_time">07:00</string>
+    <string name="event_yoga_dawn_location">Терраса</string>
+    <string name="event_yoga_dawn_category">Спорт</string>
+
+    <string name="event_wine_tasting_name">Дегустация вин</string>
+    <string name="event_wine_tasting_description">Вечер с сомелье</string>
+    <string name="event_wine_tasting_date">18.06.2024</string>
+    <string name="event_wine_tasting_time">20:00</string>
+    <string name="event_wine_tasting_location">Ресторан</string>
+    <string name="event_wine_tasting_category">Гастрономия</string>
+
+    <string name="event_cooking_masterclass_name">Мастер-класс по кулинарии</string>
+    <string name="event_cooking_masterclass_description">Готовим с шеф-поваром</string>
+    <string name="event_cooking_masterclass_date">19.06.2024</string>
+    <string name="event_cooking_masterclass_time">15:00</string>
+    <string name="event_cooking_masterclass_location">Кухня</string>
+    <string name="event_cooking_masterclass_category">Мастер-класс</string>
+
+    <!-- Mock Data (MockHotelRepository) -->
+    <string name="mock_user_name">John Doe</string>
+    <string name="mock_user_email">john.doe@example.com</string>
+    <string name="mock_room_type_standard">Standard</string>
+    <string name="mock_room_type_deluxe">Deluxe</string>
+    <string name="mock_room_type_suite">Suite</string>
+    <string name="mock_room_type_presidential">Presidential</string>
+    <string name="mock_room_description_standard">Comfortable room with essential amenities. Queen bed, TV, Wi-Fi, bathroom.</string>
+    <string name="mock_room_description_deluxe">Spacious room with premium amenities. King bed, work desk, minibar, city view.</string>
+    <string name="mock_room_description_suite">Luxurious suite with separate living area. King bed, jacuzzi, panoramic view.</string>
+    <string name="mock_room_description_presidential">Ultimate luxury experience. Two bedrooms, private terrace, butler service.</string>
+    <string name="mock_error_room_not_found">Room not found</string>
+    <string name="mock_error_room_not_available">Room is not available</string>
+
+    <!-- Mock Services -->
+    <string name="mock_service_spa">SPA Treatment</string>
+    <string name="mock_service_transfer">Airport Transfer</string>
+    <string name="mock_service_breakfast">Breakfast Buffet</string>
+    <string name="mock_service_gym">Gym Access</string>
+    <string name="mock_service_room_service">Room Service</string>
+    <string name="mock_service_laundry">Laundry</string>
+    <string name="mock_service_description_spa">Relaxing spa experience</string>
+    <string name="mock_service_description_transfer">Comfortable ride to airport</string>
+    <string name="mock_service_description_breakfast">Delicious breakfast spread</string>
+    <string name="mock_service_description_gym">Modern fitness equipment</string>
+    <string name="mock_service_description_room_service">24/7 in-room dining</string>
+    <string name="mock_service_description_laundry">Same-day laundry service</string>
+
+    <!-- NFC Notification -->
+    <string name="nfc_notification_channel_name">NFC Key Notifications</string>
+    <string name="nfc_notification_channel_description">Notifications for NFC key actions</string>
+    <string name="nfc_notification_door_open_title">Дверь открыта</string>
+    <string name="nfc_notification_door_open_content">Номер %1$s</string>
+    <string name="nfc_scan_success_format">Success: %1$s for key %2$s</string>
+
+    <!-- Date/Time Formats -->
+    <string name="date_format_yyyy_mm_dd">yyyy-MM-dd</string>
+    <string name="date_format_dd_mm_yyyy_hh_mm">dd MMM yyyy HH:mm</string>
+    <string name="date_format_dd_mm_yyyy">dd MMM yyyy</string>
+    <string name="time_format_hh_mm_ss">HH:mm:ss</string>
+
+    <!-- User Preferences -->
+    <string name="prefs_name">hotel_user_prefs</string>
+    <string name="prefs_key_last_category">last_category</string>
+    <string name="prefs_key_viewed_events">viewed_events</string>
+
+    <!-- XLS Parser -->
+    <string name="xls_events_file">events.xlsx</string>
+
+    <!-- Package Name (for tests) -->
+    <string name="test_package_name">com.example.hotel_app</string>
 </resources>

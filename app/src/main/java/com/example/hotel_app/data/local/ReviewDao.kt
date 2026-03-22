@@ -13,7 +13,4 @@ interface ReviewDao {
 
     @Query("DELETE FROM reviews WHERE id = :reviewId")
     suspend fun deleteReview(reviewId: String)
-
-    @Query("SELECT * FROM reviews WHERE id = :reviewId")
-    suspend fun getReviewById(reviewId: String): ReviewEntity?
 }

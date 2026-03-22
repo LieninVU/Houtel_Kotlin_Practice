@@ -6,8 +6,12 @@ import com.example.hotel_app.domain.model.HotelService
 import com.example.hotel_app.domain.model.ServiceCategory
 import com.example.hotel_app.domain.model.getIcon
 import com.example.hotel_app.domain.repository.HotelRepository
+import com.example.hotel_app.domain.repository.PaymentResult
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
@@ -27,6 +31,9 @@ class ServicesViewModel(private val repository: HotelRepository) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
+    private val _paymentResult = MutableSharedFlow<PaymentUiState>()
+    val paymentResult: SharedFlow<PaymentUiState> = _paymentResult.asSharedFlow()
 
     fun loadServices() {
         viewModelScope.launch {
@@ -70,4 +77,26 @@ class ServicesViewModel(private val repository: HotelRepository) : ViewModel() {
     }
 
     fun getServiceIcon(category: ServiceCategory): String = category.getIcon()
+
+    fun payForService(service: HotelService) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            
+            when (val result = repository.payForService(service)) {
+                is PaymentResult.Success -> {
+                    _paymentResult.emit(PaymentUiState.Success("Услуга '${service.title}' оплачена!"))
+                }
+                is PaymentResult.Error -> {
+                    _paymentResult.emit(PaymentUiState.Error(result.message))
+                }
+            }
+            
+            _isLoading.value = false
+        }
+    }
+}
+
+sealed class PaymentUiState {
+    data class Success(val message: String) : PaymentUiState()
+    data class Error(val message: String) : PaymentUiState()
 }
