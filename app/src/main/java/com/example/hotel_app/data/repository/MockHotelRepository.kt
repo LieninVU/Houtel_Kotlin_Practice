@@ -1,5 +1,7 @@
 package com.example.hotel_app.data.repository
 
+import com.example.hotel_app.R
+import com.example.hotel_app.ResourceProvider
 import com.example.hotel_app.data.local.ReviewDao
 import com.example.hotel_app.data.local.ReviewEntity
 import com.example.hotel_app.domain.model.*
@@ -15,6 +17,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import java.text.SimpleDateFormat
 import java.util.*
+
+/**
+ * Результат валидации бронирования.
+ */
+private sealed class BookingValidationResult {
+    data object Valid : BookingValidationResult()
+    data class Error(val message: String) : BookingValidationResult()
+}
+
+/**
+ * Успешный результат валидации с данными комнаты.
+ * Наследует BookingValidationResult для использования в when.
+ */
+private data class ValidatedRoom(val room: Room) : BookingValidationResult()
 
 class MockHotelRepository(
     private val reviewDao: ReviewDao
@@ -107,22 +123,22 @@ class MockHotelRepository(
         checkOut: String
     ): BookingResult {
         delay(1000)
-        
-        val room = _rooms.value.find { it.id == roomId }
-            ?: return BookingResult.Error("Room not found")
-        
-        if (!room.isAvailable) {
-            return BookingResult.Error("Room is not available")
+
+        // ✅ Валидация через отдельный метод
+        val room = when (val validation = validateBooking(roomId)) {
+            is BookingValidationResult.Error -> return BookingResult.Error(validation.message)
+            is ValidatedRoom -> validation.room
+            BookingValidationResult.Valid -> return BookingResult.Error("Unexpected validation state")
         }
-        
+
         val roomNumber = roomId.removePrefix("room_")
         val bookingId = UUID.randomUUID().toString()
         val nfcKeyId = UUID.randomUUID().toString()
-        
+
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, 7)
         val validUntil = dateFormat.format(calendar.time)
-        
+
         val nfcKey = NfcKey(
             id = nfcKeyId,
             roomNumber = roomNumber,
@@ -130,7 +146,7 @@ class MockHotelRepository(
             isActive = true,
             validUntil = validUntil
         )
-        
+
         val booking = Booking(
             id = bookingId,
             roomId = roomId,
@@ -142,21 +158,63 @@ class MockHotelRepository(
             status = BookingStatus.CONFIRMED,
             nfcKeyId = nfcKeyId
         )
-        
-        _rooms.value = _rooms.value.map {
-            if (it.id == roomId) it.copy(isAvailable = false) else it
+
+        updateRoomAvailability(roomId, isAvailable = false)
+        addNfcKey(nfcKey)
+        addBooking(booking)
+
+        return BookingResult.Success(booking, nfcKey)
+    }
+
+    /**
+     * Валидация данных для бронирования.
+     * Вынесена в отдельный метод для упрощения основной логики.
+     */
+    private fun validateBooking(roomId: String): BookingValidationResult {
+        val room = _rooms.value.find { it.id == roomId }
+            ?: return BookingValidationResult.Error(
+                ResourceProvider.getString(R.string.mock_error_room_not_found)
+            )
+
+        if (!room.isAvailable) {
+            return BookingValidationResult.Error(
+                ResourceProvider.getString(R.string.mock_error_room_not_available)
+            )
         }
-        
+
+        // Возвращаем комнату для дальнейшего использования
+        return ValidatedRoom(room)
+    }
+
+    /**
+     * Обновление доступности номера.
+     * Вынесено в отдельный метод для читаемости.
+     */
+    private fun updateRoomAvailability(roomId: String, isAvailable: Boolean) {
+        _rooms.value = _rooms.value.map {
+            if (it.id == roomId) it.copy(isAvailable = isAvailable) else it
+        }
+    }
+
+    /**
+     * Добавление NFC ключа.
+     * Вынесено в отдельный метод для читаемости.
+     */
+    private fun addNfcKey(key: NfcKey) {
         val currentKeys = _nfcKeys.value.toMutableList()
-        currentKeys.add(nfcKey)
+        currentKeys.add(key)
         _nfcKeys.value = currentKeys
-        
+    }
+
+    /**
+     * Добавление бронирования.
+     * Вынесено в отдельный метод для читаемости.
+     */
+    private fun addBooking(booking: Booking) {
         val currentBookings = _bookings.value.toMutableList()
         currentBookings.add(booking)
         _bookings.value = currentBookings
         _activeBooking.value = booking
-        
-        return BookingResult.Success(booking, nfcKey)
     }
 
     override fun getNfcKeys(): Flow<List<NfcKey>> = _nfcKeys

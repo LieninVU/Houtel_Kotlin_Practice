@@ -2,6 +2,8 @@ package com.example.hotel_app.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hotel_app.R
+import com.example.hotel_app.ResourceProvider
 import com.example.hotel_app.data.local.ReviewDao
 import com.example.hotel_app.data.repository.MockHotelRepository
 import com.example.hotel_app.data.repository.toEntity
@@ -13,6 +15,29 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+
+/**
+ * Extension-функции для валидации данных отзыва.
+ * Упрощают основную логику и делают код более читаемым.
+ */
+private fun NewReviewData.validate(): ReviewValidationError? {
+    return when {
+        userName.isBlank() -> ReviewValidationError.EmptyName
+        rating !in 1..5 -> ReviewValidationError.InvalidRating
+        comment.isBlank() -> ReviewValidationError.EmptyComment
+        else -> null
+    }
+}
+
+/**
+ * Типы ошибок валидации отзыва.
+ * Содержат resource ID для локализации.
+ */
+private sealed class ReviewValidationError(val messageResId: Int) {
+    object EmptyName : ReviewValidationError(R.string.reviews_error_empty_name)
+    object InvalidRating : ReviewValidationError(R.string.reviews_error_empty_rating)
+    object EmptyComment : ReviewValidationError(R.string.reviews_error_empty_text)
+}
 
 class ReviewsViewModel(
     private val reviewDao: ReviewDao,
@@ -60,18 +85,9 @@ class ReviewsViewModel(
     fun submitReview() {
         val reviewData = _newReview.value
 
-        if (reviewData.userName.isBlank()) {
-            _submitResult.value = SubmitResult.Error("Введите ваше имя")
-            return
-        }
-
-        if (reviewData.rating < 1 || reviewData.rating > 5) {
-            _submitResult.value = SubmitResult.Error("Выберите рейтинг от 1 до 5")
-            return
-        }
-
-        if (reviewData.comment.isBlank()) {
-            _submitResult.value = SubmitResult.Error("Введите текст отзыва")
+        // ✅ Валидация через extension-функцию
+        reviewData.validate()?.let { error ->
+            _submitResult.value = SubmitResult.Error(ResourceProvider.getString(error.messageResId))
             return
         }
 
@@ -83,12 +99,12 @@ class ReviewsViewModel(
                 userName = reviewData.userName,
                 rating = reviewData.rating,
                 comment = reviewData.comment,
-                date = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date())
+                date = SimpleDateFormat(ResourceProvider.getString(R.string.reviews_date_format), Locale.getDefault()).format(Date())
             )
 
             mockRepository.saveReview(review)
             _isLoading.value = false
-            _submitResult.value = SubmitResult.Success("Отзыв отправлен!")
+            _submitResult.value = SubmitResult.Success(ResourceProvider.getString(R.string.reviews_success_message))
             _newReview.value = NewReviewData()
         }
     }

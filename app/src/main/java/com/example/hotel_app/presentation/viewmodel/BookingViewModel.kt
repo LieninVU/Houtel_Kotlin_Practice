@@ -105,6 +105,15 @@ sealed class BookingEvent {
     data class ValidationError(val message: String) : BookingEvent()
 }
 
+/**
+ * Результат валидации формы бронирования.
+ * Используется для упрощения логики валидации.
+ */
+private sealed class ValidationResult {
+    data object Valid : ValidationResult()
+    data class Error(val message: String) : ValidationResult()
+}
+
 class BookingViewModel(private val repository: HotelRepository) : ViewModel() {
 
     // ✅ ХОРОШО: Единый StateFlow для всего состояния UI
@@ -165,29 +174,37 @@ class BookingViewModel(private val repository: HotelRepository) : ViewModel() {
         }
     }
 
+    /**
+     * Валидация формы бронирования.
+     * Возвращает ValidationResult с ошибкой или Valid.
+     */
+    private fun validateBookingForm(state: BookingUiState): ValidationResult {
+        return when {
+            state.selectedRoom == null ->
+                ValidationResult.Error(ResourceProvider.getString(R.string.booking_error_no_room))
+            
+            state.checkInDate.isNullOrBlank() || state.checkOutDate.isNullOrBlank() ->
+                ValidationResult.Error(ResourceProvider.getString(R.string.booking_error_no_dates))
+            
+            state.guestName.isBlank() ->
+                ValidationResult.Error(ResourceProvider.getString(R.string.booking_error_no_guest_name))
+            
+            else -> ValidationResult.Valid
+        }
+    }
+
     private fun createBooking() {
         val currentState = _state.value
 
-        // ✅ Валидация через вычисляемые свойства состояния
-        if (currentState.selectedRoom == null) {
-            viewModelScope.launch {
-                _event.emit(BookingEvent.ValidationError(ResourceProvider.getString(R.string.booking_error_no_room)))
+        // ✅ Валидация через отдельный метод
+        when (val validation = validateBookingForm(currentState)) {
+            is ValidationResult.Error -> {
+                viewModelScope.launch {
+                    _event.emit(BookingEvent.ValidationError(validation.message))
+                }
+                return
             }
-            return
-        }
-
-        if (currentState.checkInDate.isNullOrBlank() || currentState.checkOutDate.isNullOrBlank()) {
-            viewModelScope.launch {
-                _event.emit(BookingEvent.ValidationError(ResourceProvider.getString(R.string.booking_error_no_dates)))
-            }
-            return
-        }
-
-        if (currentState.guestName.isBlank()) {
-            viewModelScope.launch {
-                _event.emit(BookingEvent.ValidationError(ResourceProvider.getString(R.string.booking_error_no_guest_name)))
-            }
-            return
+            is ValidationResult.Valid -> { /* Продолжаем бронирование */ }
         }
 
         viewModelScope.launch {

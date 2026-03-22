@@ -132,27 +132,27 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.user.collect { user ->
-                        binding.tvUserName.text = user?.name ?: "Guest"
+                        binding.tvUserName.text = user?.name ?: getString(R.string.dashboard_quick_action_key)
                     }
                 }
 
                 launch {
                     viewModel.activeBooking.collect { booking ->
-                        if (booking == null) {
-                            binding.tvBookingRoom.text = "No active booking"
-                            binding.tvBookingDates.text = "Tap Booking to reserve a room"
+                        booking?.let {
+                            binding.tvBookingRoom.text = "${it.roomType} #${it.roomNumber}"
+                            binding.tvBookingDates.text = "${it.checkIn} - ${it.checkOut}"
+                            binding.tvBookingStatus.text = it.status.name.replace("_", " ")
+                        } ?: run {
+                            binding.tvBookingRoom.text = getString(R.string.dashboard_no_active_booking)
+                            binding.tvBookingDates.text = getString(R.string.dashboard_tap_to_reserve)
                             binding.tvBookingStatus.text = "—"
-                        } else {
-                            binding.tvBookingRoom.text = "${booking.roomType} #${booking.roomNumber}"
-                            binding.tvBookingDates.text = "${booking.checkIn} - ${booking.checkOut}"
-                            binding.tvBookingStatus.text = booking.status.name.replace("_", " ")
                         }
                     }
                 }
 
                 launch {
                     viewModel.bookings.collect { list ->
-                        binding.tvBookingCount.text = "Bookings: ${list.size}"
+                        binding.tvBookingCount.text = getString(R.string.dashboard_bookings_count_format, list.size)
                     }
                 }
             }

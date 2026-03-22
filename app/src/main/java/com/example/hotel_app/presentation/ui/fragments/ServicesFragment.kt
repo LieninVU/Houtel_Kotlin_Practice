@@ -63,40 +63,32 @@ class ServicesFragment : Fragment(R.layout.fragment_services) {
             .show()
     }
 
+    /**
+     * Маппинг кнопок категорий на соответствующие ServiceCategory.
+     * Используется для упрощения обработки кликов.
+     */
+    private val categoryButtons: Map<View, ServiceCategory?> by lazy {
+        mapOf(
+            binding.chipAll to null,
+            binding.chipSpa to ServiceCategory.SPA,
+            binding.chipTransfer to ServiceCategory.TRANSFER,
+            binding.chipFood to ServiceCategory.FOOD,
+            binding.chipOther to ServiceCategory.OTHER
+        )
+    }
+
     private fun setupCategoryFilter() {
-        binding.chipAll.setOnClickListener {
-            clearCategoryButtons()
-            binding.chipAll.isEnabled = false
-            viewModel.selectCategory(null)
-        }
-        binding.chipSpa.setOnClickListener {
-            clearCategoryButtons()
-            binding.chipSpa.isEnabled = false
-            viewModel.selectCategory(ServiceCategory.SPA)
-        }
-        binding.chipTransfer.setOnClickListener {
-            clearCategoryButtons()
-            binding.chipTransfer.isEnabled = false
-            viewModel.selectCategory(ServiceCategory.TRANSFER)
-        }
-        binding.chipFood.setOnClickListener {
-            clearCategoryButtons()
-            binding.chipFood.isEnabled = false
-            viewModel.selectCategory(ServiceCategory.FOOD)
-        }
-        binding.chipOther.setOnClickListener {
-            clearCategoryButtons()
-            binding.chipOther.isEnabled = false
-            viewModel.selectCategory(ServiceCategory.OTHER)
+        categoryButtons.forEach { (button, category) ->
+            button.setOnClickListener {
+                disableCategoryButtons()
+                button.isEnabled = false
+                viewModel.selectCategory(category)
+            }
         }
     }
 
-    private fun clearCategoryButtons() {
-        binding.chipAll.isEnabled = true
-        binding.chipSpa.isEnabled = true
-        binding.chipTransfer.isEnabled = true
-        binding.chipFood.isEnabled = true
-        binding.chipOther.isEnabled = true
+    private fun disableCategoryButtons() {
+        categoryButtons.keys.forEach { it.isEnabled = true }
     }
 
     private fun setupSearch() {

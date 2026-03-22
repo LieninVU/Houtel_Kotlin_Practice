@@ -38,20 +38,20 @@ class HotelInfoViewModel(context: Context) : ViewModel() {
 
     fun loadEvents() {
         _eventsState.value = UiState.Loading
-        try {
-            val allEvents = parser.parseFromAssets()
-            if (allEvents.isEmpty()) {
-                _eventsState.value = UiState.Error("Нет данных о мероприятиях")
-            } else {
-                _eventsState.value = UiState.Success(allEvents)
-                _recommendations.value = getRecommendations(allEvents)
-            }
+        
+        val allEvents = try {
+            parser.parseFromAssets()
         } catch (e: Exception) {
             _eventsState.value = UiState.Error("Ошибка загрузки: ${e.localizedMessage}")
-            // Fallback на моки при ошибке
-            val mocks = parser.getMockEvents()
-            _recommendations.value = getRecommendations(mocks)
+            parser.getMockEvents()
         }
+
+        _eventsState.value = when {
+            allEvents.isEmpty() -> UiState.Error("Нет данных о мероприятиях")
+            else -> UiState.Success(allEvents)
+        }
+        
+        _recommendations.value = getRecommendations(allEvents)
     }
 
     /**
@@ -61,11 +61,16 @@ class HotelInfoViewModel(context: Context) : ViewModel() {
      */
     private fun getRecommendations(events: List<Event>): List<Event> {
         val lastCategory = userPrefs.lastViewedCategory
-        return if (lastCategory.isNotBlank()) {
-            val byCat = events.filter { it.category == lastCategory }
-            if (byCat.isNotEmpty()) byCat.take(5) else events.shuffled().take(3)
-        } else {
-            events.shuffled().take(3)
+        
+        return when {
+            lastCategory.isBlank() -> events.shuffled().take(3)
+            else -> {
+                val byCat = events.filter { it.category == lastCategory }
+                when {
+                    byCat.isNotEmpty() -> byCat.take(5)
+                    else -> events.shuffled().take(3)
+                }
+            }
         }
     }
 
