@@ -13,7 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@android:drawable/ic_media_previous"
-        app:title="Payment" />
+        app:title="@string/payment_toolbar_title" />
 
     <!-- Timer -->
     <TextView
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Оплата через: 5с"
+        android:text="@string/payment_timer_format"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Сумма: $0"
+        android:text="@string/payment_amount_format"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +73,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Оплатить"
+        android:text="@string/payment_button_pay"
         app:layout_constraintBottom_toTopOf="@id/btnCancel" />
 
     <!-- Cancel Button -->
@@ -81,7 +81,7 @@
         android:id="@+id/btnCancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Отмена"
+        android:text="@string/payment_button_cancel"
         style="@style/Widget.Material3.Button.OutlinedButton"
         app:layout_constraintBottom_toTopOf="@id/btnContinue" />
 
@@ -91,7 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Перейти к ключу"
+        android:text="@string/payment_button_continue"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent" />
 

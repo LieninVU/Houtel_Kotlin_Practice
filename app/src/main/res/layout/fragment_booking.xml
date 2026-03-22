@@ -15,7 +15,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Book a Room"
+            app:title="@string/booking_toolbar_title"
             app:navigationIcon="@drawable/ic_launcher_foreground" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="1. Select a Room"
+                android:text="@string/booking_step_select_room"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-                android:text="2. Select Dates"
+                android:text="@string/booking_step_select_dates"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:hint="Check-in"
+                    android:hint="@string/booking_hint_check_in"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    android:hint="Check-out"
+                    android:hint="@string/booking_hint_check_out"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-                android:text="3. Guest Information"
+                android:text="@string/booking_step_guest_info"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -132,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="8dp"
-                android:hint="Full Name"
+                android:hint="@string/booking_hint_full_name"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -166,7 +166,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Booking Summary"
+                        android:text="@string/booking_summary_title"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -209,7 +209,7 @@
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
         android:enabled="false"
-        android:text="Book Now"
+        android:text="@string/booking_button_book"
         android:textSize="16sp"
         app:cornerRadius="12dp" />
 

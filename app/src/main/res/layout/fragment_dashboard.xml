@@ -15,7 +15,7 @@
             android:id="@+id/tvWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome Home,"
+            android:text="@string/dashboard_welcome"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -24,7 +24,7 @@
             android:id="@+id/tvUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Guest"
+            android:text="@string/dashboard_quick_action_key"
             android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="My Key"
+                        android:text="@string/dashboard_quick_action_key"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -91,7 +91,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Booking"
+                        android:text="@string/dashboard_quick_action_booking"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -115,7 +115,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Services"
+                        android:text="@string/dashboard_quick_action_services"
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -127,7 +127,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Hotel information"
+            android:text="@string/dashboard_hotel_info_button"
             app:layout_constraintTop_toBottomOf="@id/cardQuickActions" />
 
         <!-- Recommendations -->
@@ -145,7 +145,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Recommended for you"
+                android:text="@string/dashboard_recommended_title"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:paddingBottom="8dp" />
@@ -176,14 +176,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp"
-                android:text="Failed to load recommendations"
+                android:text="@string/dashboard_error_load_recommendations"
                 android:textSize="14sp" />
 
             <Button
                 android:id="@+id/btnRetry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Retry" />
+                android:text="@string/dashboard_button_retry" />
         </LinearLayout>
 
         <!-- Current Booking Status -->
@@ -192,7 +192,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Current Booking"
+            android:text="@string/dashboard_current_booking_title"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layoutRecommendations" />
@@ -214,7 +214,7 @@
                     android:id="@+id/tvBookingRoom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="No active booking"
+                    android:text="@string/dashboard_no_active_booking"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -223,7 +223,7 @@
                     android:id="@+id/tvBookingDates"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tap Booking to reserve a room"
+                    android:text="@string/dashboard_tap_to_reserve"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvBookingRoom" />
@@ -246,7 +246,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Bookings: 0"
+                    android:text="@string/dashboard_bookings_count_format"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="11sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -261,7 +261,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Оплаченные услуги"
+            android:text="@string/dashboard_paid_services_title"
             android:textStyle="bold"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
@@ -282,7 +282,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Нет оплаченных услуг"
+            android:text="@string/dashboard_no_paid_services"
             android:textColor="@android:color/darker_gray"
             android:textSize="14sp"
             android:visibility="gone"
@@ -296,7 +296,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Special Offers"
+            android:text="@string/dashboard_special_offers"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rvPaidServices" />

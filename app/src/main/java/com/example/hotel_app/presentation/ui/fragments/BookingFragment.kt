@@ -15,8 +15,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hotel_app.R
 import com.example.hotel_app.databinding.FragmentBookingBinding
-import com.example.hotel_app.domain.model.Room
 import com.example.hotel_app.presentation.ui.adapter.RoomAdapter
+import com.example.hotel_app.presentation.viewmodel.BookingAction
+import com.example.hotel_app.presentation.viewmodel.BookingEvent
 import com.example.hotel_app.presentation.viewmodel.BookingViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
@@ -35,7 +36,18 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
     private val calendar = Calendar.getInstance()
 
     private val roomAdapter = RoomAdapter { room ->
-        onRoomSelected(room)
+        // ✅ MVI: отправляем действие в ViewModel
+        viewModel.onAction(BookingAction.SelectRoom(room))
+        updateSelectedRoomInAdapter(room.id)
+        scrollToBookingForm()
+    }
+
+    /**
+     * Обновляет выделенный элемент в адаптере.
+     * Выносится в отдельный метод для избежания рекурсивной проблемы компилятора.
+     */
+    private fun updateSelectedRoomInAdapter(roomId: String) {
+        roomAdapter.setSelectedRoom(roomId)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,18 +80,16 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
         binding.etCheckIn.setOnClickListener {
             showDatePicker { date ->
                 binding.etCheckIn.setText(date)
-                viewModel.setCheckInDate(date)
-                updateSummary()
-                updateBookButtonState()
+                // ✅ MVI: отправляем действие в ViewModel
+                viewModel.onAction(BookingAction.SetCheckInDate(date))
             }
         }
 
         binding.etCheckOut.setOnClickListener {
             showDatePicker { date ->
                 binding.etCheckOut.setText(date)
-                viewModel.setCheckOutDate(date)
-                updateSummary()
-                updateBookButtonState()
+                // ✅ MVI: отправляем действие в ViewModel
+                viewModel.onAction(BookingAction.SetCheckOutDate(date))
             }
         }
     }
@@ -102,28 +112,16 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
 
     private fun setupBookButton() {
         binding.btnBook.setOnClickListener {
-            val guestName = binding.etGuestName.text?.toString() ?: ""
-            viewModel.createBooking(guestName)
+            // ✅ MVI: отправляем действие в ViewModel
+            viewModel.onAction(BookingAction.CreateBooking)
         }
     }
 
     private fun setupGuestNameInput() {
-        binding.etGuestName.doAfterTextChanged {
-            updateBookButtonState()
+        binding.etGuestName.doAfterTextChanged { text ->
+            // ✅ MVI: отправляем действие в ViewModel
+            viewModel.onAction(BookingAction.SetGuestName(text?.toString() ?: ""))
         }
-    }
-
-    private fun updateBookButtonState() {
-        val guestName = binding.etGuestName.text?.toString() ?: ""
-        binding.btnBook.isEnabled = viewModel.isFormValid(guestName)
-    }
-
-    private fun onRoomSelected(room: Room) {
-        viewModel.selectRoom(room)
-        roomAdapter.setSelectedRoom(room.id)
-        updateSummary()
-        updateBookButtonState()
-        scrollToBookingForm()
     }
 
     private fun scrollToBookingForm() {
@@ -138,64 +136,46 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
         }
     }
 
-    private fun updateSummary() {
-        val room = viewModel.selectedRoom.value
-        val checkIn = viewModel.checkInDate.value
-        val checkOut = viewModel.checkOutDate.value
-
-        if (room != null) {
-            binding.cardSummary.isVisible = true
-            val roomNumber = room.id.removePrefix("room_")
-            binding.tvSummaryRoom.text = "Room: ${room.type} #$roomNumber"
-            
-            if (!checkIn.isNullOrBlank() && !checkOut.isNullOrBlank()) {
-                binding.tvSummaryDates.text = "Dates: $checkIn - $checkOut"
-                val total = viewModel.calculateTotalPrice()
-                binding.tvSummaryPrice.text = "Total: $${total.toInt()}"
-            } else {
-                binding.tvSummaryDates.text = "Dates: Select dates"
-                binding.tvSummaryPrice.text = "Price: $${room.price.toInt()} / night"
-            }
-        } else {
-            binding.cardSummary.isVisible = false
-        }
-    }
-
+    /**
+     * Наблюдение за единым состоянием UI.
+     * ✅ ХОРОШО: один collect для всего состояния вместо 6 отдельных
+     */
     private fun observeState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // ✅ Холодный Flow для комнат — данные от репозитория
                 launch {
-                    viewModel.rooms.collect { rooms ->
+                    viewModel.roomsFlow.collect { rooms ->
                         roomAdapter.submitList(rooms)
                     }
                 }
 
+                // ✅ Единый StateFlow для всего UI-состояния
                 launch {
-                    viewModel.isRoomsLoading.collect { isLoading ->
-                        binding.progressRooms.isVisible = isLoading
+                    viewModel.state.collect { state ->
+                        // Обновляем прогресс загрузки комнат
+                        binding.progressRooms.isVisible = state.isRoomsLoading
+
+                        // Обновляем прогресс бронирования и кнопку
+                        binding.progressBooking.isVisible = state.isBookingLoading
+                        binding.btnBook.isEnabled = state.isFormValid && !state.isBookingLoading
+
+                        // Обновляем карточку summary
+                        updateSummary(state)
                     }
                 }
 
+                // ✅ SharedFlow для одноразовых событий (навигация, ошибки)
                 launch {
-                    viewModel.isLoading.collect { isLoading ->
-                        binding.progressBooking.isVisible = isLoading
-                        binding.btnBook.isEnabled = !isLoading && viewModel.isFormValid(
-                            binding.etGuestName.text?.toString() ?: ""
-                        )
-                    }
-                }
-
-                launch {
-                    viewModel.bookingEvent.collect { event ->
+                    viewModel.event.collect { event ->
                         when (event) {
-                            is BookingViewModel.BookingUiEvent.BookingSuccess -> {
+                            is BookingEvent.BookingSuccess -> {
                                 showSuccessDialog(
                                     roomNumber = event.booking.roomNumber,
                                     message = event.message
                                 )
                             }
-                            is BookingViewModel.BookingUiEvent.NavigateToPayment -> {
-                                // Переход на оплату с передачей суммы
+                            is BookingEvent.NavigateToPayment -> {
                                 val action = BookingFragmentDirections.actionBookingFragmentToPaymentFragment(
                                     amount = event.amount.toFloat(),
                                     bookingId = event.booking.id,
@@ -203,10 +183,10 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
                                 )
                                 findNavController().navigate(action)
                             }
-                            is BookingViewModel.BookingUiEvent.BookingError -> {
+                            is BookingEvent.BookingError -> {
                                 Toast.makeText(requireContext(), event.message, Toast.LENGTH_LONG).show()
                             }
-                            is BookingViewModel.BookingUiEvent.ValidationError -> {
+                            is BookingEvent.ValidationError -> {
                                 Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
                             }
                         }
@@ -216,15 +196,41 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
         }
     }
 
+    /**
+     * Рендеринг состояния в UI.
+     * Принимает immutable состояние — предсказуемый рендеринг.
+     */
+    private fun updateSummary(state: com.example.hotel_app.presentation.viewmodel.BookingUiState) {
+        val room = state.selectedRoom
+        val checkIn = state.checkInDate
+        val checkOut = state.checkOutDate
+
+        if (room != null) {
+            binding.cardSummary.isVisible = true
+            val roomNumber = room.id.removePrefix("room_")
+            binding.tvSummaryRoom.text = getString(R.string.booking_summary_room_format, room.type, roomNumber)
+
+            if (!checkIn.isNullOrBlank() && !checkOut.isNullOrBlank()) {
+                binding.tvSummaryDates.text = getString(R.string.booking_summary_dates_format, checkIn, checkOut)
+                // ✅ Используем вычисляемое свойство из состояния
+                binding.tvSummaryPrice.text = getString(R.string.booking_summary_total_format, state.totalPrice.toInt())
+            } else {
+                binding.tvSummaryDates.text = getString(R.string.booking_summary_dates_select)
+                binding.tvSummaryPrice.text = getString(R.string.booking_summary_price_per_night, room.price.toInt())
+            }
+        } else {
+            binding.cardSummary.isVisible = false
+        }
+    }
+
     private fun showSuccessDialog(roomNumber: String, message: String) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Booking Confirmed!")
-            .setMessage("$message\n\nYour digital NFC key has been automatically created and is ready to use.")
-            .setPositiveButton("View My Key") { _, _ ->
+            .setTitle(R.string.booking_dialog_confirmed_title)
+            .setMessage(getString(R.string.booking_dialog_confirmed_message, message))
+            .setPositiveButton(R.string.booking_dialog_view_key) { _, _ ->
                 findNavController().navigate(R.id.keyFragment)
             }
-            .setNegativeButton("Back to Dashboard") { _, _ ->
-                // корректно возвращаемся на dashboard (вместе с bottom-nav)
+            .setNegativeButton(R.string.booking_dialog_back_to_dashboard) { _, _ ->
                 if (!findNavController().popBackStack(R.id.dashboardFragment, false)) {
                     findNavController().navigate(R.id.dashboardFragment)
                 }

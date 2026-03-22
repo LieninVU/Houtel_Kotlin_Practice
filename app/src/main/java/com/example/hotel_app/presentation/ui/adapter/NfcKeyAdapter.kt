@@ -12,7 +12,8 @@ class NfcKeyAdapter(
     private val onKeyClick: (NfcKey) -> Unit
 ) : ListAdapter<NfcKey, NfcKeyAdapter.KeyViewHolder>(DiffCallback) {
 
-    class KeyViewHolder(val binding: LayoutItemNfcKeyBinding) : RecyclerView.ViewHolder(binding.root)
+    class KeyViewHolder(val binding: LayoutItemNfcKeyBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KeyViewHolder {
         val binding = LayoutItemNfcKeyBinding.inflate(
@@ -28,7 +29,7 @@ class NfcKeyAdapter(
             tvRoomType.text = key.roomType
             tvValidUntil.text = "Valid until: ${key.validUntil}"
             tvLastUsed.text = "Last used: ${key.lastUsed ?: "Never"}"
-            
+
             root.setOnClickListener { onKeyClick(key) }
         }
     }

@@ -9,9 +9,11 @@ import com.example.hotel_app.databinding.LayoutItemPaidServiceBinding
 import com.example.hotel_app.domain.model.PaidService
 import com.example.hotel_app.domain.model.getIcon
 
-class PaidServicesAdapter : ListAdapter<PaidService, PaidServicesAdapter.PaidServiceViewHolder>(DiffCallback) {
+class PaidServicesAdapter :
+    ListAdapter<PaidService, PaidServicesAdapter.PaidServiceViewHolder>(DiffCallback) {
 
-    class PaidServiceViewHolder(val binding: LayoutItemPaidServiceBinding) : RecyclerView.ViewHolder(binding.root)
+    class PaidServiceViewHolder(val binding: LayoutItemPaidServiceBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PaidServiceViewHolder {
         val binding = LayoutItemPaidServiceBinding.inflate(
@@ -32,7 +34,10 @@ class PaidServicesAdapter : ListAdapter<PaidService, PaidServicesAdapter.PaidSer
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<PaidService>() {
-        override fun areItemsTheSame(oldItem: PaidService, newItem: PaidService) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: PaidService, newItem: PaidService) = oldItem == newItem
+        override fun areItemsTheSame(oldItem: PaidService, newItem: PaidService) =
+            oldItem.id == newItem.id
+
+        override fun areContentsTheSame(oldItem: PaidService, newItem: PaidService) =
+            oldItem == newItem
     }
 }
